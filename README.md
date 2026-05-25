@@ -8,7 +8,7 @@
 
 | Skill | Status | Description |
 |-------|--------|-------------|
-| [`generate-qbr`](./skills/generate-qbr/SKILL.md) | ✅ Available | Generate a Quarterly Business Review for a specific partner |
+| [`generate-qbr`](./skills/generate-qbr/SKILL.md) | ✅ Available *(validated against staging 2026-05-25)* | Generate a Quarterly Business Review for a specific partner |
 | `partner-health-check` | 🚧 Planned | One-glance health snapshot of a partner (deals + referrals + agreement + commission status) |
 | `monthly-commission-report` | 🚧 Planned | Auto-generate commission payout report for a partner or company-wide |
 | `referral-workflow` | 🚧 Planned | End-to-end referral submission flow (list accounts → get form → submit) |
@@ -62,29 +62,30 @@ EULER-skills/
 │   └── plugin.json          Plugin manifest (name, version, metadata)
 ├── .mcp.json                References the remote EULER MCP server
 ├── skills/                  Model-invoked skills — the primary content
+│   ├── _template/           Starter SKILL.md for new contributions
 │   └── generate-qbr/
-│       └── SKILL.md         The QBR generation playbook
+│       ├── SKILL.md         The QBR generation playbook
+│       └── examples/        Sanitized example outputs
 ├── commands/                (Future) Explicit slash commands like /euler:list
 ├── agents/                  (Future) Sub-agents for multi-step workflows
+├── CONTRIBUTING.md          How to add or modify a skill
 └── README.md
 ```
 
 ## Adding a new skill
 
-1. Create `skills/<your-skill-name>/SKILL.md`
-2. Add YAML frontmatter with `name` (must match the folder name) and `description`
-3. Document, in this order:
-   - **When to use this skill** — trigger phrases the user might type
-   - **Inputs needed from user** — what to clarify before running
-   - **Orchestration sequence** — which MCP tools, in which order, with what params
-   - **Output format** — the exact markdown structure to render
-   - **Anti-hallucination rules** — guards against fabricated metrics
-   - **Example user flow** — a worked example
-4. Reference EULER MCP tools by name (e.g. `list_accounts`, `partner_artifacts`)
-5. Open a PR — see `CONTRIBUTING.md` (TODO)
+Copy [`skills/_template/`](./skills/_template/SKILL.md) and rename. Every
+new skill must include:
 
-See [`skills/generate-qbr/SKILL.md`](./skills/generate-qbr/SKILL.md) as the
-template for new skills.
+- YAML frontmatter with `name` (matching folder name) and `description`
+- Sections: When to use · Inputs · Orchestration sequence · Output format
+  · Anti-hallucination rules · Example user flow · Why this skill exists
+- A worked example committed under `examples/`
+- Validation against the live MCP before merging
+
+Full guide: [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+
+Reference implementation: [`skills/generate-qbr/`](./skills/generate-qbr/SKILL.md).
 
 ## Versioning
 

@@ -8,3 +8,7 @@ build/
 .idea/
 .vscode/
 *.tsbuildinfo
+
+# Per-skill working notes (raw runs, scratch findings). Sanitized outputs
+# live in skills/<name>/examples/ and are committed.
+skills/*/.scratch/
