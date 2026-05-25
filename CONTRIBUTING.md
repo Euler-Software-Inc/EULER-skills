@@ -28,6 +28,12 @@ and opinionated — read this before opening a PR.
    against the actual MCP response — not from memory, not from docs.
    The catalog and response shapes drift; only the live server is truth.
 
+   When a skill's SKILL.md approaches 500 lines, extract long reference
+   material (response field tables, exhaustive enum lists, examples) to
+   `references/<topic>.md`. SKILL.md stays focused on orchestration +
+   output + rules; references are loaded on demand. This matches the
+   Anthropic Agent Skills progressive-disclosure pattern.
+
    Save raw runs to `skills/<your-skill-name>/.scratch/` while iterating;
    keep the directory in `.gitignore` (or delete before merge). Commit a
    sanitized golden output to `skills/<your-skill-name>/examples/` once

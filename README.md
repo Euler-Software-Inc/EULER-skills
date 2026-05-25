@@ -65,6 +65,7 @@ EULER-skills/
 │   ├── _template/           Starter SKILL.md for new contributions
 │   └── generate-qbr/
 │       ├── SKILL.md         The QBR generation playbook
+│       ├── references/      Reference docs loaded on demand
 │       └── examples/        Sanitized example outputs
 ├── commands/                (Future) Explicit slash commands like /euler:list
 ├── agents/                  (Future) Sub-agents for multi-step workflows

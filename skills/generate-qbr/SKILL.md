@@ -1,6 +1,6 @@
 ---
 name: generate-qbr
-description: Generate a Quarterly Business Review (QBR) document for a specific partner using EULER MCP tools. Use when the user asks for a QBR, quarterly review, partner business review, or quarterly performance summary tied to a partner.
+description: Generate a Quarterly Business Review (QBR) document for a specific partner using EULER MCP tools. Use this skill whenever the user mentions a QBR, quarterly review, partner business review, quarterly performance summary, or asks to "review", "summarize", or "report on" how a specific partner has been doing — even if they only describe the intent without using the term "QBR".
 ---
 
 # Generate QBR — Quarterly Business Review for a partner
@@ -89,74 +89,19 @@ standard QBR. Skip a step only if the user's framing explicitly excludes it
 
 ### Tool-by-tool response field paths
 
-The MCP backend (Bubble-based) returns inconsistent field names. Use these
-**exact** paths — verified against staging on 2026-05-25. Do NOT invent
-field names. If a path you'd want is missing here, the field doesn't exist.
+The MCP backend returns inconsistent field names (Bubble-side quirks).
+The exact paths and serialization bugs per tool are documented in
+[`references/mcp-field-paths.md`](references/mcp-field-paths.md) —
+consult that file when extracting fields from a specific response.
 
-#### `list_accounts`
-```
-accounts[].id, .type, .name, .company_id, .partner_id, .affiliate_company_name (partner only), .dashboard_url
-consent_summary.hidden_count
-```
-
-#### `partners(action: 'list')`
-Returns a stringified-JSON-array under `response.result` (loose parsing
-required — see Rule 7). Each entry:
-```
-partner_id, "Partner name", status
-```
-(`status` may be empty string for unconfigured partners.)
-
-#### `performance(action: 'partner')`
-```
-partner_id, start_date (echoed), end_date (echoed),
-total_deals_count (string, may be "0"),
-booking_revenue (string with "$" prefix; may be just "$" when zero — see Rule 3),
-billings_revenue (string like "$100.00"),
-win_rate (string like "0.00%"),
-sales_cycle (string like "0 Days"),
-avg_contract_value (string like "$0"),
-partner_status
-```
-
-#### `partner_artifacts(action: 'deals')`
-```
-total_items (string), page, limit, partner_id,
-Result[].deal_id
-Result[].Amount (string, raw number, NO currency prefix — e.g. "500")
-Result[]."crm status (deal_stage)" (yes, with spaces and parens — use this exact key)
-Result[]."Deal name"
-Result[].last_stage_change_date (string like "20599 Days" — this is a DURATION, not a date. Do NOT format as a date.)
-```
-
-#### `commissions(action: 'partner')`
-When empty, returns the literal string `"Empty (this search did not return any results)"`.
-When populated, shape varies — read it and adapt; do not assume structure.
-
-#### `referrals(action: 'for_partner')`
-Returns `result_per_page` as a stringified JSON-like blob with a
-**serialization bug**: pairs use commas instead of colons
-(`{"id","value"}` instead of `{"id":"value"}`). Parse loosely.
-Fields per entry:
-```
-id, "Referred company name", Status, "Submitted On"
-```
-
-#### `partner_artifacts(action: 'agreements')`
-Returns `Result[]` with **corrupted keys** (`ïd` with diaeresis). Skip the id field.
-Usable fields per entry:
-```
-"agreement Name" (note lowercase 'agreement')
-Status
-"Signed On" (may be empty string when unsigned)
-```
-There is **no `expires_on` / renewal-date field**. Do not write "expires
-YYYY-MM-DD" in the output — the data doesn't exist.
-
-#### `partner_artifacts(action: 'invoices')`
-When empty: `Result: [Empty (this search did not return any results)]`.
-When populated, treat field names as case-sensitive and document on first
-encounter.
+Key gotchas to keep in mind (the file has the full detail):
+- Some keys have spaces, lowercase first letters, or unicode noise
+  (`"Deal name"`, `"agreement Name"`, `ïd`)
+- All numeric fields come back as strings
+- `referrals(for_partner)` has a JSON serialization bug (commas instead
+  of colons in `result_per_page`) — parse loosely
+- `last_stage_change_date` on deals is a duration string, not a
+  timestamp (see Rule 15)
 
 ### Error handling during orchestration
 
@@ -335,10 +280,13 @@ These rules are **not optional**. Every QBR must follow them.
    strings — orchestration-only, never printed. When the MCP adds the
    partner's CRM ID (HubSpot / Salesforce / etc), render that instead.
 
-1. **NEVER fabricate metrics.** If a tool returns empty data, **silence
-   the entire section** — do not print "No X data" placeholders. The
-   absence is the signal. Exception: the TL;DR may reference an absence
-   in narrative ("no closed deals this quarter").
+1. **Empty data → silence the section.** When a tool returns nothing
+   for a section, omit the section entirely rather than printing
+   placeholders like "No X data". The absence is itself the signal —
+   inserting a placeholder line dilutes that signal without adding
+   information and clutters the doc. Exception: the TL;DR may name an
+   absence in narrative ("no closed deals this quarter") because there
+   it is part of the story.
 
 2. **NEVER emit action items that ask the user to debug the system.**
    If `performance.booking_revenue` returns `"$"` while closed-won deals
@@ -363,20 +311,26 @@ These rules are **not optional**. Every QBR must follow them.
    zero. Display zero as `$0`. Non-zero with thousand separators
    (`$1,234,567`). Percentages as returned (`75.0%`).
 
-6. **Dates vs durations vs strings.** `"20599 Days"` is a duration, not
-   a date — never render as `YYYY-MM-DD`. `"Jan 1, 2026 5:46 pm"` is a
-   date string — reformat to `YYYY-MM-DD` only if parsing succeeds;
-   render verbatim otherwise.
+6. **Dates vs durations vs strings.** The deals tool returns
+   `last_stage_change_date` as a duration string (`"20599 Days"`,
+   `"0 Days"`) — attempting to render it as a date produces nonsense
+   (we observed years like 4763 when the backend tried to parse such
+   inputs). Reserve `YYYY-MM-DD` rendering for strings that successfully
+   parse as a real date (`"Jan 1, 2026 5:46 pm"`, `"May 9, 2024"`).
+   When in doubt, render verbatim.
 
 7. **Action items must be actionable.** Each row in the action table has
    all 5 columns filled (Prio · Action · Owner · Due · Expected outcome).
    No placeholder TBDs. If you cannot fill all 5 from the data + sensible
    defaults (see Output Format section), drop the row.
 
-8. **All-time vs period-filtered must be clear in section headings.**
-   Headlines use Q-period framing ("What happened in Q1"). Lifetime
-   sections use the word "lifetime" in the heading ("Pipeline (lifetime)").
-   Never silently mix.
+8. **Label all-time vs period-filtered in section headings.** The
+   period-filtered tools (`performance`, `commissions`) and the
+   lifetime tools (`partner_artifacts`, `referrals`) live in the same
+   document, and a reader has no way to tell which is which without an
+   explicit label. Use Q-period framing for headline sections
+   ("What happened in Q1") and the word "lifetime" in pipeline /
+   referrals / agreements headings.
 
 9. **Q-over-Q comparison is opt-in.** Default to current-quarter-only.
    If the user explicitly asks for QoQ, fetch both quarters' data and
@@ -399,8 +353,11 @@ These rules are **not optional**. Every QBR must follow them.
     > *Note: <section> could not be loaded due to a data fetch error.*
     No giant red banner — the doc must still be presentable.
 
-12. **Do not summarize across multiple partners.** Per-partner skill.
-    If the user asks for batch, explain scope and offer to loop.
+12. **One partner per invocation.** A QBR is partner-specific by design
+    — narratives, action items, and traffic-light status only make
+    sense in context of a single partner. If the user asks for a batch
+    ("QBR for all my partners"), explain the scope and offer to loop
+    the skill once per partner rather than rolling up into a summary.
 
 13. **Tier-conditional narrative.** TL;DR and action items adapt to
     `partner_status`:
@@ -432,10 +389,13 @@ These rules are **not optional**. Every QBR must follow them.
     "stuck for X" about any deal. Only assertions backed by parsed date
     strings (e.g. `"Submitted On": "Feb 26, 2026"`) are allowed.
 
-16. **Number formatting context.** TL;DR may use rounded units for
-    readability (`$87K`, `$1.2M`). All other sections use precise
-    formatting with thousand separators (`$87,250`, `$1,234,567`).
-    Never round in tables.
+16. **Number formatting context.** The TL;DR is a narrative; rounded
+    units read more naturally there (`$87K`, `$1.2M`). Tables and
+    detail sections sit next to figures a reader may want to sum or
+    spot-check, so use precise formatting with thousand separators
+    (`$87,250`, `$1,234,567`). Rounding inside a table creates
+    ambiguity about whether the rounding is the underlying number or
+    a presentation choice.
 
 ## Example user flow
 
@@ -462,7 +422,7 @@ Claude:
 User: copies output → pastes into Slack / Google Doc / email to the partner.
 ```
 
-## Known limitations (v0.3.0)
+## Known limitations (v0.4.0)
 
 Things the skill cannot do today, by tool constraint. Logged for upstream
 MCP improvements:
