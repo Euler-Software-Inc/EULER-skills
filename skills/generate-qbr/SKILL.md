@@ -191,12 +191,16 @@ in order (first match wins):
 
 | Indicator | Conditions |
 |-----------|------------|
-| 🔴 **Red** | `partner_status` = "Active" AND `total_deals_count` (period) = 0 AND open-pipeline count ≤ 1 |
-| 🔴 **Red** | `partner_status` = "Active" AND foundational agreements (MNDA, master/partner agreement) are present but unsigned |
-| 🟡 **Amber** | `partner_status` ∈ {"Active", "Onboarding"} AND (any open deals OR pipeline activity in last 90 days) but 0 closed-won in period |
-| 🟡 **Amber** | `partner_status` = "Prospecting" — expected stage, low activity is the baseline |
-| 🟢 **Green** | `partner_status` = "Active" AND closed-won deals in period ≥ 1 |
 | ⚪ **Inactive** | `partner_status` = "Inactive" — frame as reactivate-or-offboard decision |
+| 🔴 **Red** | `partner_status` = "Active" AND `total_deals_count` (period) = 0 AND open pipeline ≤ 1 deal AND lifetime closed-won = 0 (partner can't operate or hasn't produced) |
+| 🔴 **Red** | `partner_status` = "Active" AND foundational agreement (MNDA / master / partner / agency agreement) unsigned AND lifetime closed-won = 0 (foundational gap blocks revenue) |
+| 🟡 **Amber** | `partner_status` = "Active" AND lifetime closed-won ≥ 1 AND any operational concern (0 closes in period, unsigned agreements, stale pipeline). Partner is producing but has a real gap. |
+| 🟡 **Amber** | `partner_status` ∈ {"Onboarding", "Prospecting"} — pre-production stages, low activity is the baseline |
+| 🟢 **Green** | `partner_status` = "Active" AND closed-won in period ≥ 1 AND no foundational agreement gap |
+
+> Heuristic: an unsigned agreement at a partner with lifetime production is
+> an Amber concern, not a Red blocker — they're already operating. Red is
+> reserved for partners who literally cannot or did not produce.
 
 ### Template
 
@@ -206,9 +210,10 @@ in order (first match wins):
 ## TL;DR
 
 <emoji> **<one-line headline that names the state>**.
-<2–3 sentences narrative: biggest signal, biggest risk, one number that
-matters most. No tables here, no bullets — prose.>
-**Recommended next step:** <one sentence>.
+<EXACTLY 2 sentences, max 3. Biggest signal + biggest risk, with the one
+number that matters most embedded inline. Prose only — no tables, no
+bullets, no lists.>
+**Recommended next step:** <one sentence, ONE focused action — not a list joined by "and">.
 
 ---
 
@@ -242,41 +247,61 @@ Hidden by zero-denominator rule (omit row entirely):
 | P2   | ... | ... | ... | ... |
 
 Generation rules:
-- Each item is derived from a finding above (agreement unsigned, deal
-  stalled, referral aging). Never generic ("nurture the partner").
+- Each item is derived from a finding ACTUALLY IN THE DATA (agreement
+  unsigned, referral aging by parsed Submitted-On date, deal in late stage
+  by stage name alone — see "Stage-age caveat" below). Never generic
+  ("nurture the partner"). Never invented signals.
 - Priorities: P0 = blocks revenue/activation, P1 = material risk, P2 = hygiene.
-- Owner defaults: "Partner Manager" (your-side) or "<Partner-name> AE"
-  (their-side) if user hasn't named someone. Do NOT invent specific names.
-- Due defaults: P0 = within 2 weeks of period end · P1 = within 4 weeks · P2 = within the quarter.
+- **Owner labels — use these EXACT strings, do not invent names:**
+  - `Partner Manager` — anything on the customer (your) side
+  - `Partner-side` — anything the partner's team needs to do
+  - A real person's name ONLY if the user explicitly provided one
+- Due defaults (offsets from period end): P0 = +2 weeks · P1 = +4 weeks · P2 = +8 weeks. Format as `YYYY-MM-DD`.
 - Cap at 5 items. If more candidates exist, keep the top 5 by priority + impact.
+
+**Stage-age caveat (Rule against fake aging signals):** the deals tool
+returns `last_stage_change_date` as a duration string like `"20599 Days"`
+or `"389 Days"` — these are NOT reliable timestamps. Do NOT write "stalled
+in stage" / "no movement in N days" / "stale for X" — you do not have
+aging data. Limit yourself to what stage name + Amount actually tell you:
+"in Demo Scheduled at $10K" is OK; "stalled in Demo Scheduled" is not.
 
 ## Pipeline (lifetime)  [CONDITIONAL — omit if `deals.total_items` = 0]
 
-**Open deals:**
+**Open deals** (sorted by Amount descending):
 - <Deal name> — $<Amount> — <stage>
 - <Deal name> — $<Amount> — <stage>
 
 **Closed-won (lifetime):** <count> deals, $<sum> total. Top: <Deal name> ($<Amount>).
-**Closed-lost (lifetime):** <count> deals, $<sum> total.
+[If test-data heuristic fires — see below — append: "Of these, N appear to be
+test/staging entries (e.g. <N> identical-amount records); real Closed Won is
+<count> deals worth $<sum>."]
 
-> Note: deal records do not carry a close date, so lifetime totals
-> cannot be split by period. Use this section as a portfolio snapshot.
+**Closed-lost (lifetime):** <count> deals, $<sum> total.
 
 ## Agreements  [CONDITIONAL — omit if no agreements on record]
 
 - <emoji> <agreement Name> — <Status> (signed: <"YYYY-MM-DD" | "unsigned">)
 - ...
 
-Emoji rule:
-- 🟢 Signed (non-empty `Signed On`)
-- 🟡 Pending / unsigned
-- 🔴 Any status that maps to "expired" / "terminated"
+Emoji map by `Status` string (case-insensitive):
+- 🟢 — `Complete`, `Signed`, `Active`, `Executed`, or any status with a non-empty `Signed On`
+- 🟡 — `Pending`, `Draft`, `In Review`, `Out for Signature`, or unsigned
+- 🔴 — `Expired`, `Terminated`, `Revoked`, `Cancelled`
+
+When the `Status` string doesn't fit any of the above, default to 🟡
+and render the raw status. Do NOT invent emoji.
 
 ## Referrals (lifetime)  [CONDITIONAL — omit if `total_count` = 0]
 
 <total_count> referrals on record · <p> pending · <a> approved · <r> rejected.
-Most recent: <Submitted On> — <Referred company name> (<Status>).
-Submitted in period: <count by parsing Submitted On>.
+Most recent: <Submitted On as YYYY-MM-DD> — <Referred company name> (<Status>).
+Submitted in period: <count by parsing Submitted On strings like "Feb 26, 2026"
+into dates and counting those within start_date/end_date>.
+
+If test-looking referrals exist (see Rule 14), append: "N entries appear to
+be test submissions (e.g. 'asdf', 'EULER', purely numeric names) — recommend
+cleanup."
 
 ## Commissions  [CONDITIONAL — omit if empty]
 
@@ -386,6 +411,31 @@ These rules are **not optional**. Every QBR must follow them.
       Zero revenue in period is a red flag. Pipeline coverage matters.
     - **Inactive** → narrative is a reactivate-or-offboard framing.
       Action items skew toward "decide" rather than "execute."
+
+14. **Test-data heuristic — flag, don't filter.** Staging / test entries
+    are common in this dataset. Apply these signals (case-insensitive):
+    - **Deals**: 5+ Closed Won records at identical Amount (e.g. nine at $100)
+    - **Referrals**: company names like `asdf`, `test`, `foo`, `bar`,
+      `1234`, purely numeric, or single-word brands matching the customer
+      itself (e.g. `EULER` / `Euler` when the customer is Martus)
+    - **Agreements**: name fields with placeholder text
+
+    Treatment: keep them in headline counts (transparency), but call them
+    out in the relevant section ("N entries appear to be test submissions")
+    and add a P2 cleanup action item. Do NOT silently filter — the partner
+    manager owns that decision.
+
+15. **No fake aging signals.** The deals tool returns
+    `last_stage_change_date` as a duration string (e.g. `"20599 Days"`,
+    `"389 Days"`) that is NOT a reliable timestamp. Do NOT write phrases
+    like "stalled", "no movement in N days", "stale", "aging out",
+    "stuck for X" about any deal. Only assertions backed by parsed date
+    strings (e.g. `"Submitted On": "Feb 26, 2026"`) are allowed.
+
+16. **Number formatting context.** TL;DR may use rounded units for
+    readability (`$87K`, `$1.2M`). All other sections use precise
+    formatting with thousand separators (`$87,250`, `$1,234,567`).
+    Never round in tables.
 
 ## Example user flow
 
