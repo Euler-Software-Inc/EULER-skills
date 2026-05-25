@@ -1,8 +1,9 @@
 # Q1 2026 — Axion DataWorks × Martus
 
 **Period:** 2026-01-01 to 2026-03-31
-**Partner ID:** `1715179138375x527400652689293400`
 **Partner status:** Active
+<!-- Partner CRM ID will appear here once the MCP exposes it. Internal
+     EULER partner_id is never rendered. -->
 
 > ⚠️ Disclaimer: Headline metrics below are filtered to the period above.
 > Pipeline, referrals, agreements, and invoices sections show **all-time

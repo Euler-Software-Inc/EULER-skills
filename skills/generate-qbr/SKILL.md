@@ -173,8 +173,11 @@ Render a single markdown document. Use this exact structure. Bracketed
 # Q<N> <Year> — <Partner name> × <Customer name>
 
 **Period:** <start_date> to <end_date>
-**Partner ID:** `<partner_id>`
 **Partner status:** <performance.partner_status>
+<!-- Once the MCP exposes the partner's CRM ID (HubSpot/Salesforce/etc),
+     render it here as: **Partner CRM ID:** `<crm_id>`.
+     Until then, DO NOT print the internal EULER partner_id — it's an
+     opaque Bubble identifier with no meaning to the partner manager. -->
 
 > ⚠️ Disclaimer: Headline metrics below are filtered to the period above.
 > Pipeline, referrals, agreements, and invoices sections show **all-time
@@ -255,6 +258,14 @@ If empty: `> No agreements on record for this partner.`
 ## Anti-hallucination rules
 
 These rules are **not optional**. Every QBR must follow them.
+
+0. **NEVER render internal EULER IDs in the output.** The `partner_id`
+   (e.g. `1715179138375x527400652689293400`) is a Bubble-internal opaque
+   string and means nothing to a partner manager. It is used for
+   orchestration only — never printed in the rendered QBR. When the MCP
+   adds the partner's CRM ID (HubSpot/Salesforce/etc), render that
+   instead. Same rule applies to `deal_id`, agreement id, referral id —
+   internal IDs stay internal.
 
 1. **NEVER fabricate metrics.** If a tool returns empty or zero data for a
    section, write `"No <X> data for this period"` or `"No <X> on record"`
@@ -341,6 +352,12 @@ User: copies output → pastes into Slack / Google Doc / email to the partner.
 Things the skill cannot do today, by tool constraint. Logged for upstream
 MCP improvements:
 
+- **No partner CRM ID exposed.** Customer-side tools return the
+  EULER-internal `partner_id` only. Partner managers want the CRM ID
+  (HubSpot / Salesforce / Pipedrive object id) in their QBR. Pending
+  upstream MCP change — once added to `partners(list)`, `list_accounts`,
+  and `performance(partner)` responses, surface it in the header.
+  Assigned: Marcelo (Bubble-side).
 - **No period filter for deals / referrals / agreements / invoices.** Listed
   as all-time. Workaround: parse `"Submitted On"` for referrals and
   approximate.
