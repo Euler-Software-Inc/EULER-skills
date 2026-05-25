@@ -1,0 +1,348 @@
+/* EULER Skills — shared output stylesheet
+ * Used by: generate-qbr, partner-briefing
+ * Self-contained, no external dependencies (no Google Fonts, no CDN).
+ * Designed for print + Slack/email/Notion paste compatibility.
+ */
+
+:root {
+  --bg: #FAFAF9;
+  --surface: #FFFFFF;
+  --text: #18181B;
+  --text-muted: #71717A;
+  --text-subtle: #A1A1AA;
+  --border: #E4E4E7;
+  --border-strong: #D4D4D8;
+
+  --green: #16A34A;
+  --green-soft: #DCFCE7;
+  --green-text: #14532D;
+  --amber: #D97706;
+  --amber-soft: #FEF3C7;
+  --amber-text: #78350F;
+  --red: #DC2626;
+  --red-soft: #FEE2E2;
+  --red-text: #7F1D1D;
+  --gray: #71717A;
+  --gray-soft: #F4F4F5;
+  --gray-text: #3F3F46;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  padding: 40px 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 48px 56px;
+  box-shadow: var(--shadow-md);
+}
+
+/* ─── Header ───────────────────────────────────────── */
+.header {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 12px 0;
+  color: var(--text);
+}
+
+h1 .subtitle {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0;
+  margin-top: 4px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.meta-separator {
+  color: var(--text-subtle);
+}
+
+/* ─── Status pill ───────────────────────────────────── */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.status-pill.green { background: var(--green-soft); color: var(--green-text); }
+.status-pill.amber { background: var(--amber-soft); color: var(--amber-text); }
+.status-pill.red   { background: var(--red-soft);   color: var(--red-text); }
+.status-pill.gray  { background: var(--gray-soft);  color: var(--gray-text); }
+
+/* ─── TL;DR callout ─────────────────────────────────── */
+.tldr {
+  margin: 28px 0;
+  padding: 20px 24px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gray);
+  background: var(--gray-soft);
+}
+.tldr.green { border-left-color: var(--green); background: var(--green-soft); border-color: #BBF7D0; }
+.tldr.amber { border-left-color: var(--amber); background: var(--amber-soft); border-color: #FDE68A; }
+.tldr.red   { border-left-color: var(--red);   background: var(--red-soft);   border-color: #FECACA; }
+
+.tldr-headline {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.tldr-body {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text);
+  margin: 0;
+}
+
+.tldr-cta {
+  font-size: 13px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.08);
+  color: var(--text);
+}
+.tldr-cta strong {
+  font-weight: 600;
+}
+
+/* ─── Section headings ──────────────────────────────── */
+h2 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin: 36px 0 12px 0;
+}
+
+h2:first-of-type {
+  margin-top: 0;
+}
+
+.section {
+  margin: 28px 0;
+}
+
+.section-prose {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ─── Lists ─────────────────────────────────────────── */
+ul {
+  margin: 8px 0;
+  padding-left: 22px;
+}
+li {
+  margin-bottom: 6px;
+  line-height: 1.55;
+}
+
+ul.unstyled {
+  list-style: none;
+  padding-left: 0;
+}
+ul.unstyled li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+ul.unstyled li:last-child {
+  border-bottom: none;
+}
+
+/* ─── Tables ────────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 20px 0;
+  font-size: 13px;
+}
+
+th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-strong);
+  background: var(--gray-soft);
+}
+
+th:first-child { border-top-left-radius: 6px; }
+th:last-child  { border-top-right-radius: 6px; }
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+
+td.numeric {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ─── Priority badges ───────────────────────────────── */
+.prio-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.prio-badge.p0 { background: var(--red-soft);   color: var(--red-text); }
+.prio-badge.p1 { background: var(--amber-soft); color: var(--amber-text); }
+.prio-badge.p2 { background: var(--gray-soft);  color: var(--gray-text);  border: 1px solid var(--border); }
+
+/* ─── Stats grid ────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 12px 0 20px 0;
+}
+@media (min-width: 600px) {
+  .stats-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .stats-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+.stat {
+  padding: 14px 16px;
+  background: var(--gray-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.stat-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ─── Deal rows / agreement rows ────────────────────── */
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.row:last-child {
+  border-bottom: none;
+}
+.row-name {
+  font-weight: 500;
+  color: var(--text);
+}
+.row-meta {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.row-amount {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ─── Notes (small italic asides) ───────────────────── */
+.note {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 6px;
+}
+
+/* ─── Print ─────────────────────────────────────────── */
+@media print {
+  body {
+    background: white;
+    padding: 0;
+    font-size: 12px;
+  }
+  .container {
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding: 24px;
+    max-width: none;
+  }
+  h2 { margin-top: 20px; }
+  .tldr { break-inside: avoid; }
+  tr { break-inside: avoid; }
+}

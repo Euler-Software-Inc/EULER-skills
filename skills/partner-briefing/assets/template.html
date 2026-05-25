@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing: {{partner_name}} — {{prep_date}}</title>
+<style>
+/* INLINE THE FULL CONTENTS OF assets/styles.css HERE */
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>🎯 Briefing: {{partner_name}}</h1>
+    <div class="meta">
+      <span class="status-pill {{green|amber|red|gray}}">{{emoji}} {{Hot|Steady|Cold|Inactive}}</span>
+      <span class="meta-separator">·</span>
+      <span>Prepared {{prep_date_YYYY-MM-DD}}</span>
+      <span class="meta-separator">·</span>
+      <span>Status: {{partner_status}}</span>
+    </div>
+  </div>
+
+  <div class="tldr {{green|amber|red|gray}}">
+    <p class="tldr-headline">{{one-line state with the most important number embedded}}</p>
+    <p class="tldr-cta">{{one sentence: what they'll push on, what you should lead with}}</p>
+  </div>
+
+  <h2>What they'll likely want to talk about</h2>
+  <ul>
+    <li>{{bullet derived from real data — max 3 bullets}}</li>
+  </ul>
+
+  <h2>What you should bring up</h2>
+  <ul>
+    <li>{{actionable bullet on YOUR side — max 3 bullets}}</li>
+  </ul>
+
+  <h2>Quick stats (last {{N}} days)</h2>
+  <div class="stats-grid cols-4">
+    <div class="stat">
+      <div class="stat-label">{{label}}</div>
+      <div class="stat-value">{{value}}</div>
+      <div class="stat-sub">{{optional sub-detail}}</div>
+    </div>
+    <!-- Omit any stat where value is zero AND no contextual sub-detail makes the zero meaningful -->
+  </div>
+
+  <h2>Recent touchpoints</h2>
+  <!-- Omit entire section if no parseable dates on either row -->
+  <div class="row">
+    <span class="row-name">Most recent referral</span>
+    <span class="row-meta">{{YYYY-MM-DD}} — {{name}} <em>({{status}})</em></span>
+  </div>
+  <div class="row">
+    <span class="row-name">Most recent agreement signed</span>
+    <span class="row-meta">{{YYYY-MM-DD}} — {{agreement Name}}</span>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -97,39 +97,83 @@ manager glances at it before reading anything else.
 
 ## Output format
 
-Slack-paste friendly. Target length: **~200 words**. The whole point is
-30-second readability before walking into a call.
+Render a **single self-contained HTML file** — no external CSS, no
+external fonts, no script tags. The user copies the file or opens it
+in a browser; portability across Slack / email / Notion / PDF print
+demands a self-contained artifact.
 
-```markdown
-# 🎯 Briefing: <Partner name> — prepared <today's date YYYY-MM-DD>
+**Target length:** ~200 words of body content. The point is 30-second
+readability before walking into a call.
 
-<emoji> **<one-line state>**. <one sentence with the single most relevant signal — what they'll most likely raise, or the biggest open thread>.
+### How to produce the HTML
 
-## What they'll likely want to talk about
+1. Read [`assets/styles.css`](assets/styles.css) and inline its full
+   contents into a single `<style>` block in `<head>`. Do not link to
+   the file — self-contained is the whole point.
+2. Use the structural template in [`assets/template.html`](assets/template.html)
+   as the skeleton. Fill in the data; never invent classes that aren't
+   defined in the stylesheet.
+3. The model output is the complete HTML — `<!DOCTYPE html>` through
+   `</html>`. No surrounding markdown, no explanation, no headers.
 
-- <bullet — derived from real data: pending agreements, pending referrals awaiting your review, deals in late stage, recent commission events>
-- <bullet>
-- <bullet — keep to 3 max>
+### Required structure (HTML class names → meaning)
 
-## What you should bring up
-
-- <bullet — actions on YOUR side: agreements awaiting your signature, referrals awaiting your approval, open deals you want a stage update on, partners in tier-mismatch>
-- <bullet>
-- <bullet — keep to 3 max>
-
-## Quick stats (last <N> days)
-
-- New referrals submitted: <N> (<status breakdown>)
-- Closed-won in window: $<X> (<n> deals)
-- Open pipeline: $<X> across <n> deals
-- Agreements: <N signed> / <N pending>
-- Commissions paid: $<X> [omit row if zero]
-
-## Recent touchpoints
-
-- Most recent referral: <YYYY-MM-DD> — <Referred company name> (<Status>) [omit row if no referrals]
-- Most recent agreement event: <YYYY-MM-DD> — <agreement Name> (<Status>) [omit row if no agreement with a parseable date]
 ```
+<div class="container">
+  <div class="header">
+    <h1>🎯 Briefing: <Partner name></h1>
+    <div class="meta">
+      <span class="status-pill {green|amber|red|gray}">{emoji} {label}</span>
+      · Prepared <YYYY-MM-DD>
+      · Status: <partner_status>
+    </div>
+  </div>
+
+  <div class="tldr {green|amber|red|gray}">
+    <p class="tldr-headline">{one-line state, with the most important number embedded}</p>
+    <p class="tldr-cta">{one sentence — what they'll push on / what you should lead with}</p>
+  </div>
+
+  <h2>What they'll likely want to talk about</h2>
+  <ul>...max 3 bullets...</ul>
+
+  <h2>What you should bring up</h2>
+  <ul>...max 3 bullets...</ul>
+
+  <h2>Quick stats (last <N> days)</h2>
+  <div class="stats-grid cols-4">
+    <div class="stat">
+      <div class="stat-label">{label}</div>
+      <div class="stat-value">{value}</div>
+      <div class="stat-sub">{sub-detail, optional}</div>
+    </div>
+    ...
+  </div>
+
+  <h2>Recent touchpoints</h2>
+  <div class="row">
+    <span class="row-name">{type}</span>
+    <span class="row-meta">{date — name (status)}</span>
+  </div>
+  ...
+</div>
+```
+
+### Status-pill labels (briefing variant — 30-day window)
+
+| Emoji | Pill label | Meaning |
+|-------|-----------|---------|
+| 🟢 | `Hot` | Movement positive in the window (close-won, referral approved, agreement signed, commission paid) |
+| 🟡 | `Steady` | In-flight activity (open pipeline, pending referrals, in-progress agreements) but no closes in window |
+| 🔴 | `Cold` | Active partner + zero window activity + foundational blocker |
+| ⚪ | `Inactive` | `partner_status = "Inactive"` — reactivate-or-offboard framing |
+
+### Section omission rules
+
+- **Stat cards** that are zero — omit the entire card (don't render "Closed-won: $0")
+- **"Recent touchpoints" rows** when no parseable date exists for that entity type
+- **Entire "Recent touchpoints" section** when both rows would be omitted
+- **Entire "What you should bring up" section** when no derivable items exist from data
 
 ### Section omission rules
 

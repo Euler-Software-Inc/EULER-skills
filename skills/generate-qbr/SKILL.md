@@ -121,13 +121,28 @@ Key gotchas to keep in mind (the file has the full detail):
 
 ## Output format
 
-This is an **executive-readable** document. A partner manager should be
-able to skim it in 30 seconds and walk into a partner call ready.
-Markdown only — no HTML, no internal field paths, no system terminology.
+Render a **single self-contained HTML file** — no external CSS, no
+external fonts, no script tags. A partner manager should be able to
+open it in a browser, paste it into email, save as PDF, or share by
+link, all from the same artifact.
 
-Use this exact structure. Sections marked **CONDITIONAL** are omitted
-entirely when their underlying data is empty. Do not print "No X data"
-placeholders inside the rendered doc — silence the section instead.
+The document is **executive-readable**: skimmed in 30 seconds, drilled
+into in 2 minutes. No internal field paths, no system terminology.
+
+### How to produce the HTML
+
+1. Read [`assets/styles.css`](assets/styles.css) and inline its full
+   contents into a single `<style>` block in `<head>`. Do not link to
+   the file — self-contained is required for portability.
+2. Use the structural template in [`assets/template.html`](assets/template.html)
+   as the skeleton. Fill in data; do not invent class names that
+   aren't defined in the stylesheet.
+3. Model output is the complete HTML — `<!DOCTYPE html>` through
+   `</html>`. No surrounding markdown, no preamble.
+
+Sections marked **CONDITIONAL** are omitted entirely when their
+underlying data is empty. Do not print "No X data" placeholders —
+silence the section.
 
 ### Status traffic light (computed)
 
@@ -147,51 +162,87 @@ in order (first match wins):
 > an Amber concern, not a Red blocker — they're already operating. Red is
 > reserved for partners who literally cannot or did not produce.
 
-### Template
+### Required structure (HTML class names → meaning)
 
-```markdown
-# <Partner name> — Q<N> <Year>
+```
+<div class="container">
+  <div class="header">
+    <h1><Partner name> — Q<N> <Year></h1>
+    <div class="meta">
+      <span class="status-pill {green|amber|red|gray}">{emoji} {label}</span>
+      · Period: {start_date} to {end_date}
+      · Partner status: {partner_status}
+    </div>
+  </div>
 
-## TL;DR
+  <div class="tldr {green|amber|red|gray}">
+    <p class="tldr-headline">{one-line state}</p>
+    <p class="tldr-body">{2–3 sentences: biggest signal + biggest risk + the number that matters}</p>
+    <p class="tldr-cta"><strong>Recommended next step:</strong> {one focused action}</p>
+  </div>
 
-<emoji> **<one-line headline that names the state>**.
-<EXACTLY 2 sentences, max 3. Biggest signal + biggest risk, with the one
-number that matters most embedded inline. Prose only — no tables, no
-bullets, no lists.>
-**Recommended next step:** <one sentence, ONE focused action — not a list joined by "and">.
+  <h2>What happened in Q<N></h2>
+  <p class="section-prose">{2–4 sentences in business language}</p>
 
----
+  <h2>What needs to happen in Q<N+1></h2>
+  <table>
+    <thead><tr><th>Prio</th><th>Action</th><th>Owner</th><th>Due</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="prio-badge p0">P0</span></td>
+        <td><strong>{action verb-led}</strong>
+          <div class="note">{expected outcome}</div>
+        </td>
+        <td>Partner Manager</td>
+        <td class="numeric">YYYY-MM-DD</td>
+      </tr>
+      ...up to 5 rows...
+    </tbody>
+  </table>
 
-## What happened in Q<N>
+  <h2>Pipeline (lifetime)</h2>
+  <div class="stats-grid"> ...stat cards (omit Closed-lost if $0)... </div>
 
-<2–4 sentences of prose summarizing the period. Pull from
-performance metrics + most material pipeline movement. Frame in
-business terms ("Axion closed nothing in Q1") not system terms
-("performance.total_deals_count was 0").>
+  <h2>Top open deals</h2>
+  <div class="row">
+    <span class="row-name">{Deal name}</span>
+    <span class="row-meta">{stage}</span>
+    <span class="row-amount">${Amount}</span>
+  </div>
+  ...top 5 max; if >5, end with: <p class="note">+ N more open deals under $1K (...)</p>
 
-**Key numbers** (period-filtered) [CONDITIONAL — omit table if all
-displayed rows would be zero/N/A]:
+  <h2>Agreements</h2>
+  <div class="row">
+    <span class="row-name"><span class="status-pill {green|amber|red}">{emoji} {Status}</span> &nbsp; {agreement Name}</span>
+    <span class="row-meta">signed YYYY-MM-DD | unsigned</span>
+  </div>
 
-| Metric | Q<N> <Year> | [if target supplied] Target | [if target supplied] % |
-|--------|-------------|-----------------------------|------------------------|
-| Deals closed | <n> | <target> | <%> |
-| Booking revenue | <$> | <$> | <%> |
-| Commissions paid | <$> | — | — |
+  <h2>Referrals (lifetime)</h2>
+  <div class="stats-grid cols-3"> ...3 stat cards... </div>
+  <p class="section-prose">Most recent: ... Submitted in period: ... Test-data note if applicable.</p>
 
-Hidden by zero-denominator rule (omit row entirely):
-- Win rate when total_deals_count = 0
-- Average sales cycle when total_deals_count = 0
-- Average contract value when total_deals_count = 0
+  <h2>Commissions</h2>  <!-- CONDITIONAL: omit if empty -->
+  <p class="section-prose">Total paid in Q<N>: $X. ...</p>
 
-## What needs to happen in Q<N+1>
+  <h2>Invoices</h2>  <!-- CONDITIONAL: omit if empty -->
+  <p class="section-prose">N invoices, $X total. ...</p>
+</div>
+```
 
-| Prio | Action | Owner | Due | Expected outcome |
-|------|--------|-------|-----|------------------|
-| P0   | <verb-led action> | <role or name> | <YYYY-MM-DD> | <one line> |
-| P1   | ... | ... | ... | ... |
-| P2   | ... | ... | ... | ... |
+### Status pill labels (QBR vocabulary)
 
-Generation rules:
+| Emoji | Pill label | Conditions (recap from traffic-light table) |
+|-------|-----------|---------------------------------------------|
+| 🟢 | `On track` | Active + closed-won in period |
+| 🟡 | `Watch` | Active with operational concern, OR Onboarding/Prospecting |
+| 🔴 | `At risk` | Active + 0 lifetime closed-won + (no pipeline OR unsigned foundational) |
+| ⚪ | `Inactive` | partner_status = "Inactive" |
+
+Do not write the pill label as `🟡 Amber` — that's internal jargon.
+The semantic label (`Watch`, `At risk`, etc.) tells the reader what
+the colour MEANS.
+
+### Action item generation rules
 - Each item is derived from a finding ACTUALLY IN THE DATA (agreement
   unsigned, referral aging by parsed Submitted-On date, deal in late stage
   by stage name alone — see "Stage-age caveat" below). Never generic
@@ -211,51 +262,21 @@ in stage" / "no movement in N days" / "stale for X" — you do not have
 aging data. Limit yourself to what stage name + Amount actually tell you:
 "in Demo Scheduled at $10K" is OK; "stalled in Demo Scheduled" is not.
 
-## Pipeline (lifetime)  [CONDITIONAL — omit if `deals.total_items` = 0]
+### Agreement emoji map (`Status` string, case-insensitive)
 
-**Open deals** (sorted by Amount descending):
-- <Deal name> — $<Amount> — <stage>
-- <Deal name> — $<Amount> — <stage>
-
-**Closed-won (lifetime):** <count> deals, $<sum> total. Top: <Deal name> ($<Amount>).
-[If test-data heuristic fires — see below — append: "Of these, N appear to be
-test/staging entries (e.g. <N> identical-amount records); real Closed Won is
-<count> deals worth $<sum>."]
-
-**Closed-lost (lifetime):** <count> deals, $<sum> total.
-
-## Agreements  [CONDITIONAL — omit if no agreements on record]
-
-- <emoji> <agreement Name> — <Status> (signed: <"YYYY-MM-DD" | "unsigned">)
-- ...
-
-Emoji map by `Status` string (case-insensitive):
-- 🟢 — `Complete`, `Signed`, `Active`, `Executed`, or any status with a non-empty `Signed On`
+- 🟢 — `Complete`, `Signed`, `Active`, `Executed`, or any non-empty `Signed On`
 - 🟡 — `Pending`, `Draft`, `In Review`, `Out for Signature`, or unsigned
 - 🔴 — `Expired`, `Terminated`, `Revoked`, `Cancelled`
+- Unknown statuses default to 🟡, with the raw status text rendered next to it.
 
-When the `Status` string doesn't fit any of the above, default to 🟡
-and render the raw status. Do NOT invent emoji.
+### Pipeline section rules
 
-## Referrals (lifetime)  [CONDITIONAL — omit if `total_count` = 0]
-
-<total_count> referrals on record · <p> pending · <a> approved · <r> rejected.
-Most recent: <Submitted On as YYYY-MM-DD> — <Referred company name> (<Status>).
-Submitted in period: <count by parsing Submitted On strings like "Feb 26, 2026"
-into dates and counting those within start_date/end_date>.
-
-If test-looking referrals exist (see Rule 14), append: "N entries appear to
-be test submissions (e.g. 'asdf', 'EULER', purely numeric names) — recommend
-cleanup."
-
-## Commissions  [CONDITIONAL — omit if empty]
-
-Total paid in Q<N>: $<sum>. <Optional: largest single commission, status breakdown>.
-
-## Invoices  [CONDITIONAL — omit if empty]
-
-<count> invoices, totaling $<sum>. <flag overdue if any>.
-```
+- Show **top 5 open deals** by Amount descending — never the full list.
+  When there are more, append a `<p class="note">` summarizing the
+  rollup (e.g. *"+ 5 more open deals under $1K (Names...)"*).
+- Closed-won stat card shows total; if test-data heuristic fires (Rule 14),
+  add a `stat-sub` like *"7 real deals · 4 test entries excluded ($699)"*.
+- Closed-lost stat card: **omit entirely if $0** (Rule 1).
 
 ### What is NOT in the rendered output
 

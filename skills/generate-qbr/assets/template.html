@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{partner_name}} — Q{{N}} {{Year}}</title>
+<style>
+/* INLINE THE FULL CONTENTS OF assets/styles.css HERE */
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>{{partner_name}} — Q{{N}} {{Year}}</h1>
+    <div class="meta">
+      <span class="status-pill {{green|amber|red|gray}}">{{emoji}} {{On track|Watch|At risk|Inactive}}</span>
+      <span class="meta-separator">·</span>
+      <span>Period: {{start_date}} to {{end_date}}</span>
+      <span class="meta-separator">·</span>
+      <span>Partner status: {{partner_status}}</span>
+    </div>
+  </div>
+
+  <div class="tldr {{green|amber|red|gray}}">
+    <p class="tldr-headline">{{one-line state that names the situation}}</p>
+    <p class="tldr-body">{{2–3 sentences: biggest signal, biggest risk, the one number that matters most}}</p>
+    <p class="tldr-cta"><strong>Recommended next step:</strong> {{one focused action — never an "and" list}}</p>
+  </div>
+
+  <h2>What happened in Q{{N}}</h2>
+  <p class="section-prose">{{2–4 sentences in business language. Frame in business terms, not system terms.}}</p>
+
+  <h2>What needs to happen in Q{{N+1}}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 50px;">Prio</th>
+        <th>Action</th>
+        <th style="width: 140px;">Owner</th>
+        <th style="width: 110px;">Due</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="prio-badge {{p0|p1|p2}}">{{P0|P1|P2}}</span></td>
+        <td>
+          <strong>{{verb-led action}}</strong>
+          <div class="note">{{expected outcome — one line}}</div>
+        </td>
+        <td>{{Partner Manager | Partner-side}}</td>
+        <td class="numeric">{{YYYY-MM-DD}}</td>
+      </tr>
+      <!-- up to 5 rows -->
+    </tbody>
+  </table>
+
+  <h2>Pipeline (lifetime)</h2>
+  <!-- CONDITIONAL: omit entire pipeline section if deals.total_items = 0 -->
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-label">Open pipeline</div>
+      <div class="stat-value">${{sum}}</div>
+      <div class="stat-sub">{{n}} deals across stages</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Closed-won (lifetime)</div>
+      <div class="stat-value">${{sum}}</div>
+      <div class="stat-sub">{{n}} deals{{ · M test entries excluded ($X) if test-data heuristic fires}}</div>
+    </div>
+    <!-- OMIT Closed-lost stat card if $0 -->
+  </div>
+
+  <h2>Top open deals</h2>
+  <div class="row">
+    <span class="row-name">{{Deal name}}</span>
+    <span class="row-meta">{{crm status (deal_stage)}}</span>
+    <span class="row-amount">${{Amount}}</span>
+  </div>
+  <!-- top 5 by Amount only. If more, append: -->
+  <p class="note">+ {{N}} more open deals under {{$1K|$5K|threshold}} ({{names...}})</p>
+
+  <h2>Agreements</h2>
+  <!-- CONDITIONAL: omit if no agreements -->
+  <div class="row">
+    <span class="row-name">
+      <span class="status-pill {{green|amber|red}}">{{emoji}} {{Status}}</span>
+      &nbsp; {{agreement Name}}
+    </span>
+    <span class="row-meta">{{signed YYYY-MM-DD | unsigned}}</span>
+  </div>
+
+  <h2>Referrals (lifetime)</h2>
+  <!-- CONDITIONAL: omit if total_count = 0 -->
+  <div class="stats-grid cols-3">
+    <div class="stat">
+      <div class="stat-label">Total on record</div>
+      <div class="stat-value">{{total_count}}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Pending review</div>
+      <div class="stat-value">{{pending_count}}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Submitted in Q{{N}}</div>
+      <div class="stat-value">{{in_period_count}}</div>
+      <div class="stat-sub">{{test-data note if applicable}}</div>
+    </div>
+  </div>
+  <p class="section-prose">
+    Most recent: {{YYYY-MM-DD}} — {{Referred company name}} ({{Status}}).
+    {{If test-looking referrals exist: "N entries appear to be test submissions (...). Recommend cleanup."}}
+  </p>
+
+  <h2>Commissions</h2>
+  <!-- CONDITIONAL: omit if empty -->
+  <p class="section-prose">Total paid in Q{{N}}: ${{sum}}. {{Optional: largest, breakdown}}.</p>
+
+  <h2>Invoices</h2>
+  <!-- CONDITIONAL: omit if empty -->
+  <p class="section-prose">{{count}} invoices, totaling ${{sum}}. {{Flag overdue if any.}}</p>
+
+</div>
+
+</body>
+</html>

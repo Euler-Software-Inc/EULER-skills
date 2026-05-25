@@ -67,10 +67,12 @@ EULER-skills/
 │   ├── generate-qbr/
 │   │   ├── SKILL.md         The QBR generation playbook
 │   │   ├── references/      Reference docs (MCP field paths) — shared
-│   │   └── examples/        Sanitized example outputs
+│   │   ├── assets/          styles.css + template.html for HTML output
+│   │   └── examples/        Sanitized example outputs (HTML + .md)
 │   └── partner-briefing/
 │       ├── SKILL.md         Pre-meeting briefing playbook
-│       └── examples/        Sanitized example outputs
+│       ├── assets/          styles.css + template.html for HTML output
+│       └── examples/        Sanitized example outputs (HTML + .md)
 ├── commands/                (Future) Explicit slash commands like /euler:list
 ├── agents/                  (Future) Sub-agents for multi-step workflows
 ├── CONTRIBUTING.md          How to add or modify a skill

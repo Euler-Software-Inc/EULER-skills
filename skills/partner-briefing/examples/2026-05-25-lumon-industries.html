@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing: Lumon Industries — 2026-05-25</title>
+<style>
+:root {
+  --bg: #FAFAF9;
+  --surface: #FFFFFF;
+  --text: #18181B;
+  --text-muted: #71717A;
+  --text-subtle: #A1A1AA;
+  --border: #E4E4E7;
+  --border-strong: #D4D4D8;
+  --green: #16A34A;
+  --green-soft: #DCFCE7;
+  --green-text: #14532D;
+  --amber: #D97706;
+  --amber-soft: #FEF3C7;
+  --amber-text: #78350F;
+  --red: #DC2626;
+  --red-soft: #FEE2E2;
+  --red-text: #7F1D1D;
+  --gray: #71717A;
+  --gray-soft: #F4F4F5;
+  --gray-text: #3F3F46;
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px; line-height: 1.6; color: var(--text); background: var(--bg);
+  padding: 40px 20px;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+.container {
+  max-width: 780px; margin: 0 auto; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px; padding: 48px 56px;
+  box-shadow: var(--shadow-md);
+}
+.header { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; margin: 0 0 12px 0; color: var(--text); }
+.meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 13px; color: var(--text-muted); }
+.meta-separator { color: var(--text-subtle); }
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap;
+}
+.status-pill.green { background: var(--green-soft); color: var(--green-text); }
+.status-pill.amber { background: var(--amber-soft); color: var(--amber-text); }
+.status-pill.red   { background: var(--red-soft);   color: var(--red-text); }
+.status-pill.gray  { background: var(--gray-soft);  color: var(--gray-text); }
+.tldr {
+  margin: 28px 0; padding: 20px 24px; border-radius: 10px;
+  border: 1px solid var(--border); border-left: 4px solid var(--gray); background: var(--gray-soft);
+}
+.tldr.green { border-left-color: var(--green); background: var(--green-soft); border-color: #BBF7D0; }
+.tldr.amber { border-left-color: var(--amber); background: var(--amber-soft); border-color: #FDE68A; }
+.tldr.red   { border-left-color: var(--red);   background: var(--red-soft);   border-color: #FECACA; }
+.tldr-headline { font-size: 15px; font-weight: 600; margin: 0; line-height: 1.5; color: var(--text); }
+h2 {
+  font-size: 12px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text-muted); margin: 36px 0 12px 0;
+}
+h2:first-of-type { margin-top: 0; }
+ul { margin: 8px 0; padding-left: 22px; }
+li { margin-bottom: 6px; line-height: 1.55; }
+.stats-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  margin: 12px 0 20px 0;
+}
+@media (min-width: 600px) { .stats-grid.cols-4 { grid-template-columns: repeat(4, 1fr); } }
+.stat {
+  padding: 14px 16px; background: var(--gray-soft); border: 1px solid var(--border); border-radius: 8px;
+}
+.stat-label {
+  font-size: 11px; text-transform: uppercase; color: var(--text-muted);
+  letter-spacing: 0.06em; margin-bottom: 6px; font-weight: 500;
+}
+.stat-value {
+  font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em; color: var(--text);
+}
+.stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.row:last-child { border-bottom: none; }
+.row-name { font-weight: 500; color: var(--text); }
+.row-meta { color: var(--text-muted); font-size: 13px; }
+@media print {
+  body { background: white; padding: 0; font-size: 12px; }
+  .container { box-shadow: none; border: none; border-radius: 0; padding: 24px; max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>🎯 Briefing: Lumon Industries</h1>
+    <div class="meta">
+      <span class="status-pill green">🟢 Hot</span>
+      <span class="meta-separator">·</span>
+      <span>Prepared 2026-05-25</span>
+      <span class="meta-separator">·</span>
+      <span>Status: Onboarding</span>
+    </div>
+  </div>
+
+  <div class="tldr green">
+    <p class="tldr-headline">Closed a $10K Everest deal this month; 7 referrals from early April still pending triage on your side; tier status mismatch (Onboarding but producing at Active levels).</p>
+    <p class="tldr-cta">They'll likely push on the referral backlog and the tier conversation. You should lead with the tier promotion offer.</p>
+  </div>
+
+  <h2>What they'll likely want to talk about</h2>
+  <ul>
+    <li>The 7 early-April referrals awaiting your review — Sierra and LLK both hit <strong>"Error creating deal in crm"</strong></li>
+    <li>2 Standard Affiliate Agreements still <strong>Pending signature</strong> on your side</li>
+    <li>Tier — they're delivering Active-tier production ($120K lifetime Closed Won) on an Onboarding contract</li>
+  </ul>
+
+  <h2>What you should bring up</h2>
+  <ul>
+    <li><strong>Tier promotion conversation</strong> — the data supports moving Lumon out of Onboarding</li>
+    <li>Sierra + LLK referrals failed the CRM write — need your manual entry to unblock</li>
+    <li>Acme ($50K, Stage 1) — ask Lumon for an update before next quarter</li>
+  </ul>
+
+  <h2>Quick stats (last 30 days)</h2>
+  <div class="stats-grid cols-4">
+    <div class="stat">
+      <div class="stat-label">Closed-won</div>
+      <div class="stat-value">$10,000</div>
+      <div class="stat-sub">1 deal · Everest</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">New referrals</div>
+      <div class="stat-value">0</div>
+      <div class="stat-sub">last submitted 2026-04-22</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Open pipeline</div>
+      <div class="stat-value">$58,300</div>
+      <div class="stat-sub">10 deals · Acme $50K leading</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Agreements</div>
+      <div class="stat-value">3 / 5</div>
+      <div class="stat-sub">3 signed · 2 pending</div>
+    </div>
+  </div>
+
+  <h2>Recent touchpoints</h2>
+  <div class="row">
+    <span class="row-name">Most recent referral</span>
+    <span class="row-meta">2026-04-22 — LLK <em>(Error creating deal in crm)</em></span>
+  </div>
+  <div class="row">
+    <span class="row-name">Most recent agreement signed</span>
+    <span class="row-meta">2025-02-12 — Standard Affiliate Agreement</span>
+  </div>
+
+</div>
+
+</body>
+</html>

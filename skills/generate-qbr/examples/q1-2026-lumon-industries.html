@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumon Industries — Q1 2026</title>
+<style>
+:root {
+  --bg: #FAFAF9;
+  --surface: #FFFFFF;
+  --text: #18181B;
+  --text-muted: #71717A;
+  --text-subtle: #A1A1AA;
+  --border: #E4E4E7;
+  --border-strong: #D4D4D8;
+  --green: #16A34A;
+  --green-soft: #DCFCE7;
+  --green-text: #14532D;
+  --amber: #D97706;
+  --amber-soft: #FEF3C7;
+  --amber-text: #78350F;
+  --red: #DC2626;
+  --red-soft: #FEE2E2;
+  --red-text: #7F1D1D;
+  --gray: #71717A;
+  --gray-soft: #F4F4F5;
+  --gray-text: #3F3F46;
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px; line-height: 1.6; color: var(--text); background: var(--bg);
+  padding: 40px 20px;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+.container {
+  max-width: 780px; margin: 0 auto; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px; padding: 48px 56px;
+  box-shadow: var(--shadow-md);
+}
+.header { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; margin: 0 0 12px 0; color: var(--text); }
+.meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 13px; color: var(--text-muted); }
+.meta-separator { color: var(--text-subtle); }
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap;
+}
+.status-pill.green { background: var(--green-soft); color: var(--green-text); }
+.status-pill.amber { background: var(--amber-soft); color: var(--amber-text); }
+.status-pill.red   { background: var(--red-soft);   color: var(--red-text); }
+.status-pill.gray  { background: var(--gray-soft);  color: var(--gray-text); }
+.tldr {
+  margin: 28px 0; padding: 22px 26px; border-radius: 10px;
+  border: 1px solid var(--border); border-left: 4px solid var(--gray); background: var(--gray-soft);
+}
+.tldr.green { border-left-color: var(--green); background: var(--green-soft); border-color: #BBF7D0; }
+.tldr.amber { border-left-color: var(--amber); background: var(--amber-soft); border-color: #FDE68A; }
+.tldr.red   { border-left-color: var(--red);   background: var(--red-soft);   border-color: #FECACA; }
+.tldr-headline { font-size: 15px; font-weight: 600; margin: 0 0 10px 0; line-height: 1.45; color: var(--text); }
+.tldr-body { font-size: 14px; line-height: 1.55; color: var(--text); margin: 0; }
+.tldr-cta { font-size: 13px; margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(0, 0, 0, 0.08); color: var(--text); }
+.tldr-cta strong { font-weight: 700; }
+h2 {
+  font-size: 12px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text-muted); margin: 36px 0 12px 0;
+}
+.section-prose { font-size: 14px; line-height: 1.65; color: var(--text); margin: 8px 0 0 0; }
+ul { margin: 8px 0; padding-left: 22px; }
+li { margin-bottom: 6px; line-height: 1.55; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0 20px 0; font-size: 13px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+th {
+  text-align: left; font-weight: 600; color: var(--text-muted);
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 10px 12px; border-bottom: 1px solid var(--border-strong); background: var(--gray-soft);
+}
+td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+tr:last-child td { border-bottom: none; }
+td.numeric { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.prio-badge {
+  display: inline-block; padding: 3px 9px; border-radius: 4px;
+  font-weight: 700; font-size: 11px; letter-spacing: 0.02em;
+}
+.prio-badge.p0 { background: var(--red-soft);   color: var(--red-text); }
+.prio-badge.p1 { background: var(--amber-soft); color: var(--amber-text); }
+.prio-badge.p2 { background: var(--gray-soft);  color: var(--gray-text);  border: 1px solid var(--border); }
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0 20px 0; }
+@media (min-width: 600px) { .stats-grid.cols-3 { grid-template-columns: repeat(3, 1fr); } }
+.stat { padding: 14px 16px; background: var(--gray-soft); border: 1px solid var(--border); border-radius: 8px; }
+.stat-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.06em; margin-bottom: 6px; font-weight: 500; }
+.stat-value { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; color: var(--text); }
+.stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.row:last-child { border-bottom: none; }
+.row-name { font-weight: 500; color: var(--text); }
+.row-meta { color: var(--text-muted); font-size: 13px; }
+.row-amount { font-variant-numeric: tabular-nums; color: var(--text-muted); font-size: 13px; font-weight: 500; white-space: nowrap; }
+.note { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 8px; }
+@media print {
+  body { background: white; padding: 0; font-size: 12px; }
+  .container { box-shadow: none; border: none; border-radius: 0; padding: 24px; max-width: none; }
+  h2 { margin-top: 20px; }
+  .tldr, tr { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>Lumon Industries — Q1 2026</h1>
+    <div class="meta">
+      <span class="status-pill amber">🟡 Watch</span>
+      <span class="meta-separator">·</span>
+      <span>Period: 2026-01-01 to 2026-03-31</span>
+      <span class="meta-separator">·</span>
+      <span>Partner status: Onboarding</span>
+    </div>
+  </div>
+
+  <div class="tldr amber">
+    <p class="tldr-headline">Onboarding partner with $120K lifetime Closed Won — operational profile of an Active partner, not an Onboarding one.</p>
+    <p class="tldr-body">Lumon carries 7 lifetime Closed Won deals (Acme $100K, Everest $10K, BookShelf $4.5K, MailMasters $4K, etc.), 18 lifetime referrals — 1 submitted in Q1, 7 more in early Q2 — and a complete foundational agreement set (Standard Agency, MNDA, Standard Affiliate all signed). Yet still carries Onboarding status with no Q1 2026 closes recorded by the performance tool.</p>
+    <p class="tldr-cta"><strong>Recommended next step:</strong> promote Lumon from Onboarding to Active given the lifetime production already on file.</p>
+  </div>
+
+  <h2>What happened in Q1</h2>
+  <p class="section-prose">
+    The performance tool reports zero Q1 2026 activity, but the underlying lifetime data tells a different story: Lumon has 7 real Closed Won deals on file totaling $119,896 — including a $100,000 Acme deal — and the foundational agreement set is complete with 2 additional Pending Affiliate Agreements still in flight. One referral was submitted in Q1 ("sss", Feb 20 — appears to be a test entry) and seven more landed in early Q2 (Ace Corp ×2, LLC, kraken, self-referral, Sierra, LLK), with Sierra and LLK both hitting CRM-write errors. No commissions were paid in the period.
+  </p>
+
+  <h2>What needs to happen in Q2</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 50px;">Prio</th>
+        <th>Action</th>
+        <th style="width: 140px;">Owner</th>
+        <th style="width: 110px;">Due</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="prio-badge p0">P0</span></td>
+        <td><strong>Tier review</strong> — promote Lumon to Active given lifetime production
+          <div class="note">Align status with operational reality</div>
+        </td>
+        <td>Partner Manager</td>
+        <td class="numeric">2026-06-07</td>
+      </tr>
+      <tr>
+        <td><span class="prio-badge p0">P0</span></td>
+        <td><strong>Sign the 2 pending Standard Affiliate Agreements</strong>
+          <div class="note">Close the remaining agreement gap</div>
+        </td>
+        <td>Partner Manager</td>
+        <td class="numeric">2026-06-14</td>
+      </tr>
+      <tr>
+        <td><span class="prio-badge p1">P1</span></td>
+        <td><strong>Triage the early-Q2 referral surge</strong> (Ace Corp ×2, kraken, LLC, Sierra, self-referral, LLK)
+          <div class="note">Approve real prospects; reject duplicates and self-referrals</div>
+        </td>
+        <td>Partner Manager</td>
+        <td class="numeric">2026-06-10</td>
+      </tr>
+      <tr>
+        <td><span class="prio-badge p1">P1</span></td>
+        <td><strong>Investigate "Error creating deal in crm"</strong> on Sierra and LLK referrals
+          <div class="note">Resolve CRM write failures</div>
+        </td>
+        <td>Partner Manager</td>
+        <td class="numeric">2026-06-14</td>
+      </tr>
+      <tr>
+        <td><span class="prio-badge p2">P2</span></td>
+        <td><strong>Clean test-data deals</strong> — "lucas test", "Big Tree" (no Amount), test-named "sss" referral
+          <div class="note">Clean baseline for Q2 reporting</div>
+        </td>
+        <td>Partner Manager</td>
+        <td class="numeric">2026-06-30</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Pipeline (lifetime)</h2>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-label">Open pipeline</div>
+      <div class="stat-value">$58,300</div>
+      <div class="stat-sub">10 deals across stages</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Closed-won (lifetime)</div>
+      <div class="stat-value">$119,896</div>
+      <div class="stat-sub">7 real deals · 4 test entries excluded ($699)</div>
+    </div>
+  </div>
+
+  <h2>Top open deals</h2>
+  <div class="row">
+    <span class="row-name">Acme</span>
+    <span class="row-meta">Stage 1</span>
+    <span class="row-amount">$50,000</span>
+  </div>
+  <div class="row">
+    <span class="row-name">MailMasters</span>
+    <span class="row-meta">won <em>(unusual lowercase)</em></span>
+    <span class="row-amount">$4,000</span>
+  </div>
+  <div class="row">
+    <span class="row-name">Kodak</span>
+    <span class="row-meta">Negotiating</span>
+    <span class="row-amount">$3,000</span>
+  </div>
+  <div class="row">
+    <span class="row-name">The Coffee Shop</span>
+    <span class="row-meta">Qualification</span>
+    <span class="row-amount">$2,450</span>
+  </div>
+  <div class="row">
+    <span class="row-name">Chocolate Chip</span>
+    <span class="row-meta">Demo Scheduled</span>
+    <span class="row-amount">$1,250</span>
+  </div>
+  <p class="note">+ 5 more open deals under $1K (Oatmeal Chocolate Chip, No bake, lucas test, The Digit co Referral, Big Tree)</p>
+
+  <h2>Agreements</h2>
+  <div class="row">
+    <span class="row-name"><span class="status-pill green">🟢 Complete</span> &nbsp; Standard Agency Agreement</span>
+    <span class="row-meta">signed 2023-08-18</span>
+  </div>
+  <div class="row">
+    <span class="row-name"><span class="status-pill green">🟢 Complete</span> &nbsp; MNDA</span>
+    <span class="row-meta">signed 2023-08-01</span>
+  </div>
+  <div class="row">
+    <span class="row-name"><span class="status-pill green">🟢 Complete</span> &nbsp; Standard Affiliate Agreement</span>
+    <span class="row-meta">signed 2025-02-12</span>
+  </div>
+  <div class="row">
+    <span class="row-name"><span class="status-pill amber">🟡 Pending</span> &nbsp; Standard Agency Agreement</span>
+    <span class="row-meta">unsigned</span>
+  </div>
+  <div class="row">
+    <span class="row-name"><span class="status-pill amber">🟡 Pending</span> &nbsp; Standard Affiliate Agreement</span>
+    <span class="row-meta">unsigned</span>
+  </div>
+
+  <h2>Referrals (lifetime)</h2>
+  <div class="stats-grid cols-3">
+    <div class="stat">
+      <div class="stat-label">Total on record</div>
+      <div class="stat-value">18</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Pending review</div>
+      <div class="stat-value">11</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Submitted in Q1</div>
+      <div class="stat-value">1</div>
+      <div class="stat-sub">"sss" — appears to be test</div>
+    </div>
+  </div>
+  <p class="section-prose">
+    Most recent: 2026-04-22 — LLK (Error creating deal in crm). Several pending entries appear to be test submissions ("sss", "lumon industries" self-referral, "LLC", "kraken") — recommend cleanup.
+  </p>
+
+</div>
+
+</body>
+</html>
