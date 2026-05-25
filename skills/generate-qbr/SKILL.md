@@ -41,7 +41,17 @@ Before running, confirm with the user:
   and offer to list all partners (`partners(action: 'list')` without
   filter, page through if needed).
 
-### 2. Which quarter?
+### 2. (Optional) JBP target for the quarter
+
+- If the user offers a target (revenue or deal count for the quarter),
+  capture it. Used for the **vs-target column** in the headline table
+  and to compute attainment % in the TL;DR.
+- If not offered, do NOT ask — proceed without targets. The TL;DR
+  narrative adapts (focuses on pipeline health and partner activation
+  signals instead of attainment).
+- Future versions will fetch JBP targets from a dedicated MCP tool.
+
+### 3. Which quarter?
 
 - Accept any of: `"Q1 2026"`, `"Q4 2025"`, explicit ISO dates, `"last quarter"`,
   `"this quarter"`.
@@ -166,161 +176,216 @@ encounter.
 
 ## Output format
 
-Render a single markdown document. Use this exact structure. Bracketed
-`<...>` placeholders are computed from the response field paths above.
+This is an **executive-readable** document. A partner manager should be
+able to skim it in 30 seconds and walk into a partner call ready.
+Markdown only — no HTML, no internal field paths, no system terminology.
+
+Use this exact structure. Sections marked **CONDITIONAL** are omitted
+entirely when their underlying data is empty. Do not print "No X data"
+placeholders inside the rendered doc — silence the section instead.
+
+### Status traffic light (computed)
+
+Compute the partner's status indicator once, at the start, by these rules
+in order (first match wins):
+
+| Indicator | Conditions |
+|-----------|------------|
+| 🔴 **Red** | `partner_status` = "Active" AND `total_deals_count` (period) = 0 AND open-pipeline count ≤ 1 |
+| 🔴 **Red** | `partner_status` = "Active" AND foundational agreements (MNDA, master/partner agreement) are present but unsigned |
+| 🟡 **Amber** | `partner_status` ∈ {"Active", "Onboarding"} AND (any open deals OR pipeline activity in last 90 days) but 0 closed-won in period |
+| 🟡 **Amber** | `partner_status` = "Prospecting" — expected stage, low activity is the baseline |
+| 🟢 **Green** | `partner_status` = "Active" AND closed-won deals in period ≥ 1 |
+| ⚪ **Inactive** | `partner_status` = "Inactive" — frame as reactivate-or-offboard decision |
+
+### Template
 
 ```markdown
-# Q<N> <Year> — <Partner name> × <Customer name>
+# <Partner name> — Q<N> <Year>
 
-**Period:** <start_date> to <end_date>
-**Partner status:** <performance.partner_status>
-<!-- Once the MCP exposes the partner's CRM ID (HubSpot/Salesforce/etc),
-     render it here as: **Partner CRM ID:** `<crm_id>`.
-     Until then, DO NOT print the internal EULER partner_id — it's an
-     opaque Bubble identifier with no meaning to the partner manager. -->
+## TL;DR
 
-> ⚠️ Disclaimer: Headline metrics below are filtered to the period above.
-> Pipeline, referrals, agreements, and invoices sections show **all-time
-> data** — the underlying tools do not accept a date range. Use stage
-> + Submitted On dates as approximate filters when interpreting.
+<emoji> **<one-line headline that names the state>**.
+<2–3 sentences narrative: biggest signal, biggest risk, one number that
+matters most. No tables here, no bullets — prose.>
+**Recommended next step:** <one sentence>.
 
 ---
 
-## Headline metrics (period-filtered)
+## What happened in Q<N>
 
-| Metric | Q<N> <Year> | Source field |
-|--------|-------------|--------------|
-| Deals closed (period) | <performance.total_deals_count> | `performance.total_deals_count` |
-| Booking revenue | <booking, see Rule 3> | `performance.booking_revenue` |
-| Billings revenue | <performance.billings_revenue> | `performance.billings_revenue` |
-| Win rate | <performance.win_rate> | `performance.win_rate` |
-| Average sales cycle | <performance.sales_cycle> | `performance.sales_cycle` |
-| Average contract value | <performance.avg_contract_value> | `performance.avg_contract_value` |
-| Commissions paid (period) | $<sum from commissions> | `commissions` (computed) |
+<2–4 sentences of prose summarizing the period. Pull from
+performance metrics + most material pipeline movement. Frame in
+business terms ("Axion closed nothing in Q1") not system terms
+("performance.total_deals_count was 0").>
 
-## Pipeline & deals (all-time)
+**Key numbers** (period-filtered) [CONDITIONAL — omit table if all
+displayed rows would be zero/N/A]:
 
-- Total deals on record: <deals.total_items>
-- Breakdown by stage:
-  - Closed Won: <count> — $<sum of Amount> total
-  - Closed Lost: <count> — $<sum of Amount> total
-  - In progress (everything else): <count> — $<sum of Amount> total
-- Top open deal by Amount: <Deal name> — $<Amount> (<crm status (deal_stage)>)
-- Top closed-won deal: <Deal name> — $<Amount>
+| Metric | Q<N> <Year> | [if target supplied] Target | [if target supplied] % |
+|--------|-------------|-----------------------------|------------------------|
+| Deals closed | <n> | <target> | <%> |
+| Booking revenue | <$> | <$> | <%> |
+| Commissions paid | <$> | — | — |
 
-> If `performance.booking_revenue` is empty/"$" but Closed Won deals exist
-> here, note in narrative: "Period booking revenue reported as $0 by
-> performance tool — Closed Won deals on file may pre-date the period
-> (no closed-on date available in the deals tool)."
+Hidden by zero-denominator rule (omit row entirely):
+- Win rate when total_deals_count = 0
+- Average sales cycle when total_deals_count = 0
+- Average contract value when total_deals_count = 0
 
-## Commissions (period-filtered)
+## What needs to happen in Q<N+1>
 
-- Total paid: $<sum>
-- Largest single commission: $<value> (<deal name if available>)
-- Status breakdown: <e.g. all paid / N pending>
+| Prio | Action | Owner | Due | Expected outcome |
+|------|--------|-------|-----|------------------|
+| P0   | <verb-led action> | <role or name> | <YYYY-MM-DD> | <one line> |
+| P1   | ... | ... | ... | ... |
+| P2   | ... | ... | ... | ... |
 
-If empty: `> No commissions data for this period.`
+Generation rules:
+- Each item is derived from a finding above (agreement unsigned, deal
+  stalled, referral aging). Never generic ("nurture the partner").
+- Priorities: P0 = blocks revenue/activation, P1 = material risk, P2 = hygiene.
+- Owner defaults: "Partner Manager" (your-side) or "<Partner-name> AE"
+  (their-side) if user hasn't named someone. Do NOT invent specific names.
+- Due defaults: P0 = within 2 weeks of period end · P1 = within 4 weeks · P2 = within the quarter.
+- Cap at 5 items. If more candidates exist, keep the top 5 by priority + impact.
 
-## Referrals & deal registration (all-time)
+## Pipeline (lifetime)  [CONDITIONAL — omit if `deals.total_items` = 0]
 
-- <total_count> referrals on record
-- By status: <count> pending · <count> approved · <count> rejected · <count> other
-- Most recent submission: <Submitted On> — <Referred company name> (<Status>)
-- Submissions within the period (<start_date>–<end_date>): <count, computed by
-  parsing "Submitted On">
+**Open deals:**
+- <Deal name> — $<Amount> — <stage>
+- <Deal name> — $<Amount> — <stage>
 
-If empty: `> No referrals on record for this partner.`
+**Closed-won (lifetime):** <count> deals, $<sum> total. Top: <Deal name> ($<Amount>).
+**Closed-lost (lifetime):** <count> deals, $<sum> total.
 
-## Agreements
+> Note: deal records do not carry a close date, so lifetime totals
+> cannot be split by period. Use this section as a portfolio snapshot.
 
-- <total_items> agreements on record:
-  - <agreement Name> — <Status> (signed: <Signed On or "unsigned">)
-  - ...
+## Agreements  [CONDITIONAL — omit if no agreements on record]
 
-If empty: `> No agreements on record for this partner.`
+- <emoji> <agreement Name> — <Status> (signed: <"YYYY-MM-DD" | "unsigned">)
+- ...
 
-## Invoices
+Emoji rule:
+- 🟢 Signed (non-empty `Signed On`)
+- 🟡 Pending / unsigned
+- 🔴 Any status that maps to "expired" / "terminated"
 
-(Include section only if non-empty.)
-- <total_items> invoices issued, totaling $<sum>
-- <flag any overdue>
+## Referrals (lifetime)  [CONDITIONAL — omit if `total_count` = 0]
 
-## Suggested action items for Q<N+1> <Year>
+<total_count> referrals on record · <p> pending · <a> approved · <r> rejected.
+Most recent: <Submitted On> — <Referred company name> (<Status>).
+Submitted in period: <count by parsing Submitted On>.
 
-> DRAFT — partner manager to confirm. Items below are inferences from the
-> data above, not commitments. Each item links to the metric that prompted it.
+## Commissions  [CONDITIONAL — omit if empty]
 
-- <bullet, e.g. "Push 2 Pending agreements (MNDA, Tech Partner Agreement) to signature" → linked to Agreements section>
-- <bullet, e.g. "Triage 5 pending referrals from Nov 2025 — oldest is 200 days stale" → linked to Referrals section>
-- <bullet, e.g. "Investigate why performance.booking_revenue reports $0 while deals tool shows N Closed Won — possible pre-period deals" → linked to Headline + Pipeline>
+Total paid in Q<N>: $<sum>. <Optional: largest single commission, status breakdown>.
+
+## Invoices  [CONDITIONAL — omit if empty]
+
+<count> invoices, totaling $<sum>. <flag overdue if any>.
 ```
+
+### What is NOT in the rendered output
+
+The following are diagnostic-only and **must never appear** in the doc
+shown to the user:
+
+- Internal IDs (`partner_id`, `deal_id`, agreement id, referral id) — Rule 0
+- Source-field annotations like `` `performance.total_deals_count` ``
+- Disclaimers about MCP / Bubble / tool limitations
+- "DRAFT — partner manager to confirm" caveats (the table format already
+  implies these are proposed; no defensive hedging)
+- Footer metadata like "Generated by skill vX.Y.Z on YYYY-MM-DD"
+- "No X data" placeholder lines (silence the section instead)
+- Anything mentioning "the performance tool" or "the deals tool"
 
 ## Anti-hallucination rules
 
 These rules are **not optional**. Every QBR must follow them.
 
-0. **NEVER render internal EULER IDs in the output.** The `partner_id`
-   (e.g. `1715179138375x527400652689293400`) is a Bubble-internal opaque
-   string and means nothing to a partner manager. It is used for
-   orchestration only — never printed in the rendered QBR. When the MCP
-   adds the partner's CRM ID (HubSpot/Salesforce/etc), render that
-   instead. Same rule applies to `deal_id`, agreement id, referral id —
-   internal IDs stay internal.
+0. **NEVER render internal EULER IDs in the output.** The `partner_id`,
+   `deal_id`, agreement id, referral id are Bubble-internal opaque
+   strings — orchestration-only, never printed. When the MCP adds the
+   partner's CRM ID (HubSpot / Salesforce / etc), render that instead.
 
-1. **NEVER fabricate metrics.** If a tool returns empty or zero data for a
-   section, write `"No <X> data for this period"` or `"No <X> on record"`
-   and omit the rest of that section. Do not invent numbers, "industry
-   averages", or projections.
+1. **NEVER fabricate metrics.** If a tool returns empty data, **silence
+   the entire section** — do not print "No X data" placeholders. The
+   absence is the signal. Exception: the TL;DR may reference an absence
+   in narrative ("no closed deals this quarter").
 
-2. **NEVER compare quarters unless explicitly requested.** If the user asks
-   for a Q-over-Q comparison, fetch both quarters' data separately and only
-   then compute deltas. Otherwise, current-quarter-only.
+2. **NEVER emit action items that ask the user to debug the system.**
+   If `performance.booking_revenue` returns `"$"` while closed-won deals
+   exist in `partner_artifacts(deals)`, normalize silently to $0 — do
+   NOT produce an action like "Investigate the data discrepancy." Tool
+   bugs are an internal problem; they belong in CONTRIBUTING / engineering
+   notes, never in the QBR rendered to a partner manager.
 
-3. **Currency normalization.** The `performance` tool returns currency as
-   strings, sometimes malformed (e.g. `"$"` with no number when zero).
-   Treat `""`, `"$"`, `"$0"`, `"$0.00"` all as zero. Display as
-   `$0` in the table. For non-zero values keep thousand separators
-   (e.g. `$1,234,567`). Percentages as returned (e.g. `"75.0%"`).
+3. **NEVER expose system internals to the reader.** No source-field
+   annotations (no `` `performance.X` `` columns), no mentions of "the
+   performance tool" / "the MCP" / "Bubble" / field names, no
+   `<!-- HTML comments -->` in the rendered output. The reader is a
+   partner manager preparing for a partner call, not an engineer.
 
-4. **Dates from responses are echoed strings, not always dates.** Examples
-   that are NOT dates: `"20599 Days"` (a duration), `"0 Days"` (zero
-   duration). Examples that ARE date strings: `"Jan 1, 2026 5:46 pm"`,
-   `"May 9, 2024"`. When in doubt, render the string verbatim — never
-   reformat unless you've parsed it successfully.
+4. **Zero-denominator metric collapse.** If `total_deals_count` for the
+   period is 0, OMIT (do not render as zero) the rows for: `win_rate`,
+   `sales_cycle`, `avg_contract_value`. These are undefined when no
+   deals closed and printing "0.00%" / "0 Days" / "$0" creates false
+   precision.
 
-5. **Action items are DRAFTS, not commitments.** Always mark the section
-   with the `"DRAFT — partner manager to confirm"` caveat. Each item must
-   be a direct inference from data actually fetched in this run, never
-   generic advice. Each item should reference which section / metric it
-   came from.
+5. **Currency normalization.** Treat `""`, `"$"`, `"$0"`, `"$0.00"` all as
+   zero. Display zero as `$0`. Non-zero with thousand separators
+   (`$1,234,567`). Percentages as returned (`75.0%`).
 
-6. **If any tool errors mid-run**, do NOT silently skip. Add a banner at
-   the top of the output:
-   > ⚠️ Partial QBR: the following sections are incomplete due to errors:
-   > [list].
+6. **Dates vs durations vs strings.** `"20599 Days"` is a duration, not
+   a date — never render as `YYYY-MM-DD`. `"Jan 1, 2026 5:46 pm"` is a
+   date string — reformat to `YYYY-MM-DD` only if parsing succeeds;
+   render verbatim otherwise.
 
-7. **Loose JSON parsing required.** The MCP backend (Bubble) returns
-   stringified JSON-like content under `response.result` and
-   `result_per_page`. Some shapes have known bugs:
-   - `referrals(for_partner).result_per_page`: pairs use commas instead of
-     colons (`{"id","value"}` not `{"id":"value"}`).
-   - `partner_artifacts(agreements).Result[]`: keys have unicode noise
-     (`ïd` with diaeresis).
-   - Numbers come as strings throughout. Parse with `Number()` /
-     `parseFloat` / regex before computing.
+7. **Action items must be actionable.** Each row in the action table has
+   all 5 columns filled (Prio · Action · Owner · Due · Expected outcome).
+   No placeholder TBDs. If you cannot fill all 5 from the data + sensible
+   defaults (see Output Format section), drop the row.
 
-   If you can't parse a response into the expected fields, surface that as
-   an error rather than guessing.
+8. **All-time vs period-filtered must be clear in section headings.**
+   Headlines use Q-period framing ("What happened in Q1"). Lifetime
+   sections use the word "lifetime" in the heading ("Pipeline (lifetime)").
+   Never silently mix.
 
-8. **All-time vs period-filtered must be labeled.** `performance` and
-   `commissions` are period-filtered (accept start_date/end_date).
-   `partner_artifacts` and `referrals(for_partner)` return all-time data.
-   The output template enforces this distinction with section subtitles.
-   Never silently mix them.
+9. **Q-over-Q comparison is opt-in.** Default to current-quarter-only.
+   If the user explicitly asks for QoQ, fetch both quarters' data and
+   compute deltas. (Industry-standard QBRs include QoQ by default;
+   we're conservative here because tool-call cost doubles.)
 
-9. **Do not summarize across multiple partners.** This skill is per-partner.
-   If the user asks "QBR for all my partners", explain the scope and offer
-   to run the skill once per partner.
+10. **Loose JSON parsing required.** The MCP backend returns stringified
+    JSON-like content with known bugs:
+    - `referrals(for_partner).result_per_page`: pairs use commas instead
+      of colons (`{"id","value"}` not `{"id":"value"}`)
+    - `partner_artifacts(agreements).Result[]`: keys have unicode noise
+      (`ïd` with diaeresis)
+    - Numbers come as strings throughout
+
+    Parse with `Number()` / `parseFloat` / regex before computing.
+    If parsing fails, surface as an error — do not guess.
+
+11. **If a tool errors mid-run**, render the rest of the doc normally
+    and add a single line at the END (not the top) of the TL;DR:
+    > *Note: <section> could not be loaded due to a data fetch error.*
+    No giant red banner — the doc must still be presentable.
+
+12. **Do not summarize across multiple partners.** Per-partner skill.
+    If the user asks for batch, explain scope and offer to loop.
+
+13. **Tier-conditional narrative.** TL;DR and action items adapt to
+    `partner_status`:
+    - **Prospecting / Onboarding** → narrative focuses on activation
+      milestones (agreements signed, first referral, first deal
+      registered). Zero revenue is expected; do not flag as red.
+    - **Active** → narrative compares against expected production.
+      Zero revenue in period is a red flag. Pipeline coverage matters.
+    - **Inactive** → narrative is a reactivate-or-offboard framing.
+      Action items skew toward "decide" rather than "execute."
 
 ## Example user flow
 
@@ -347,7 +412,7 @@ Claude:
 User: copies output → pastes into Slack / Google Doc / email to the partner.
 ```
 
-## Known limitations (v0.2.0)
+## Known limitations (v0.3.0)
 
 Things the skill cannot do today, by tool constraint. Logged for upstream
 MCP improvements:

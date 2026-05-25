@@ -1,83 +1,54 @@
-# Q1 2026 — Axion DataWorks × Martus
+# Axion DataWorks — Q1 2026
 
-**Period:** 2026-01-01 to 2026-03-31
-**Partner status:** Active
-<!-- Partner CRM ID will appear here once the MCP exposes it. Internal
-     EULER partner_id is never rendered. -->
+## TL;DR
 
-> ⚠️ Disclaimer: Headline metrics below are filtered to the period above.
-> Pipeline, referrals, agreements, and invoices sections show **all-time
-> data** — the underlying tools do not accept a date range. Use stage
-> + Submitted On dates as approximate filters when interpreting.
+🔴 **Active partner with zero Q1 activity and foundational agreements still unsigned.**
+Axion closed no deals and submitted no referrals in Q1 2026, despite carrying Active
+status. Two foundational agreements (MNDA, Tech Partner Agreement) remain unsigned
+60+ days into the partnership, and the single open deal (Best Buy, $775) has shown
+no stage movement. The biggest number that matters: **$0 in period vs. an Active-tier
+expectation of meaningful production**.
+**Recommended next step:** schedule an activation review with Axion's lead within
+two weeks; the gating issue is agreement signature, not pipeline.
 
 ---
 
-## Headline metrics (period-filtered)
+## What happened in Q1
 
-| Metric | Q1 2026 | Source field |
-|--------|---------|--------------|
-| Deals closed (period) | 0 | `performance.total_deals_count` |
-| Booking revenue | $0 | `performance.booking_revenue` |
-| Billings revenue | $0.00 | `performance.billings_revenue` |
-| Win rate | 0.00% | `performance.win_rate` |
-| Average sales cycle | 0 Days | `performance.sales_cycle` |
-| Average contract value | $0 | `performance.avg_contract_value` |
-| Commissions paid (period) | $0 | `commissions` (computed) |
+Nothing closed and nothing new entered the pipeline. Lifetime deal records show
+2 historical Closed Won ($1,500 combined: Target $500, GM $1,000) that pre-date
+Q1, plus 1 Closed Lost (Honda, $3,000). The only open deal — Best Buy at $775 —
+sits in Demo Scheduled. Two referrals exist on file (both from May 2024); one
+was a test submission ("asdf") and one stalled in `creating` status. No
+commissions were paid because no deals closed.
 
-## Pipeline & deals (all-time)
+## What needs to happen in Q2
 
-- Total deals on record: 4
-- Breakdown by stage:
-  - Closed Won: 2 — $1,500 total
-  - Closed Lost: 1 — $3,000 total
-  - In progress (everything else): 1 — $775 total
-- Top open deal by Amount: Best Buy — $775 (Demo Scheduled)
-- Top closed-won deal: GM — $1,000
+| Prio | Action | Owner | Due | Expected outcome |
+|------|--------|-------|-----|------------------|
+| P0 | Get MNDA + Tech Partner Agreement signed | Partner Manager | 2026-06-07 | Unblock partnership operations |
+| P0 | Run activation review call with Axion lead | Partner Manager | 2026-06-14 | Decide: re-engage or downgrade tier |
+| P1 | Push Best Buy ($775) for stage update or disqualify | Axion AE | 2026-06-03 | Move out of stale Demo Scheduled |
+| P2 | Clean stale referrals ("asdf" rejected, Link's Co stuck since May 2024) | Partner Manager | 2026-06-30 | Tidy referral pipeline for clean Q2 baseline |
 
-> Period booking revenue reported as $0 by performance tool — the 2 Closed
-> Won deals on file likely pre-date Q1 2026 (no closed-on date available
-> in the deals tool to confirm).
+## Pipeline (lifetime)
 
-## Commissions (period-filtered)
+**Open deals:**
+- Best Buy — $775 — Demo Scheduled
 
-> No commissions data for this period.
+**Closed-won (lifetime):** 2 deals, $1,500 total. Top: GM ($1,000).
+**Closed-lost (lifetime):** 1 deal, $3,000 (Honda).
 
-## Referrals & deal registration (all-time)
-
-- 2 referrals on record
-- By status: 0 pending · 0 approved · 1 rejected · 1 other (`creating`)
-- Most recent submission: May 9, 2024 — Link's Co (creating)
-- Submissions within the period (2026-01-01 to 2026-03-31): 0
+> Note: deal records do not carry a close date, so lifetime totals
+> cannot be split by period. Use this section as a portfolio snapshot.
 
 ## Agreements
 
-- 2 agreements on record:
-  - MNDA — Pending (signed: unsigned)
-  - Tech Partner Agreement — Pending (signed: unsigned)
+- 🟡 MNDA — Pending (unsigned)
+- 🟡 Tech Partner Agreement — Pending (unsigned)
 
-## Invoices
+## Referrals (lifetime)
 
-> No invoices on record for this partner.
-
-## Suggested action items for Q2 2026
-
-> DRAFT — partner manager to confirm. Items below are inferences from the
-> data above, not commitments. Each item links to the metric that prompted it.
-
-- **Push 2 pending agreements (MNDA, Tech Partner Agreement) to signature** —
-  both have empty `Signed On`. Active partner shouldn't be operating
-  without a signed MNDA. → Agreements section.
-- **Investigate why Axion shows 0 period revenue despite 2 Closed Won deals
-  on file (Target $500, GM $1,000).** Likely pre-period closes; confirm
-  with CRM. → Headline + Pipeline.
-- **Decide on Best Buy ($775, Demo Scheduled) — only open deal in Axion's
-  pipeline.** No movement signal visible (`last_stage_change_date` returns
-  duration only). Ask partner for pipeline update. → Pipeline.
-- **Triage referrals: 1 rejected ("asdf" — looks like a test submission),
-  1 stuck in `creating` since May 2024.** Either clean up or re-engage. →
-  Referrals.
-
----
-
-*Generated by `generate-qbr` skill v0.2.0 on 2026-05-25. Validated against
-EULER MCP staging.*
+2 referrals on record · 0 pending · 0 approved · 1 rejected · 1 other (`creating`).
+Most recent: 2024-05-09 — Link's Co (creating).
+Submitted in period: 0.
