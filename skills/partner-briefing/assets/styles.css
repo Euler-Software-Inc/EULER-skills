@@ -446,6 +446,85 @@ td .note {
   color: var(--gray-600);
 }
 
+/* ─── Sparkline (SVG inline) ────────────────────────── */
+.sparkline {
+  display: block;
+  margin-top: 8px;
+  overflow: visible;
+}
+.sparkline polyline {
+  stroke: var(--brand-600);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sparkline .spark-fill {
+  fill: var(--brand-50);
+  opacity: 0.6;
+}
+.sparkline .spark-dot {
+  fill: var(--brand-600);
+}
+
+/* ─── Delta indicator (↑ +47% / ↓ −12% / → flat) ────── */
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  margin-top: 6px;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  letter-spacing: 0.01em;
+}
+.delta.up      { background: var(--success-50); color: var(--success-700); }
+.delta.down    { background: var(--error-50);   color: var(--error-700); }
+.delta.flat    { background: var(--gray-100);   color: var(--gray-600); }
+
+/* ─── Data confidence pill ─────────────────────────── */
+.data-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  cursor: default;
+}
+.data-pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.data-pill.complete {
+  background: var(--success-50);
+  color: var(--success-700);
+  border-color: #C7EAD8;
+}
+.data-pill.complete::before { background: var(--success-500); }
+.data-pill.partial {
+  background: var(--warning-50);
+  color: var(--warning-700);
+  border-color: #FBE4BC;
+}
+.data-pill.partial::before { background: var(--warning-500); }
+.data-pill.stale {
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border-color: var(--gray-300);
+}
+.data-pill.stale::before { background: var(--gray-500); }
+
 /* ─── Print ─────────────────────────────────────────── */
 @media print {
   body {

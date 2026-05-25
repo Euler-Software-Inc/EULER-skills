@@ -66,6 +66,8 @@ instead of a quarter. Skip steps only if the user's framing excludes them
 | 5 | `commissions(action: 'partner', partner_id, start_date, end_date)` | Recent commission events |
 | 6 | `referrals(action: 'for_partner', partner_id, page: 1, limit: 20)` | All-time referrals; filter to the window by parsing `"Submitted On"` |
 | 7 | `partner_artifacts(action: 'agreements', partner_id)` | Open agreement blockers |
+| 8 | `influenced_sourced_deals(partner_id, start_date, end_date)` | Sourced vs Influenced split for the window. Adds depth to "what they'll want to talk about" — partners commonly raise attribution disputes. |
+| 9 | `performance(action: 'partner', partner_id, prev_window_dates)` | Previous window (e.g. 30 days before the current 30-day window) for delta indicators in stat cards. |
 
 For exact field paths per tool, consult
 [`../generate-qbr/references/mcp-field-paths.md`](../generate-qbr/references/mcp-field-paths.md).
@@ -231,11 +233,15 @@ concerns. Briefing-specific additions are flagged with [BRIEFING].
    - Bad: "the partner should send more referrals" (that's the
      partner's job, not yours)
 
-5. **No fake aging signals** (inherited from QBR Rule 15). The deals
-   tool returns `last_stage_change_date` as a duration string that is
-   unreliable as a timestamp. Avoid "stalled", "stale", "no movement
-   in N days" about deals. For referrals, `"Submitted On"` IS a real
-   date string and aging assertions there ARE allowed (parse it first).
+5. **Aging signals — bounded by data quality** (inherited from QBR
+   Rule 15, refined v0.8.0). `last_stage_change_date` is a duration
+   string. Values **≥ 9999 Days** (e.g. `"20599 Days"`) are the
+   sentinel/null garbage — never use. Values **< 9999 Days**
+   (e.g. `"19 Days"`, `"389 Days"`, `"942 Days"`) ARE real aging
+   signals and can be cited: *"Everest closed-won 19 days ago"*,
+   *"Best Buy in Demo Scheduled for 493 days — push or disqualify"*.
+   For referrals, `"Submitted On"` is a real date and aging is
+   straightforwardly derivable.
 
 6. **Currency normalization** (inherited from QBR Rule 5). Treat `""`,
    `"$"`, `"$0"`, `"$0.00"` all as zero. Display zero as omitted (per
@@ -287,7 +293,38 @@ Claude:
 User: copies into Slack DM to self before the call.
 ```
 
-## Known limitations (v0.5.0)
+## Vs-previous-window delta (default-on as of v0.8.0)
+
+Stat cards show a small `↑ +12%` / `↓ −5%` / `→ no change` indicator
+below the stat value (or inline) when the current-window value differs
+materially from the previous equivalent window. Same delta-rendering
+rule as QBR.
+
+When the current window has zero activity and the previous also had
+zero, omit the delta — the absence is the signal, no need for a
+"→ no change" pill.
+
+## Impact context on "What you should bring up" (default-on as of v0.8.0)
+
+Each bullet in "What you should bring up" should embed a concrete impact
+phrase when one is derivable from data:
+
+- *"Sign MNDA — currently blocks $50K Acme deal from advancing"*
+- *"Triage 7 pending referrals — ~$105K potential pipeline awaiting your decision"*
+
+The phrasing differs slightly from QBR's Impact column because briefing
+bullets are conversational, not table cells. Apply the same
+"derived from real data, never invented" discipline.
+
+## Data confidence indicator (default-on as of v0.8.0)
+
+Same as QBR — add a `<span class="data-pill ...">` next to the status
+pill summarizing fetch completeness (complete / partial / stale).
+Briefings are short, so a partial-data badge is even more important —
+the reader needs to know if commissions or referrals data was
+unavailable before walking into the meeting.
+
+## Known limitations (v0.8.0)
 
 - **No `since last meeting`** without a date — we don't have meeting
   history. Treat as 30 days unless user supplies a date.

@@ -86,6 +86,10 @@ standard QBR. Skip a step only if the user's framing explicitly excludes it
 | 6 | `referrals(action: 'for_partner', partner_id, page: 1, limit: 20)` | **All-time** referrals submitted by the partner (NOT period-filtered). |
 | 7 | `partner_artifacts(action: 'agreements', partner_id)` | Agreement list with `Status` + `Signed On`. No `expires_on` field available. |
 | 8 | `partner_artifacts(action: 'invoices', partner_id, page: 1, limit: 20)` | All-time invoices. Include only if non-empty. |
+| 9 | `influenced_sourced_deals(partner_id, start_date, end_date)` | Deal-attribution split (Sourced vs Influenced vs Sourced-and-Influenced). Critical for tier conversations — partners want credit for the deals they touched, not just the ones they originated. |
+| 10 | `partners(action: 'summary')` | Company-wide context for anchoring: total partner count, status distribution. Used in the TL;DR ("one of only N partners in <status>"). |
+| 11 | `performance(action: 'partner', partner_id, prev_quarter_dates)` | Previous quarter for Q-over-Q deltas (see "Q-over-Q rules" below). |
+| 12 | `performance(action: 'partner', partner_id, quarter_-2/-3/-4_dates)` | Up to 4 additional historical quarters to fuel sparkline trend visualization in stat cards. Skip if user explicitly asks for a fast/lite QBR. |
 
 ### Tool-by-tool response field paths
 
@@ -403,12 +407,20 @@ These rules are **not optional**. Every QBR must follow them.
     and add a P2 cleanup action item. Do NOT silently filter — the partner
     manager owns that decision.
 
-15. **No fake aging signals.** The deals tool returns
-    `last_stage_change_date` as a duration string (e.g. `"20599 Days"`,
-    `"389 Days"`) that is NOT a reliable timestamp. Do NOT write phrases
-    like "stalled", "no movement in N days", "stale", "aging out",
-    "stuck for X" about any deal. Only assertions backed by parsed date
-    strings (e.g. `"Submitted On": "Feb 26, 2026"`) are allowed.
+15. **Aging signals — bounded by data quality.** `last_stage_change_date`
+    on deals comes back as a duration string. The backend has a sentinel
+    placeholder for "unknown" — values **≥ 9999 Days** (typically `"20599 Days"`,
+    which is 56+ years) are the null/garbage value and must NOT be used.
+    Values **< 9999 Days** ARE real elapsed-time signals and can be used:
+    - "Acme has been in Stage 1 for 493 days — push or disqualify"
+    - "Everest closed-won 19 days ago"
+    - "lucas test no movement in 355 days"
+
+    Same threshold applies anywhere we see a duration string from this
+    backend. The threshold exists because the dataset has a sentinel
+    value (~20599 days = epoch artifact); without filtering, any aging
+    claim would silently include garbage. With the threshold, aging is
+    a legitimate signal.
 
 16. **Number formatting context.** The TL;DR is a narrative; rounded
     units read more naturally there (`$87K`, `$1.2M`). Tables and
@@ -443,7 +455,81 @@ Claude:
 User: copies output → pastes into Slack / Google Doc / email to the partner.
 ```
 
-## Known limitations (v0.4.0)
+## Q-over-Q comparison (default-on as of v0.8.0)
+
+Every QBR includes the previous quarter's metrics inline. The model calls
+`performance` twice (current quarter + prev quarter) and computes deltas
+for each headline metric. Rendered as:
+
+- **In the TL;DR:** when the QoQ change is material (≥10% absolute change
+  in revenue, or any change in deal count), the headline mentions it
+  ("$10K closed vs $5K last quarter, +100%").
+- **In the Key Numbers table:** a `Δ vs Q<N-1>` column shows the delta
+  with arrow and percentage (`↑ +47%` green / `↓ −12%` red / `→ no change` gray).
+- **When current period is dormant (all zeros) but historical data
+  exists:** lean on the sparkline (see below) rather than the delta.
+  A "0 → 0, no change" cell is noise.
+
+For sparklines and richer history, the model additionally fetches 3 more
+quarters (`performance` ×3) — Q-2 through Q-4. Total `performance` calls
+per QBR: 5. Skip the historical fetch if the user explicitly asks for
+"fast" or "lite" mode.
+
+## Sparkline rules (default-on as of v0.8.0)
+
+In stat cards that display **temporal numeric data** (billings revenue,
+booking revenue, deal count), render an inline SVG sparkline below the
+stat value showing the last 5 quarters' trend.
+
+SVG specs:
+- 100×24 viewBox, no external deps
+- Stroke `var(--brand-600)` at 1.5px, fill none
+- Polyline through 5 points, normalized to the max value across the series
+- Closing circle marker at the rightmost (current period) data point
+- Use class `.sparkline` for styling hooks
+
+Do NOT render a sparkline for:
+- Stat cards showing non-numeric / categorical data (Agreements "3 / 5")
+- Stat cards where all 5 historical points are zero (no trend)
+- Counts that vary by ≤1 across the series (a flat line is noise)
+
+## Impact column in action items (default-on as of v0.8.0)
+
+Every action row in the "What needs to happen" table now has an Impact
+hint inline (rendered as a `<div class="note">` under the action text).
+The impact must derive from real data, not be invented:
+
+- Good: *"Blocks $50K Acme deal from progressing past Stage 1"*
+  (Acme is in our pipeline, $50K is in our data)
+- Good: *"Unlocks commission rate at next tier — current pipeline at
+  $58K would qualify"* (pipeline number from our data)
+- Good: *"7 prospects × ~$15K avg lifetime ACV ≈ $105K potential
+  pipeline"* (multiplication of real referral count × cohort avg)
+- Bad: *"Improves partnership trust"* (vague, unmeasurable)
+- Bad: *"Industry best practice"* (generic)
+
+When you cannot derive a concrete impact from data, drop the action item
+rather than emit a vague one — Rule 7 still applies (all 5 cells
+filled or row is removed).
+
+## Data confidence indicator (default-on as of v0.8.0)
+
+Add a `<span class="data-pill ...">` next to the status pill in the
+header, summarizing how complete the underlying data fetch was:
+
+- **`data-pill complete`** (green) — all expected tool calls returned
+  data or expected-empty
+- **`data-pill partial`** (amber) — one or more tools returned an
+  unexpected empty/error response; the doc renders normally but is
+  missing one or more sections it would otherwise include
+- **`data-pill stale`** (gray) — historical comparison data is older
+  than 90 days from the period end (e.g. a Q1 2026 QBR with no Q4 2025
+  data on file)
+
+The pill tooltip (HTML `title` attribute) lists which sources are
+incomplete. Hover for detail in browser.
+
+## Known limitations (v0.8.0)
 
 Things the skill cannot do today, by tool constraint. Logged for upstream
 MCP improvements:
