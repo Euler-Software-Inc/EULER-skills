@@ -9,6 +9,7 @@
 | Skill | Status | Description |
 |-------|--------|-------------|
 | [`generate-qbr`](./skills/generate-qbr/SKILL.md) | ✅ Available *(validated against staging 2026-05-25)* | Generate a Quarterly Business Review for a specific partner |
+| [`partner-briefing`](./skills/partner-briefing/SKILL.md) | ✅ Available *(validated against staging 2026-05-25)* | Pre-meeting briefing for a partner call — 30-second read with what they'll discuss + what you should bring up |
 | `partner-health-check` | 🚧 Planned | One-glance health snapshot of a partner (deals + referrals + agreement + commission status) |
 | `monthly-commission-report` | 🚧 Planned | Auto-generate commission payout report for a partner or company-wide |
 | `referral-workflow` | 🚧 Planned | End-to-end referral submission flow (list accounts → get form → submit) |
@@ -63,9 +64,12 @@ EULER-skills/
 ├── .mcp.json                References the remote EULER MCP server
 ├── skills/                  Model-invoked skills — the primary content
 │   ├── _template/           Starter SKILL.md for new contributions
-│   └── generate-qbr/
-│       ├── SKILL.md         The QBR generation playbook
-│       ├── references/      Reference docs loaded on demand
+│   ├── generate-qbr/
+│   │   ├── SKILL.md         The QBR generation playbook
+│   │   ├── references/      Reference docs (MCP field paths) — shared
+│   │   └── examples/        Sanitized example outputs
+│   └── partner-briefing/
+│       ├── SKILL.md         Pre-meeting briefing playbook
 │       └── examples/        Sanitized example outputs
 ├── commands/                (Future) Explicit slash commands like /euler:list
 ├── agents/                  (Future) Sub-agents for multi-step workflows
