@@ -1,9 +1,10 @@
 {
   "name": "euler",
   "version": "0.8.0",
-  "description": "Skills, slash commands, and sub-agents that orchestrate the EULER MCP tools for partner-relationship workflows.",
+  "description": "Skills that orchestrate the EULER MCP tools for partner-relationship workflows — QBR generation, pre-meeting partner briefings, and more. Self-contained HTML output styled with the EULER design system.",
   "author": {
     "name": "EULER Software Inc.",
+    "email": "support@eulerapp.com",
     "url": "https://eulerapp.com"
   },
   "homepage": "https://eulerapp.com",
@@ -12,11 +13,14 @@
     "url": "https://github.com/Euler-Software-Inc/EULER-skills.git"
   },
   "license": "MIT",
+  "category": "Sales & Partnerships",
   "keywords": [
     "euler",
     "partner-management",
     "prm",
     "qbr",
+    "quarterly-business-review",
+    "partner-briefing",
     "mcp",
     "commissions",
     "referrals"

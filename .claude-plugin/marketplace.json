@@ -1,0 +1,48 @@
+{
+  "name": "euler-plugins",
+  "owner": {
+    "name": "EULER Software Inc.",
+    "email": "support@eulerapp.com"
+  },
+  "metadata": {
+    "description": "Marketplace catalog for EULER Software's Claude Code plugins — skills, agents, and workflows for partner-relationship management built on the EULER MCP.",
+    "version": "0.8.0"
+  },
+  "plugins": [
+    {
+      "name": "euler",
+      "source": "./",
+      "description": "Skills that orchestrate the EULER MCP tools for partner-relationship workflows: QBR generation, pre-meeting partner briefings, and more. Self-contained HTML output styled with the EULER design system.",
+      "version": "0.8.0",
+      "author": {
+        "name": "EULER Software Inc.",
+        "email": "support@eulerapp.com"
+      },
+      "homepage": "https://eulerapp.com",
+      "repository": "https://github.com/Euler-Software-Inc/EULER-skills",
+      "license": "MIT",
+      "category": "Sales & Partnerships",
+      "tags": [
+        "partner-management",
+        "prm",
+        "qbr",
+        "quarterly-business-review",
+        "partner-briefing",
+        "commissions",
+        "referrals",
+        "mcp",
+        "euler"
+      ],
+      "keywords": [
+        "euler",
+        "partner-management",
+        "prm",
+        "qbr",
+        "mcp",
+        "commissions",
+        "referrals"
+      ],
+      "strict": false
+    }
+  ]
+}

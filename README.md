@@ -18,27 +18,47 @@
 
 ## Installation
 
-### Via Claude marketplace (once published)
+This repo is structured as a **Claude Code plugin marketplace** (`euler-plugins`)
+containing one plugin (`euler`).
+
+### Via Claude Code (recommended)
 
 ```bash
-/plugin install @euler-software-inc/euler
+/plugin marketplace add Euler-Software-Inc/EULER-skills
+/plugin install euler@euler-plugins
 ```
 
-### Via Claude Code, manual install (development)
+The first time you invoke an EULER skill, Claude will trigger the OAuth flow
+against `https://mcp.eulerapp.com` — one-time consent, the token is cached for
+30 days. Skills are invoked as `/euler:generate-qbr` and `/euler:partner-briefing`.
+
+### Local development install
+
+To iterate on the plugin locally without publishing:
 
 ```bash
-git clone https://github.com/Euler-Software-Inc/EULER-skills.git ~/.claude/plugins/euler
+git clone https://github.com/Euler-Software-Inc/EULER-skills.git
+cd EULER-skills
+claude --plugin-dir .
 ```
 
-Then restart Claude Code. The first time you invoke an EULER skill, Claude will
-trigger the OAuth flow against `https://mcp.eulerapp.com` — one-time consent,
-the token is cached for 30 days.
+Or load it without cloning via `--plugin-dir` pointing at a local path. Use
+`/reload-plugins` inside Claude Code to pick up changes without restarting.
 
-### Via Claude.ai web / Cowork
+### Updating
 
-(Once the plugin is approved on `claude.com/plugins`) — search for "EULER" in
-the plugin marketplace and click Install. Cowork org admins can push it to all
-workspace members automatically.
+```bash
+/plugin marketplace update euler-plugins
+/plugin update euler
+```
+
+### Validation
+
+To validate the manifests before pushing changes:
+
+```bash
+claude plugin validate .
+```
 
 ## How it works
 
@@ -60,6 +80,7 @@ The connector and the plugin work together:
 ```
 EULER-skills/
 ├── .claude-plugin/
+│   ├── marketplace.json     Marketplace catalog (lists the euler plugin)
 │   └── plugin.json          Plugin manifest (name, version, metadata)
 ├── .mcp.json                References the remote EULER MCP server
 ├── skills/                  Model-invoked skills — the primary content
