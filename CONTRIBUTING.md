@@ -7,7 +7,7 @@ and opinionated — read this before opening a PR.
 
 1. **Copy the template:**
    ```bash
-   cp -r skills/_template skills/<your-skill-name>
+   mkdir -p skills/your-skill-name && cp template/SKILL.md skills/your-skill-name/SKILL.md
    ```
    The folder name must be `kebab-case` and must match the `name:` field
    in `SKILL.md` frontmatter exactly.

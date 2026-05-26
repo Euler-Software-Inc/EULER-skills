@@ -84,7 +84,6 @@ EULER-skills/
 │   └── plugin.json          Plugin manifest (name, version, metadata)
 ├── .mcp.json                References the remote EULER MCP server
 ├── skills/                  Model-invoked skills — the primary content
-│   ├── _template/           Starter SKILL.md for new contributions
 │   ├── generate-qbr/
 │   │   ├── SKILL.md         The QBR generation playbook
 │   │   ├── references/      Reference docs (MCP field paths) — shared
@@ -94,6 +93,7 @@ EULER-skills/
 │       ├── SKILL.md         Pre-meeting briefing playbook
 │       ├── assets/          styles.css + template.html for HTML output
 │       └── examples/        Sanitized example outputs (HTML + .md)
+├── template/                Starter SKILL.md for new skills (not loaded — outside skills/)
 ├── commands/                (Future) Explicit slash commands like /euler:list
 ├── agents/                  (Future) Sub-agents for multi-step workflows
 ├── CONTRIBUTING.md          How to add or modify a skill
@@ -102,7 +102,7 @@ EULER-skills/
 
 ## Adding a new skill
 
-Copy [`skills/_template/`](./skills/_template/SKILL.md) and rename. Every
+Copy [`template/SKILL.md`](./template/SKILL.md) into a new `skills/<your-skill-name>/SKILL.md`. Every
 new skill must include:
 
 - YAML frontmatter with `name` (matching folder name) and `description`

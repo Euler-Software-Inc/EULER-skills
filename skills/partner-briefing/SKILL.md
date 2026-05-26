@@ -1,6 +1,6 @@
 ---
 name: partner-briefing
-description: Generate a pre-meeting briefing about a specific partner — 30-second read with what they'll want to discuss, what you should bring up, and key stats from the last 30 days. Use this skill whenever the user mentions a partner call, partner meeting, pre-call prep, partner briefing, or asks "what should I know before I talk to <partner>" / "prep me for my call with <partner>" / "give me a quick read on <partner>" — even when the word "briefing" isn't used.
+description: Generate a pre-meeting briefing about a specific partner — 30-second read with what they'll want to discuss, what you should bring up, and key stats from the last 30 days. Use this skill whenever the user mentions a partner call, partner meeting, pre-call prep, partner briefing, or asks "what should I know before I talk to a partner", "prep me for my call with this partner", or "give me a quick read on a partner" — even when the word "briefing" isn't used.
 ---
 
 # Partner Briefing — Pre-meeting prep for a partner call
