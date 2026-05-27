@@ -455,107 +455,27 @@ Claude:
 User: copies output → pastes into Slack / Google Doc / email to the partner.
 ```
 
-## Q-over-Q comparison (default-on as of v0.8.0)
+## v0.8 output enhancements
 
-Every QBR includes the previous quarter's metrics inline. The model calls
-`performance` twice (current quarter + prev quarter) and computes deltas
-for each headline metric. Rendered as:
+The detailed rules for Q-over-Q comparison, sparklines, the Impact column
+in action items, the data confidence indicator, and known limitations
+live in [`references/output-enhancements.md`](references/output-enhancements.md).
+Consult that file when rendering the output. Summary of what's in there:
 
-- **In the TL;DR:** when the QoQ change is material (≥10% absolute change
-  in revenue, or any change in deal count), the headline mentions it
-  ("$10K closed vs $5K last quarter, +100%").
-- **In the Key Numbers table:** a `Δ vs Q<N-1>` column shows the delta
-  with arrow and percentage (`↑ +47%` green / `↓ −12%` red / `→ no change` gray).
-- **When current period is dormant (all zeros) but historical data
-  exists:** lean on the sparkline (see below) rather than the delta.
-  A "0 → 0, no change" cell is noise.
-
-For sparklines and richer history, the model additionally fetches 3 more
-quarters (`performance` ×3) — Q-2 through Q-4. Total `performance` calls
-per QBR: 5. Skip the historical fetch if the user explicitly asks for
-"fast" or "lite" mode.
-
-## Sparkline rules (default-on as of v0.8.0)
-
-In stat cards that display **temporal numeric data** (billings revenue,
-booking revenue, deal count), render an inline SVG sparkline below the
-stat value showing the last 5 quarters' trend.
-
-SVG specs:
-- 100×24 viewBox, no external deps
-- Stroke `var(--brand-600)` at 1.5px, fill none
-- Polyline through 5 points, normalized to the max value across the series
-- Closing circle marker at the rightmost (current period) data point
-- Use class `.sparkline` for styling hooks
-
-Do NOT render a sparkline for:
-- Stat cards showing non-numeric / categorical data (Agreements "3 / 5")
-- Stat cards where all 5 historical points are zero (no trend)
-- Counts that vary by ≤1 across the series (a flat line is noise)
-
-## Impact column in action items (default-on as of v0.8.0)
-
-Every action row in the "What needs to happen" table now has an Impact
-hint inline (rendered as a `<div class="note">` under the action text).
-The impact must derive from real data, not be invented:
-
-- Good: *"Blocks $50K Acme deal from progressing past Stage 1"*
-  (Acme is in our pipeline, $50K is in our data)
-- Good: *"Unlocks commission rate at next tier — current pipeline at
-  $58K would qualify"* (pipeline number from our data)
-- Good: *"7 prospects × ~$15K avg lifetime ACV ≈ $105K potential
-  pipeline"* (multiplication of real referral count × cohort avg)
-- Bad: *"Improves partnership trust"* (vague, unmeasurable)
-- Bad: *"Industry best practice"* (generic)
-
-When you cannot derive a concrete impact from data, drop the action item
-rather than emit a vague one — Rule 7 still applies (all 5 cells
-filled or row is removed).
-
-## Data confidence indicator (default-on as of v0.8.0)
-
-Add a `<span class="data-pill ...">` next to the status pill in the
-header, summarizing how complete the underlying data fetch was:
-
-- **`data-pill complete`** (green) — all expected tool calls returned
-  data or expected-empty
-- **`data-pill partial`** (amber) — one or more tools returned an
-  unexpected empty/error response; the doc renders normally but is
-  missing one or more sections it would otherwise include
-- **`data-pill stale`** (gray) — historical comparison data is older
-  than 90 days from the period end (e.g. a Q1 2026 QBR with no Q4 2025
-  data on file)
-
-The pill tooltip (HTML `title` attribute) lists which sources are
-incomplete. Hover for detail in browser.
-
-## Known limitations (v0.8.0)
-
-Things the skill cannot do today, by tool constraint. Logged for upstream
-MCP improvements:
-
-- **No partner CRM ID exposed.** Customer-side tools return the
-  EULER-internal `partner_id` only. Partner managers want the CRM ID
-  (HubSpot / Salesforce / Pipedrive object id) in their QBR. Pending
-  upstream MCP change — once added to `partners(list)`, `list_accounts`,
-  and `performance(partner)` responses, surface it in the header.
-  Assigned: Marcelo (Bubble-side).
-- **No period filter for deals / referrals / agreements / invoices.** Listed
-  as all-time. Workaround: parse `"Submitted On"` for referrals and
-  approximate.
-- **No `closed_on` date in deals.** `last_stage_change_date` is a duration,
-  not a timestamp.
-- **No `expires_on` for agreements.** Cannot surface renewal risk.
-- **No Sourced/Influenced/Delivered split** in `performance`. The MCP tool
-  `influenced_sourced_deals` exists and could be added in a future version.
-- **No MDF / incentives data.** `incentives_summary` exists; future
-  enhancement.
-- **Q-over-Q comparison** not built-in. Roadmap v0.3.
+- **Q-over-Q:** fetch current + prev quarter via `performance`; render
+  delta inline + `Δ vs Q<N-1>` column with arrow + %. Omit `0 → 0`.
+- **Sparklines:** SVG inline 100×24, 5-quarter trend, brand-600 stroke.
+  Skip when all-zero or flat.
+- **Impact column:** every action row gets an `<span class="impact">` line
+  citing concrete numbers from the data ("$50K stalled deal", "7 referrals
+  × $15K avg ACV"). Never invented.
+- **Data confidence pill:** `complete` / `partial` / `stale` next to the
+  status pill, indicating fetch completeness with a tooltip listing gaps.
 
 ## Why this skill exists
 
 A QBR currently takes a partner manager 1–2 hours per partner per quarter —
-opening 5 different tools, copying numbers into a deck, formatting tables by
-hand. With this skill the same output is one prompt + a few seconds of tool
-orchestration. At scale (a customer with 14 partners × 4 quarters = 56 QBRs
-per year), the time saved is in the dozens of hours.
+opening 5 different tools, copying numbers into a deck, formatting tables
+by hand. With this skill the same output is one prompt + a few seconds of
+tool orchestration. At scale (14 partners × 4 quarters = 56 QBRs/year),
+the time saved is in the dozens of hours.
