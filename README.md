@@ -10,6 +10,7 @@
 |-------|--------|-------------|
 | [`generate-qbr`](./skills/generate-qbr/SKILL.md) | ✅ Available *(validated against staging 2026-05-25)* | Generate a Quarterly Business Review for a specific partner |
 | [`partner-briefing`](./skills/partner-briefing/SKILL.md) | ✅ Available *(validated against staging 2026-05-25)* | Pre-meeting briefing for a partner call — 30-second read with what they'll discuss + what you should bring up |
+| [`portfolio-pulse`](./skills/portfolio-pulse/SKILL.md) | 🆕 New *(field paths pending live-MCP validation)* | One-screen pulse of the whole partner portfolio — totals, top performers, who needs attention, coverage gaps |
 | `partner-health-check` | 🚧 Planned | One-glance health snapshot of a partner (deals + referrals + agreement + commission status) |
 | `monthly-commission-report` | 🚧 Planned | Auto-generate commission payout report for a partner or company-wide |
 | `referral-workflow` | 🚧 Planned | End-to-end referral submission flow (list accounts → get form → submit) |
@@ -132,4 +133,4 @@ MIT — see [LICENSE](./LICENSE).
 ## Companion repo
 
 This plugin pairs with the [EULER MCP server](https://github.com/Euler-Software-Inc/euler-mcp)
-that exposes the underlying 21 tools.
+that exposes the underlying 23 tools.
