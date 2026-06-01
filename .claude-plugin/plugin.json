@@ -8,12 +8,8 @@
     "url": "https://eulerapp.com"
   },
   "homepage": "https://eulerapp.com",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Euler-Software-Inc/EULER-skills.git"
-  },
+  "repository": "https://github.com/Euler-Software-Inc/EULER-skills",
   "license": "MIT",
-  "category": "Sales & Partnerships",
   "keywords": [
     "euler",
     "partner-management",

@@ -132,4 +132,4 @@ MIT — see [LICENSE](./LICENSE).
 ## Companion repo
 
 This plugin pairs with the [EULER MCP server](https://github.com/Euler-Software-Inc/euler-mcp)
-that exposes the underlying 21 tools.
+that exposes the underlying 23 tools.
