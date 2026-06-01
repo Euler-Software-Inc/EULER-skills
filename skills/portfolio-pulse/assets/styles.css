@@ -1,6 +1,7 @@
 /* portfolio-pulse — Euler design system, modern report treatment
  * Goals: LIGHTWEIGHT (fast first paint) + MOBILE-FIRST responsive.
- * - No JS, no images except the brand logo. ~one screen of CSS, inlined.
+ * - No JS, no images, no external assets except the two web fonts (brand
+ *   shown as a text wordmark — the remote logo SVG renders broken in Claude).
  * - Web fonts (Inter + JetBrains Mono) load with display=swap and a system
  *   fallback, so text paints instantly and never blocks open. Pair with
  *   <link rel="preconnect"> in <head> (see template.html).
@@ -57,7 +58,7 @@ img { max-width: 100%; height: auto; }
 }
 .topbar-inner { display: flex; align-items: center; gap: 12px; }
 .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.brand img { height: 24px; }
+.brand-mark { font-weight: 700; font-size: 17px; letter-spacing: -0.01em; color: var(--brand-600); }
 .brand-divider { width: 1px; height: 22px; background: var(--gray-200); flex-shrink: 0; }
 .brand-label {
   font-size: 12px; font-weight: 600; color: var(--gray-600);
@@ -192,7 +193,7 @@ td strong { color: var(--gray-950); font-weight: 600; }
 footer { background: var(--gray-950); color: var(--gray-400); padding: 32px 0; margin-top: clamp(40px, 8vw, 56px); }
 .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 .footer-inner p { margin: 0; font-size: 13px; }
-.footer-inner img { height: 22px; opacity: 0.85; filter: brightness(0) invert(1); }
+.footer-mark { font-weight: 700; font-size: 16px; letter-spacing: -0.01em; color: var(--white); }
 .footer-inner .mono { color: var(--gray-500); }
 
 /* ─── Print ─── */
@@ -202,5 +203,5 @@ footer { background: var(--gray-950); color: var(--gray-400); padding: 32px 0; m
   .fact:hover, .att-row:hover, tbody tr:hover { box-shadow: var(--shadow-xs); transform: none; background: none; }
   .spotlight, .att-row, .fact, tr { break-inside: avoid; }
   footer { background: none; color: var(--gray-600); }
-  .footer-inner img { filter: none; }
+  .footer-mark { color: var(--gray-950); }
 }

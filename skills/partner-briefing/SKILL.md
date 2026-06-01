@@ -67,7 +67,7 @@ instead of a quarter. Skip steps only if the user's framing excludes them
 | 6 | `referrals(action: 'for_partner', partner_id, page: 1, limit: 20)` | All-time referrals; filter to the window by parsing `"Submitted On"` |
 | 7 | `partner_artifacts(action: 'agreements', partner_id)` | Open agreement blockers |
 | 8 | `influenced_sourced_deals(partner_id, start_date, end_date)` | Sourced vs Influenced split for the window. Adds depth to "what they'll want to talk about" — partners commonly raise attribution disputes. |
-| 9 | `performance(action: 'partner', partner_id, prev_window_dates)` | Previous window (e.g. 30 days before the current 30-day window) for delta indicators in stat cards. |
+| 9 | `performance(action: 'partner', partner_id, prev_window_dates)` | Previous window (e.g. 30 days before the current 30-day window) for delta indicators in the hero facts (`.fact-sub`). |
 
 For exact field paths per tool, consult
 [`references/mcp-field-paths.md`](references/mcp-field-paths.md).
@@ -120,48 +120,54 @@ readability before walking into a call.
 3. The model output is the complete HTML — `<!DOCTYPE html>` through
    `</html>`. No surrounding markdown, no explanation, no headers.
 
-### Required structure (HTML class names → meaning)
+### Euler design system (modern report treatment)
 
-```
-<div class="container">
-  <div class="header">
-    <h1>🎯 Briefing: <Partner name></h1>
-    <div class="meta">
-      <span class="status-pill {green|amber|red|gray}">{emoji} {label}</span>
-      · Prepared <YYYY-MM-DD>
-      · Status: <partner_status>
-    </div>
-  </div>
+Output follows the **Euler design system** in the same modern layout as
+`generate-qbr`, `portfolio-pulse`, and `pending-approvals-triage`: sticky **topbar**
+with the Euler **text wordmark** → **hero** (eyebrow chip + headline with a gradient
+`.accent` span + `.quick-facts` headline stats) → **spotlight** gradient panel (the
+30-second read) → two short `.attention` sections → a compact `.table-wrap` of recent
+touchpoints → footer. Even as a briefing it's one screen; keep it tight.
 
-  <div class="tldr {green|amber|red|gray}">
-    <p class="tldr-headline">{one-line state, with the most important number embedded}</p>
-    <p class="tldr-cta">{one sentence — what they'll push on / what you should lead with}</p>
-  </div>
+**Brand is a text wordmark, not an image.** Use `<span class="brand-mark">Euler</span>`
+in topbar and `<span class="brand-mark footer-mark">Euler</span>` in footer — the remote
+logo SVG renders broken in Claude. Keep the two `<link rel="preconnect">` tags.
 
-  <h2>What they'll likely want to talk about</h2>
-  <ul>...max 3 bullets...</ul>
+**Lightweight (required).** No JavaScript, no images, no extra fonts beyond the two the
+sheet `@import`s. Tone classes (`.hero-eyebrow`, `.spotlight` → `amber`/`red`/default)
+follow the briefing traffic light.
 
-  <h2>What you should bring up</h2>
-  <ul>...max 3 bullets...</ul>
+### Required structure (component → meaning)
 
-  <h2>Quick stats (last <N> days)</h2>
-  <div class="stats-grid cols-4">
-    <div class="stat">
-      <div class="stat-label">{label}</div>
-      <div class="stat-value">{value}</div>
-      <div class="stat-sub">{sub-detail, optional}</div>
-    </div>
-    ...
-  </div>
+Follow [`assets/template.html`](assets/template.html). Sections, in order. Use ONLY
+class names defined in the stylesheet.
 
-  <h2>Recent touchpoints</h2>
-  <div class="row">
-    <span class="row-name">{type}</span>
-    <span class="row-meta">{date — name (status)}</span>
-  </div>
-  ...
-</div>
-```
+1. **Topbar** — `brand-mark` "Euler" + `brand-label` "Partner Briefing · {Partner}".
+2. **Hero** — `hero-eyebrow` (tone) "Prepared {YYYY-MM-DD} · {partner_status}";
+   `<h1>` "Briefing: <span class="accent">{Partner}</span>"; subtitle = one-line state
+   with the most important number + a `.data-pill` (complete/partial/stale).
+3. **Quick facts** (`.quick-facts` → `.fact`): stats for the last {N} days. **Omit any
+   fact whose value is zero** with no contextual sub-detail (a briefing has no room for
+   "$0" cards). Numerals render mono via `.fact-value`.
+4. **Spotlight** (`.spotlight` tone) — the 30-second read: `<h2>` one-line state; `<p>`
+   one–two sentences (what they'll push on / what you should lead with). Wrap key figures
+   in `<span class="num">`.
+5. **01 · They'll raise** (`.attention` → `.att-row`, ≤3): what they'll likely want to
+   talk about — each `att-name` a topic, `att-meta` the why, traceable to a real record
+   (pending agreement, referral awaiting review, late-stage deal, recent commission).
+   **Omit the section** if you cannot derive even one item.
+6. **02 · You raise** (`.attention` → `.att-row`, ≤3): what you should bring up —
+   actionable for the partner-manager, with a `status-pill` marker and a concrete impact
+   phrase in `att-meta` when derivable ("blocks $50K Acme deal", "~$105K pipeline
+   awaiting your decision"). Never requests for the partner; never "debug the tool".
+7. **03 · Recent touchpoints** (`.table-wrap`): What · Detail · When (numeric date).
+   Omit a row when its entity has no parseable date; **omit the whole section** if both
+   rows would be omitted.
+8. **Footer** — `brand-mark footer-mark` "Euler" + "Partner Briefing · {Partner} · last
+   {N} days" + `.mono` "euler · partner-briefing".
+
+Model output is the complete HTML (`<!DOCTYPE html>` → `</html>`) — no surrounding
+markdown, no preamble.
 
 ### Status-pill labels (briefing variant — 30-day window)
 
@@ -176,7 +182,7 @@ readability before walking into a call.
 
 Briefings are short; empty sections kill the format. Omit:
 
-- **"Quick stats" stat cards** that are zero — omit the whole card (don't render "Closed-won: $0")
+- **"Quick stats" facts** (`.fact`) that are zero — omit the whole fact (don't render "Closed-won: $0")
 - **"Recent touchpoints" rows** when the underlying entity has no parseable date
 - **The entire "Recent touchpoints" section** if both rows would be omitted
 - **The "What you should bring up" section** if you cannot derive at least one item from data (rare — usually there's an unsigned agreement or pending referral)
@@ -290,10 +296,9 @@ User: opens the HTML in a browser (or saves as PDF) to skim before the call.
 
 ## Vs-previous-window delta (default-on as of v0.8.0)
 
-Stat cards show a small `↑ +12%` / `↓ −5%` / `→ no change` indicator
-below the stat value (or inline) when the current-window value differs
-materially from the previous equivalent window. Same delta-rendering
-rule as QBR.
+Hero facts show a small `↑ +12%` / `↓ −5%` / `→ no change` indicator in the
+`.fact-sub` when the current-window value differs materially from the previous
+equivalent window. Same delta-rendering rule as QBR.
 
 When the current window has zero activity and the previous also had
 zero, omit the delta — the absence is the signal, no need for a
@@ -313,11 +318,11 @@ bullets are conversational, not table cells. Apply the same
 
 ## Data confidence indicator (default-on as of v0.8.0)
 
-Same as QBR — add a `<span class="data-pill ...">` next to the status
-pill summarizing fetch completeness (complete / partial / stale).
-Briefings are short, so a partial-data badge is even more important —
-the reader needs to know if commissions or referrals data was
-unavailable before walking into the meeting.
+Same as QBR — add a `<span class="data-pill ...">` in the hero subtitle
+summarizing fetch completeness (complete / partial / stale). Briefings are
+short, so a partial-data badge is even more important — the reader needs to
+know if commissions or referrals data was unavailable before walking into the
+meeting.
 
 ## Known limitations (v0.8.0)
 

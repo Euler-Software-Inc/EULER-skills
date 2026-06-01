@@ -118,8 +118,8 @@ Note: pasting raw HTML into Slack does not render — share the file or a link.
 
 ### Euler design system (modern report treatment)
 Output follows the **Euler design system** in a modern, landing-page-style layout:
-sticky **topbar** with the Euler logo → **hero** (eyebrow chip + headline with a
-gradient `.accent` span + `.quick-facts` headline stats) → **spotlight** gradient
+sticky **topbar** with the Euler **text wordmark** → **hero** (eyebrow chip + headline
+with a gradient `.accent` span + `.quick-facts` headline stats) → **spotlight** gradient
 panel for the headline read → sectioned body (`.section-eyebrow` "01 · …") →
 leaderboard `.table-wrap` → `.attention` rows → `.dist` status chips → footer.
 
@@ -130,9 +130,11 @@ two-layer shadows. Use ONLY class names defined there; never improvise colors or
 fonts. Use the skeleton in [`assets/template.html`](assets/template.html). Model
 output is the complete HTML (`<!DOCTYPE html>` → `</html>`) — no surrounding markdown.
 
-External deps (acceptable, same as the other skills): Google Fonts (`@import` in the
-stylesheet) and the Euler brand-logo SVG in the topbar/footer
-(`https://fce3ae0034736fb2f8d94c846392c61c.cdn.bubble.io/d348/f1748028305109x160057403347279230/brand-logo.svg`).
+**Brand is a text wordmark, not an image.** Render `<span class="brand-mark">Euler</span>`
+in the topbar and `<span class="brand-mark footer-mark">Euler</span>` in the footer — do
+NOT use an `<img>` logo (the remote brand SVG renders broken in Claude's artifact viewer).
+The only external dep is Google Fonts (`@import` in the stylesheet); keep the two
+`<link rel="preconnect">` tags.
 
 Tone classes follow overall health: `.hero-eyebrow` and `.spotlight` take
 `amber`/`red` (or default brand) to match the portfolio state.
@@ -149,7 +151,7 @@ HTML with repeated rows — cap the leaderboard at N and needs-attention at ~6.
 
 Follow [`assets/template.html`](assets/template.html). Sections, in order:
 
-1. **Topbar** — Euler logo + `brand-label` "Portfolio Pulse · {Customer}".
+1. **Topbar** — Euler `brand-mark` wordmark + `brand-label` "Portfolio Pulse · {Customer}".
 2. **Hero** — `hero-eyebrow` (tone) "{window} · {N} partners"; `<h1>` short headline
    with a gradient `.accent` span; subtitle + a `.data-pill` (complete/partial/stale).
 3. **Quick facts** (`.quick-facts` → `.fact`): Partners · Producing (window) ·
@@ -162,7 +164,7 @@ Follow [`assets/template.html`](assets/template.html). Sections, in order:
    reason/action). Cap ~6, top by severity. **Omit the whole section if empty.**
 7. **Status distribution** (`03 · Roster`): `.dist` → `.dist-chip` per status
    (Active/Onboarding/Prospecting/Inactive/No status set), counted from `partners(list)`.
-8. **Footer** — Euler logo + "Portfolio Pulse · {Customer} · {window}".
+8. **Footer** — Euler `brand-mark footer-mark` wordmark + "Portfolio Pulse · {Customer} · {window}".
 
 ### Status pill vocabulary (portfolio)
 | Emoji | Pill | Meaning |

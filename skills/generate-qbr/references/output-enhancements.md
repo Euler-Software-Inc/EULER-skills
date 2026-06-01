@@ -1,5 +1,19 @@
 # `generate-qbr` — v0.8 output enhancements (detailed rules)
 
+> ⚠️ **Superseded class names (modern template migration).** This reference
+> predates the modern Euler-design-system template. The HTML structure and
+> class names below (`.impact` spans, inline-SVG sparklines inside stat cards,
+> a `Δ vs Q-N` table column) **no longer match the template**. Apply the
+> mapping in SKILL.md → *"v0.8 output enhancements"* instead:
+> - Q-over-Q delta → text in the hero `.fact-sub` / spotlight prose (no column)
+> - Sparklines → **dropped** (the `.fact` cards host no charts)
+> - Impact → the `.cell-note` under each action row in the `01 · Next quarter` table
+> - Data confidence → the `.data-pill` in the hero subtitle
+>
+> The *logic* below (when to compute a delta, what counts as a real impact
+> figure, confidence thresholds) still applies — only the rendering/class names
+> changed.
+
 > Load this reference when rendering the HTML output. SKILL.md gives you
 > the orchestration + short rule summaries; this file has the detailed
 > rendering behavior for the four v0.8 enhancements: Q-over-Q,
