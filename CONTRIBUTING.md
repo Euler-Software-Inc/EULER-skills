@@ -66,6 +66,13 @@ and opinionated — read this before opening a PR.
 - **Examples** — every skill must have at least one worked example in
   `examples/`. Sanitize real customer data (rename partners, round
   dollar amounts).
+- **HTML output must be lightweight + mobile-responsive (always).** Generated
+  HTML has to open fast on any device: no JavaScript, no images beyond the
+  brand logo, no base64/data-URI blobs, at most the two Euler web fonts loaded
+  with `display=swap` (+ `<link rel="preconnect">`) so text paints instantly.
+  Use fluid `clamp()` type and make wide tables scroll on narrow screens — never
+  fixed pixel widths that overflow a phone. Cap repeated rows (top-N) so the
+  document stays small. Test the output at a 360px viewport before merging.
 
 ## Things to NOT do
 

@@ -137,6 +137,14 @@ stylesheet) and the Euler brand-logo SVG in the topbar/footer
 Tone classes follow overall health: `.hero-eyebrow` and `.spotlight` take
 `amber`/`red` (or default brand) to match the portfolio state.
 
+**Lightweight & mobile-responsive (required).** The artifact must open fast on any
+device: no JavaScript, no images beyond the brand logo, no embedded data URIs or
+base64 blobs, no heavy gradients-on-gradients. The stylesheet already handles
+responsiveness with fluid `clamp()` type and a table that scrolls on narrow screens —
+do NOT add fixed pixel widths, multi-hundred-line inline `<style>` beyond the provided
+sheet, or extra web fonts. Keep the `<link rel="preconnect">` tags. Don't bloat the
+HTML with repeated rows — cap the leaderboard at N and needs-attention at ~6.
+
 ### Required structure (class → meaning; component → design-system)
 
 Follow [`assets/template.html`](assets/template.html). Sections, in order:
