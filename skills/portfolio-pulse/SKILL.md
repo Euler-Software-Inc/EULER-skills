@@ -58,14 +58,20 @@ No partner is named — this is the entire portfolio.
 | # | Tool call | Provides |
 |---|-----------|----------|
 | 1 | `list_accounts` | Customer-side `name` (header) + account gate. |
-| 2 | `partners(action: 'summary')` | Company-wide partner count + status distribution. |
-| 3 | `performance(action: 'company', start_date, end_date)` | Own-company aggregate (sales / deals / charges) for portfolio totals. |
-| 4 | `performance(action: 'overall', entity_key, start_date, end_date, page: 1, limit: N)` | **Terminal** ranked top-N partners + aggregate metrics in one call. Won deals only, no commissions. |
-| 5 | `partners(action: 'list', page: 1, limit: 100)` | Roster (name + status) to derive the at-risk segment. Page if needed; note if truncated. |
+| 2 | `partners(action: 'summary')` | Company-wide totals + portal-access counts. **Its status breakdown proved unreliable** (disagreed with the roster — 2026-06-01 live run); do NOT use it for the status distribution. |
+| 3 | `performance(action: 'company', start_date, end_date)` | Own-company aggregate (booking / billings / deal count / win rate) for portfolio totals. |
+| 4 | `performance(action: 'overall', entity_key, start_date, end_date, page: 1, limit: N)` | **Terminal** ranked top-N partners + aggregate metrics in one call. Ranks by **billed/invoiced revenue** (`entity_key: 'revenue'`) — a partner can rank with revenue while having 0 closed-won deals. |
+| 5 | `partners(action: 'list', page: 1, limit: 100)` | Roster (name + status) — **the canonical source for the status distribution AND the at-risk segment**. Page if needed; note if truncated. |
 
 `overall` is terminal — it returns ranking + aggregates together; do NOT loop
 per-partner `partner_artifacts`/`commissions` for a pulse. If the user wants depth
 on one partner, suggest `/euler:generate-qbr <partner>`.
+
+> **Roster status comes from `partners(list)`, not `summary`.** On the 2026-06-01
+> live run, `summary` returned a status breakdown that only accounted for 35 of 42
+> partners and disagreed with the per-entry roster. Always compute the status
+> distribution by counting `partners(list)` entries. Use `summary` only for the
+> grand total + portal-access counts, and treat it skeptically.
 
 For exact response field paths per tool, consult
 [`references/mcp-field-paths.md`](references/mcp-field-paths.md). The same backend
@@ -82,21 +88,27 @@ gotchas apply (dates `YYYY-MM-DD`; numerics arrive as strings; loose JSON parsin
 
 ## Segmentation (cheap signals only — no per-partner deep fetch)
 
-- **Portfolio totals** (summary + company): partner count, status mix, revenue/deals
-  in window.
-- **Top performers** (overall): top N by the chosen metric, with deal count.
-- **Needs attention** (from `partners(list)` status + ranking absence):
+- **Portfolio totals**: partner count (from `list`/`summary`), revenue/deals in window
+  (from `company` + `overall`).
+- **Status distribution** (count `partners(list)` entries — NOT `summary`):
+  Active / Onboarding / Prospecting / Inactive / **No status set**.
+- **Top performers** (overall): top N by revenue (billed/invoiced), with deal count.
+- **Needs attention** (from `partners(list)` status + ranking absence), top by severity:
+  - **No status configured** cohort → if it's a large share, this is the #1 item:
+    the program can't be measured/worked until the roster is segmented. Action =
+    "segment the roster & assign statuses", not pipeline.
   - `Inactive` partners → reactivate-or-offboard.
   - `Active` partners with zero production in the window (active but absent from the
-    won ranking / zero revenue).
-  - A large `Onboarding`/`Prospecting` cohort → activation backlog.
-  - Each row: status pill + name + reason (from the cheap signal) + one action +
-    deep-link ("run `/euler:generate-qbr` for <partner>").
+    revenue ranking).
+  - Each row: status pill + name + reason (cheap signal) + one action + deep-link
+    ("run `/euler:generate-qbr` for <partner>").
 - **Coverage gaps**: producing vs dormant share; concentration (top partner = X% of
-  ranked revenue → concentration risk).
-  - Producing count precision depends on `overall`'s response (whether it returns a
-    total/all-producers count or only the top-N page). If only top-N, label as
-    "top-N producing" rather than implying the full book. Never overstate.
+  ranked revenue).
+  - **When producing ≤ 1**, concentration is meaningless (100% of a single record is
+    noise) — render it as `n/a` / "insufficient producers", not "100%".
+  - Producing count: `overall` returned the full producing set (not a truncated page)
+    on the 2026-06-01 run — but verify per run. If the ranking IS capped at top-N,
+    label "top-N producing", never imply you saw every partner.
 
 ## Output format
 
@@ -104,59 +116,62 @@ Render a **single self-contained HTML file** — no external CSS/fonts/scripts.
 Opens in a browser, prints to PDF, or shares by file/link (email, Notion, Slack).
 Note: pasting raw HTML into Slack does not render — share the file or a link.
 
-### Euler design system
-Output follows the **Euler design system**. Read [`assets/styles.css`](assets/styles.css)
-and inline its full contents into a single `<style>` block in `<head>` (self-contained,
-required). It already encodes the tokens — Inter 400–700, Brand-600 `#2563EB`,
-two-layer shadows, radius-md tables / radius-xl cards / radius-full pills. Use ONLY
-class names defined in that stylesheet; never improvise colors or fonts. Use the
-skeleton in [`assets/template.html`](assets/template.html). Model output is the
-complete HTML (`<!DOCTYPE html>` → `</html>`) — no surrounding markdown.
+### Euler design system (modern report treatment)
+Output follows the **Euler design system** in a modern, landing-page-style layout:
+sticky **topbar** with the Euler logo → **hero** (eyebrow chip + headline with a
+gradient `.accent` span + `.quick-facts` headline stats) → **spotlight** gradient
+panel for the headline read → sectioned body (`.section-eyebrow` "01 · …") →
+leaderboard `.table-wrap` → `.attention` rows → `.dist` status chips → footer.
+
+Read [`assets/styles.css`](assets/styles.css) and inline its FULL contents into a
+single `<style>` block in `<head>` (self-contained). It encodes the tokens — Inter +
+**JetBrains Mono** (numerals/`$`), Brand-600 `#2563EB`, gray/status/utility scales,
+two-layer shadows. Use ONLY class names defined there; never improvise colors or
+fonts. Use the skeleton in [`assets/template.html`](assets/template.html). Model
+output is the complete HTML (`<!DOCTYPE html>` → `</html>`) — no surrounding markdown.
+
+External deps (acceptable, same as the other skills): Google Fonts (`@import` in the
+stylesheet) and the Euler brand-logo SVG in the topbar/footer
+(`https://fce3ae0034736fb2f8d94c846392c61c.cdn.bubble.io/d348/f1748028305109x160057403347279230/brand-logo.svg`).
+
+Tone classes follow overall health: `.hero-eyebrow` and `.spotlight` take
+`amber`/`red` (or default brand) to match the portfolio state.
+
+**Lightweight & mobile-responsive (required).** The artifact must open fast on any
+device: no JavaScript, no images beyond the brand logo, no embedded data URIs or
+base64 blobs, no heavy gradients-on-gradients. The stylesheet already handles
+responsiveness with fluid `clamp()` type and a table that scrolls on narrow screens —
+do NOT add fixed pixel widths, multi-hundred-line inline `<style>` beyond the provided
+sheet, or extra web fonts. Keep the `<link rel="preconnect">` tags. Don't bloat the
+HTML with repeated rows — cap the leaderboard at N and needs-attention at ~6.
 
 ### Required structure (class → meaning; component → design-system)
 
-```
-<div class="container">                            <!-- card, Brand-600 accent stripe -->
-  <div class="header">
-    <h1>Portfolio Pulse — <Customer></h1>
-    <div class="meta">
-      <span class="data-pill {complete|partial|stale}">…</span>
-      · Window: {start} to {end} · {N} partners
-    </div>
-  </div>
+Follow [`assets/template.html`](assets/template.html). Sections, in order:
 
-  <div class="tldr {green|amber|red}">            <!-- Alert/Callout: state -->
-    <p class="tldr-headline">{portfolio state + the number that matters}</p>
-    <p class="tldr-body">{biggest signal + biggest risk}</p>
-  </div>
-
-  <h2>Portfolio at a glance</h2>                   <!-- Stats/Widgets -->
-  <div class="stats-grid cols-4"> …total partners · active · producing (window) ·
-       revenue (window) · top-partner concentration… </div>
-
-  <h2>Top performers</h2>                          <!-- Table (compact) -->
-  <table><thead><tr><th>#</th><th>Partner</th><th>Revenue</th><th>Deals</th></tr></thead>
-    <tbody> …top N; rank #1 may use a Brand-600 accent… </tbody></table>
-
-  <h2>Needs attention</h2>                          <!-- List Item + Status -->
-  <div class="row">
-    <span class="row-name"><span class="status-pill {red|amber|gray}">{emoji} {label}</span> {Partner}</span>
-    <span class="row-meta">{reason} · {one action}</span>
-  </div>
-  …cap at ~6 rows, top by severity…
-
-  <h2>Status distribution</h2>                      <!-- Status pills + counts -->
-  <p class="section-prose">Active N · Onboarding N · Prospecting N · Inactive N</p>
-</div>
-```
+1. **Topbar** — Euler logo + `brand-label` "Portfolio Pulse · {Customer}".
+2. **Hero** — `hero-eyebrow` (tone) "{window} · {N} partners"; `<h1>` short headline
+   with a gradient `.accent` span; subtitle + a `.data-pill` (complete/partial/stale).
+3. **Quick facts** (`.quick-facts` → `.fact`): Partners · Producing (window) ·
+   Revenue (window) · Concentration. Numerals render in JetBrains Mono via `.fact-value`.
+4. **Spotlight** (`.spotlight` tone amber/red): the one-line read + 2–3 sentences
+   (biggest signal · biggest risk · first move). Wrap key figures in `<span class="num">`.
+5. **Top performers** (`01 · Leaderboard`): `.table-wrap` table — `#` (`.rank`, rank 1
+   = `.rank.top`), Partner (+ optional `.cell-note`), Revenue, Deals (numeric cols mono).
+6. **Needs attention** (`02 · Action`): `.attention` → `.att-row` (status-pill + name +
+   reason/action). Cap ~6, top by severity. **Omit the whole section if empty.**
+7. **Status distribution** (`03 · Roster`): `.dist` → `.dist-chip` per status
+   (Active/Onboarding/Prospecting/Inactive/No status set), counted from `partners(list)`.
+8. **Footer** — Euler logo + "Portfolio Pulse · {Customer} · {window}".
 
 ### Status pill vocabulary (portfolio)
 | Emoji | Pill | Meaning |
 |-------|------|---------|
-| 🟢 | `Producing` | closed-won revenue in the window |
+| 🟢 | `Producing` | revenue (billed/invoiced) in the window |
 | 🟡 | `Watch` | active, no production in window, OR onboarding/prospecting |
-| 🔴 | `At risk` | active + zero lifetime-visible production, or inactive blockers |
+| 🔴 | `At risk` | active + zero production, inactive blockers, OR a large no-status cohort |
 | ⚪ | `Inactive` | `status = Inactive` |
+| 🟣 | `No status` | roster entry with no status configured (use the `violet` pill) |
 
 Do not print internal labels like `amber` — the semantic label tells the reader what
 the colour means.
@@ -167,8 +182,11 @@ Silence empty sections (no "No X data" placeholders). The absence is the signal.
 ## Anti-hallucination rules (not optional)
 
 0. **No internal IDs** in output (`partner_id`, deal_id, etc.) — orchestration only.
-1. **`overall` ranks by closed-won deals only — NO commissions.** Label revenue as
-   "closed-won revenue (window)". Never conflate with commissions or invoices.
+1. **`overall` ranks by billed/invoiced revenue (`entity_key: 'revenue'`), NOT only
+   closed-won, and NO commissions.** Verified 2026-06-01: a $100 *billing* ranked
+   while `company` showed 0 closed-won deals. Label the metric "Revenue (window)";
+   only say "closed-won" when the deal count is actually > 0. Never conflate with
+   commissions. State the basis in `.fact-sub` (e.g. "billed · 0 closed-won deals").
 2. **At-risk reasons limited to cheap signals** (status + zero-production in window).
    NO "stalled N days" / aging claims — portfolio-pulse has no per-partner aging data.
 3. **Label window-filtered vs current-state.** `overall`/`company` are window-filtered;
