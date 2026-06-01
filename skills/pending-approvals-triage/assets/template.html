@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pending Approvals — {{CUSTOMER}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+/* Inline the FULL contents of assets/styles.css here (self-contained).
+   Lightweight: no JS, no images (brand is a text wordmark); fonts load with
+   display=swap so text paints instantly. */
+</style>
+</head>
+<body>
+
+<!-- ─── Topbar ─── -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">Euler</span>
+      <span class="brand-divider"></span>
+      <span class="brand-label">Pending Approvals · {{CUSTOMER}}</span>
+    </div>
+  </div>
+</header>
+
+<!-- ─── Hero + quick facts ─── -->
+<section class="hero">
+  <div class="container">
+    <!-- eyebrow tone (red | amber | green | default) by worst SLA in the queue -->
+    <span class="hero-eyebrow red"><span class="dot"></span>{{TOTAL}} waiting · oldest {{OLDEST_DAYS}}d</span>
+    <h1>{{HEADLINE_SHORT}} <span class="accent">{{HEADLINE_ACCENT}}</span></h1>
+    <p>{{HERO_SUBTITLE}} <span class="data-pill partial">Partial data</span></p>
+
+    <div class="quick-facts">
+      <div class="fact"><div class="fact-label">Total pending</div><div class="fact-value">{{TOTAL}}</div><div class="fact-sub">awaiting your approval</div></div>
+      <div class="fact"><div class="fact-label">Partner apps</div><div class="fact-value">{{N_PARTNERS}}</div><div class="fact-sub">awaiting approval</div></div>
+      <div class="fact"><div class="fact-label">Referrals</div><div class="fact-value">{{N_REFERRALS}}</div><div class="fact-sub">awaiting review</div></div>
+      <div class="fact"><div class="fact-label">Deal regs</div><div class="fact-value">{{N_DEALREGS}}</div><div class="fact-sub">awaiting review</div></div>
+      <div class="fact"><div class="fact-label">Oldest wait</div><div class="fact-value">{{OLDEST_DAYS}}d</div><div class="fact-sub">{{OLDEST_ITEM}}</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Spotlight: what to clear first (tone: red | amber | green) ─── -->
+<section style="padding-bottom:0">
+  <div class="container">
+    <div class="spotlight red">
+      <div class="spotlight-inner">
+        <span class="spotlight-eyebrow">Clear first</span>
+        <h2>{{ONE_LINE_WHAT_TO_CLEAR_FIRST}}</h2>
+        <p>{{MOST_STUCK_ITEM_AND_WHY}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Worklist (oldest first). If ALL queues empty, replace with an "Inbox zero" spotlight.green ─── -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">01 · Worklist</div>
+      <h2 class="section-title">What's waiting on you</h2>
+      <p class="section-subtitle">Oldest first. Work top-down — approve each in the dashboard.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Age</th><th>Type</th><th>Item</th><th>Waiting since</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="status-pill red">🔴 {{AGE_DAYS}}d</span></td>
+            <td><span class="status-pill violet">{{TYPE}}</span></td>
+            <td><strong>{{ITEM_NAME}}</strong></td>
+            <td class="numeric">{{SUBMITTED_ON}}</td>
+            <td><span class="att-meta"><code>Approve in dashboard</code></span></td>
+          </tr>
+          <!-- …oldest-first; SLA pill red >14d / amber 7–14d / green <7d; cap ~25 rows… -->
+        </tbody>
+      </table>
+    </div>
+    <p class="note">{{WORKLIST_NOTE}}</p>
+  </div>
+</section>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <div class="container footer-inner">
+    <span class="brand-mark footer-mark">Euler</span>
+    <p>Pending Approvals · {{CUSTOMER}}</p>
+    <p class="mono">euler · pending-approvals-triage</p>
+  </div>
+</footer>
+
+</body>
+</html>

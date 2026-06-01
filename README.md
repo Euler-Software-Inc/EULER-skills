@@ -11,10 +11,10 @@
 | [`generate-qbr`](./skills/generate-qbr/SKILL.md) | ✅ Available *(validated against staging 2026-05-25)* | Generate a Quarterly Business Review for a specific partner |
 | [`partner-briefing`](./skills/partner-briefing/SKILL.md) | ✅ Available *(validated against staging 2026-05-25)* | Pre-meeting briefing for a partner call — 30-second read with what they'll discuss + what you should bring up |
 | [`portfolio-pulse`](./skills/portfolio-pulse/SKILL.md) | 🆕 New *(field paths pending live-MCP validation)* | One-screen pulse of the whole partner portfolio — totals, top performers, who needs attention, coverage gaps |
+| [`pending-approvals-triage`](./skills/pending-approvals-triage/SKILL.md) | 🆕 New *(field paths pending live-MCP validation)* | Age-sorted worklist of what's awaiting approval — partner apps, pending referrals, pending deal registrations |
 | `partner-health-check` | 🚧 Planned | One-glance health snapshot of a partner (deals + referrals + agreement + commission status) |
 | `monthly-commission-report` | 🚧 Planned | Auto-generate commission payout report for a partner or company-wide |
 | `referral-workflow` | 🚧 Planned | End-to-end referral submission flow (list accounts → get form → submit) |
-| `pending-approvals-triage` | 🚧 Planned | Prioritize pending partner approvals by signal strength |
 | `flow-onboarding-setup` | 🚧 Planned | Scaffold a new onboarding flow with steps + assignments |
 
 ## Installation
