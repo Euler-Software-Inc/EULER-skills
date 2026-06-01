@@ -9,74 +9,138 @@
 </style>
 </head>
 <body>
-<div class="container">
 
-  <div class="header">
-    <h1>Portfolio Pulse — {{CUSTOMER}}</h1>
-    <div class="meta">
-      <span class="data-pill complete">Complete</span>
-      <span class="meta-separator">·</span> Window: {{START}} to {{END}}
-      <span class="meta-separator">·</span> {{PARTNER_COUNT}} partners
+<!-- ─── Topbar ─── -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <img src="https://fce3ae0034736fb2f8d94c846392c61c.cdn.bubble.io/d348/f1748028305109x160057403347279230/brand-logo.svg" alt="Euler">
+      <span class="brand-divider"></span>
+      <span class="brand-label">Portfolio Pulse · {{CUSTOMER}}</span>
     </div>
   </div>
+</header>
 
-  <!-- Alert/Callout: portfolio state. Class green|amber|red by overall health. -->
-  <div class="tldr amber">
-    <p class="tldr-headline">{{ONE_LINE_STATE_WITH_THE_NUMBER_THAT_MATTERS}}</p>
-    <p class="tldr-body">{{BIGGEST_SIGNAL_AND_BIGGEST_RISK}}</p>
+<!-- ─── Hero + quick facts ─── -->
+<section class="hero">
+  <div class="container">
+    <!-- eyebrow tone (default | amber | red) follows overall portfolio health -->
+    <span class="hero-eyebrow amber"><span class="dot"></span>{{WINDOW}} · {{PARTNER_COUNT}} partners</span>
+    <h1>{{HEADLINE_SHORT}} <span class="accent">{{HEADLINE_ACCENT}}</span></h1>
+    <p>{{HERO_SUBTITLE}} <span class="data-pill partial">Partial data</span></p>
+
+    <div class="quick-facts">
+      <div class="fact">
+        <div class="fact-label">Partners</div>
+        <div class="fact-value">{{PARTNER_COUNT}}</div>
+        <div class="fact-sub">{{ACTIVE}} active</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Producing (window)</div>
+        <div class="fact-value">{{PRODUCING}}</div>
+        <div class="fact-sub">{{PRODUCING_PCT}}</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Revenue (window)</div>
+        <div class="fact-value">{{REVENUE_WINDOW}}</div>
+        <div class="fact-sub">{{REVENUE_BASIS}}</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Concentration</div>
+        <div class="fact-value">{{CONCENTRATION}}</div>
+        <div class="fact-sub">{{CONCENTRATION_SUB}}</div>
+      </div>
+    </div>
   </div>
+</section>
 
-  <!-- Stats / Widgets -->
-  <h2>Portfolio at a glance</h2>
-  <div class="stats-grid cols-4">
-    <div class="stat">
-      <div class="stat-label">Partners</div>
-      <div class="stat-value">{{PARTNER_COUNT}}</div>
-      <div class="stat-sub">{{ACTIVE}} active</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Producing (window)</div>
-      <div class="stat-value">{{PRODUCING}}</div>
-      <div class="stat-sub">{{PRODUCING_PCT}}</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Closed-won revenue</div>
-      <div class="stat-value">{{REVENUE_WINDOW}}</div>
-      <div class="stat-sub">window</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Top-partner concentration</div>
-      <div class="stat-value">{{TOP_CONCENTRATION_PCT}}</div>
-      <div class="stat-sub">{{TOP_PARTNER_NAME}}</div>
+<!-- ─── Spotlight: headline state (tone: default | amber | red) ─── -->
+<section style="padding-bottom:0">
+  <div class="container">
+    <div class="spotlight red">
+      <div class="spotlight-inner">
+        <span class="spotlight-eyebrow">The read</span>
+        <h2>{{ONE_LINE_STATE_WITH_THE_NUMBER}}</h2>
+        <p>{{BIGGEST_SIGNAL_AND_BIGGEST_RISK_AND_FIRST_MOVE}}</p>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Table (compact): ranked top performers -->
-  <h2>Top performers</h2>
-  <table>
-    <thead><tr><th>#</th><th>Partner</th><th class="numeric">Revenue</th><th class="numeric">Deals</th></tr></thead>
-    <tbody>
-      <tr><td class="numeric">1</td><td><strong>{{P1_NAME}}</strong></td><td class="numeric">{{P1_REV}}</td><td class="numeric">{{P1_DEALS}}</td></tr>
-      <!-- …up to top N rows… -->
-    </tbody>
-  </table>
-
-  <!-- Needs attention: List Item rows + Status pill. Omit section if empty. -->
-  <h2>Needs attention</h2>
-  <div class="row">
-    <span class="row-name">
-      <span class="status-pill red">🔴 At risk</span> &nbsp; {{PARTNER_NAME}}
-    </span>
-    <span class="row-meta">{{REASON}} · {{ONE_ACTION}}</span>
+<!-- ─── Top performers ─── -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">01 · Leaderboard</div>
+      <h2 class="section-title">Top performers</h2>
+      <p class="section-subtitle">Ranked by revenue in the window (billed/invoiced — not only closed-won).</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Partner</th><th class="numeric">Revenue</th><th class="numeric">Deals</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="rank top">1</span></td>
+            <td><strong>{{P1_NAME}}</strong><div class="cell-note">{{P1_NOTE}}</div></td>
+            <td class="numeric">{{P1_REV}}</td>
+            <td class="numeric">{{P1_DEALS}}</td>
+          </tr>
+          <!-- …up to top N rows… -->
+        </tbody>
+      </table>
+    </div>
+    <p class="note">{{LEADERBOARD_NOTE}}</p>
   </div>
-  <!-- …cap ~6 rows, top by severity… -->
+</section>
 
-  <!-- Status distribution -->
-  <h2>Status distribution</h2>
-  <p class="section-prose">
-    Active {{N}} · Onboarding {{N}} · Prospecting {{N}} · Inactive {{N}}
-  </p>
+<!-- ─── Needs attention (omit section if empty) ─── -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">02 · Action</div>
+      <h2 class="section-title">Needs attention</h2>
+      <p class="section-subtitle">The few partners worth a move now — top by severity.</p>
+    </div>
+    <div class="attention">
+      <div class="att-row">
+        <div class="att-left">
+          <span class="status-pill red">🔴 At risk</span>
+          <span class="att-name">{{ATT_NAME}}</span>
+        </div>
+        <div class="att-meta">{{ATT_REASON}} · {{ATT_ACTION}}</div>
+      </div>
+      <!-- …cap ~6 rows… -->
+    </div>
+  </div>
+</section>
 
-</div>
+<!-- ─── Status distribution ─── -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">03 · Roster</div>
+      <h2 class="section-title">Status distribution</h2>
+      <p class="section-subtitle">Current roster state (not window-filtered), counted from the per-partner roster.</p>
+    </div>
+    <div class="dist">
+      <div class="dist-chip"><span class="swatch green"></span><span class="k">Active</span><span class="v">{{N}}</span></div>
+      <div class="dist-chip"><span class="swatch brand"></span><span class="k">Onboarding</span><span class="v">{{N}}</span></div>
+      <div class="dist-chip"><span class="swatch cyan"></span><span class="k">Prospecting</span><span class="v">{{N}}</span></div>
+      <div class="dist-chip"><span class="swatch gray"></span><span class="k">Inactive</span><span class="v">{{N}}</span></div>
+      <div class="dist-chip"><span class="swatch amber"></span><span class="k">No status set</span><span class="v">{{N}}</span></div>
+    </div>
+    <p class="note">{{ROSTER_NOTE}}</p>
+  </div>
+</section>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <div class="container footer-inner">
+    <img src="https://fce3ae0034736fb2f8d94c846392c61c.cdn.bubble.io/d348/f1748028305109x160057403347279230/brand-logo.svg" alt="Euler">
+    <p>Portfolio Pulse · {{CUSTOMER}} · {{WINDOW}}</p>
+    <p class="mono">euler · portfolio-pulse</p>
+  </div>
+</footer>
+
 </body>
 </html>
