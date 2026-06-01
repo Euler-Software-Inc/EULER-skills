@@ -3,63 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Briefing: {{partner_name}} — {{prep_date}}</title>
+<title>Briefing: {{PARTNER}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
-/* INLINE THE FULL CONTENTS OF assets/styles.css HERE */
+/* Inline the FULL contents of assets/styles.css here (self-contained).
+   Lightweight: no JS, no images (brand is a text wordmark — the remote
+   logo SVG renders broken in Claude); fonts load with display=swap so
+   text paints instantly. */
 </style>
 </head>
 <body>
 
-<div class="container">
-
-  <div class="header">
-    <h1>🎯 Briefing: {{partner_name}}</h1>
-    <div class="meta">
-      <span class="status-pill {{green|amber|red|gray}}">{{emoji}} {{Hot|Steady|Cold|Inactive}}</span>
-      <span class="meta-separator">·</span>
-      <span>Prepared {{prep_date_YYYY-MM-DD}}</span>
-      <span class="meta-separator">·</span>
-      <span>Status: {{partner_status}}</span>
+<!-- ─── Topbar (text wordmark — no image) ─── -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">Euler</span>
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-label">Partner Briefing · {{PARTNER}}</span>
     </div>
   </div>
+</header>
 
-  <div class="tldr {{green|amber|red|gray}}">
-    <p class="tldr-headline">{{one-line state with the most important number embedded}}</p>
-    <p class="tldr-cta">{{one sentence: what they'll push on, what you should lead with}}</p>
-  </div>
+<!-- ─── Hero + quick facts ─── -->
+<!-- hero-eyebrow tone (default | amber | red) follows the briefing traffic light -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-eyebrow amber"><span class="dot" aria-hidden="true"></span>Prepared {{PREP_DATE}} · {{PARTNER_STATUS}}</span>
+    <h1>Briefing: <span class="accent">{{PARTNER}}</span></h1>
+    <p>{{ONE_LINE_STATE_WITH_THE_NUMBER}} <span class="data-pill complete">Complete data</span></p>
 
-  <h2>What they'll likely want to talk about</h2>
-  <ul>
-    <li>{{bullet derived from real data — max 3 bullets}}</li>
-  </ul>
-
-  <h2>What you should bring up</h2>
-  <ul>
-    <li>{{actionable bullet on YOUR side — max 3 bullets}}</li>
-  </ul>
-
-  <h2>Quick stats (last {{N}} days)</h2>
-  <div class="stats-grid cols-4">
-    <div class="stat">
-      <div class="stat-label">{{label}}</div>
-      <div class="stat-value">{{value}}</div>
-      <div class="stat-sub">{{optional sub-detail}}</div>
+    <!-- Quick stats, last {{N}} days. OMIT any fact whose value is zero and has no
+         contextual sub-detail — a briefing has no room for "$0" cards. -->
+    <div class="quick-facts">
+      <div class="fact"><div class="fact-label">{{STAT_1_LABEL}}</div><div class="fact-value">{{STAT_1_VALUE}}</div><div class="fact-sub">{{STAT_1_SUB}}</div></div>
+      <div class="fact"><div class="fact-label">{{STAT_2_LABEL}}</div><div class="fact-value">{{STAT_2_VALUE}}</div><div class="fact-sub">{{STAT_2_SUB}}</div></div>
+      <div class="fact"><div class="fact-label">{{STAT_3_LABEL}}</div><div class="fact-value">{{STAT_3_VALUE}}</div><div class="fact-sub">{{STAT_3_SUB}}</div></div>
     </div>
-    <!-- Omit any stat where value is zero AND no contextual sub-detail makes the zero meaningful -->
   </div>
+</section>
 
-  <h2>Recent touchpoints</h2>
-  <!-- Omit entire section if no parseable dates on either row -->
-  <div class="row">
-    <span class="row-name">Most recent referral</span>
-    <span class="row-meta">{{YYYY-MM-DD}} — {{name}} <em>({{status}})</em></span>
+<!-- ─── Spotlight: the 30-second read (tone: default | amber | red) ─── -->
+<section style="padding-bottom:0">
+  <div class="container">
+    <div class="spotlight amber">
+      <div class="spotlight-inner">
+        <span class="spotlight-eyebrow">Before the call</span>
+        <h2>{{ONE_LINE_STATE_WITH_THE_NUMBER}}</h2>
+        <p>{{WHAT_THEYLL_PUSH_ON_AND_WHAT_YOU_LEAD_WITH}} Wrap key figures in <span class="num">$50K</span>-style chips.</p>
+      </div>
+    </div>
   </div>
-  <div class="row">
-    <span class="row-name">Most recent agreement signed</span>
-    <span class="row-meta">{{YYYY-MM-DD}} — {{agreement Name}}</span>
-  </div>
+</section>
 
-</div>
+<!-- ─── 01 · What they'll want to discuss (≤3, each from real data) ─── -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">01 · They'll raise</div>
+      <h2 class="section-title">What they'll likely want to talk about</h2>
+    </div>
+    <div class="attention">
+      <div class="att-row">
+        <div class="att-left"><span class="att-name">{{TOPIC_1}}</span></div>
+        <div class="att-meta">{{TOPIC_1_DETAIL}}</div>
+      </div>
+      <!-- …max 3 rows, each traceable to a specific record (pending agreement,
+           referral awaiting review, late-stage deal, recent commission)… -->
+    </div>
+  </div>
+</section>
+
+<!-- ─── 02 · What you should bring up (≤3, actionable for the PM) ─── -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">02 · You raise</div>
+      <h2 class="section-title">What you should bring up</h2>
+    </div>
+    <div class="attention">
+      <div class="att-row">
+        <div class="att-left"><span class="status-pill amber">🟡 Bring up</span><span class="att-name">{{ASK_1}}</span></div>
+        <div class="att-meta">{{ASK_1_IMPACT}}</div>
+      </div>
+      <!-- …max 3 rows. Embed a concrete impact phrase when derivable
+           ("blocks $50K Acme deal", "~$105K pipeline awaiting your decision")… -->
+    </div>
+  </div>
+</section>
+
+<!-- ─── 03 · Recent touchpoints — omit section if no parseable dates ─── -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">03 · Recent</div>
+      <h2 class="section-title">Recent touchpoints</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What</th><th>Detail</th><th class="numeric">When</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Most recent referral</strong></td><td>{{REF_NAME}} <em>({{REF_STATUS}})</em></td><td class="numeric">{{REF_DATE}}</td></tr>
+          <tr><td><strong>Last agreement signed</strong></td><td>{{AGR_NAME}}</td><td class="numeric">{{AGR_DATE}}</td></tr>
+          <!-- omit a row when its entity has no parseable date -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer (text wordmark) ─── -->
+<footer>
+  <div class="container footer-inner">
+    <span class="brand-mark footer-mark">Euler</span>
+    <p>Partner Briefing · {{PARTNER}} · last {{N}} days</p>
+    <p class="mono">euler · partner-briefing</p>
+  </div>
+</footer>
 
 </body>
 </html>
