@@ -89,7 +89,7 @@ standard QBR. Skip a step only if the user's framing explicitly excludes it
 | 9 | `influenced_sourced_deals(partner_id, start_date, end_date)` | Deal-attribution split (Sourced vs Influenced vs Sourced-and-Influenced). Critical for tier conversations — partners want credit for the deals they touched, not just the ones they originated. |
 | 10 | `partners(action: 'summary')` | Company-wide context for anchoring: total partner count, status distribution. Used in the TL;DR ("one of only N partners in <status>"). |
 | 11 | `performance(action: 'partner', partner_id, prev_quarter_dates)` | Previous quarter for Q-over-Q deltas (see "Q-over-Q rules" below). |
-| 12 | `performance(action: 'partner', partner_id, quarter_-2/-3/-4_dates)` | Up to 4 additional historical quarters to fuel sparkline trend visualization in stat cards. Skip if user explicitly asks for a fast/lite QBR. |
+| 12 | `performance(action: 'partner', partner_id, quarter_-2/-3/-4_dates)` | Up to 4 additional historical quarters for quarter-over-quarter trend context (rendered as deltas in the hero `.fact-sub` / spotlight prose — the modern template has no sparklines). Skip if user explicitly asks for a fast/lite QBR. |
 
 ### Tool-by-tool response field paths
 
@@ -166,72 +166,69 @@ in order (first match wins):
 > an Amber concern, not a Red blocker — they're already operating. Red is
 > reserved for partners who literally cannot or did not produce.
 
-### Required structure (HTML class names → meaning)
+### Euler design system (modern report treatment)
 
-```
-<div class="container">
-  <div class="header">
-    <h1><Partner name> — Q<N> <Year></h1>
-    <div class="meta">
-      <span class="status-pill {green|amber|red|gray}">{emoji} {label}</span>
-      · Period: {start_date} to {end_date}
-      · Partner status: {partner_status}
-    </div>
-  </div>
+Output follows the **Euler design system** in a modern, landing-page-style layout
+(identical to `portfolio-pulse` and `pending-approvals-triage`): sticky **topbar**
+with the Euler **text wordmark** → **hero** (eyebrow chip + headline with a gradient
+`.accent` span + `.quick-facts` headline metrics) → **spotlight** gradient panel for
+the TL;DR → numbered sections (`.section-eyebrow` "01 · …") with `.table-wrap` tables,
+`.quick-facts` stat clusters, and `.dist` chips → footer.
 
-  <div class="tldr {green|amber|red|gray}">
-    <p class="tldr-headline">{one-line state}</p>
-    <p class="tldr-body">{2–3 sentences: biggest signal + biggest risk + the number that matters}</p>
-    <p class="tldr-cta"><strong>Recommended next step:</strong> {one focused action}</p>
-  </div>
+**Brand is a text wordmark, not an image.** Render `<span class="brand-mark">Euler</span>`
+in the topbar and `<span class="brand-mark footer-mark">Euler</span>` in the footer.
+Do NOT use an `<img>` logo — the remote brand SVG renders broken in Claude's artifact
+viewer. Keep the two `<link rel="preconnect">` tags.
 
-  <h2>What happened in Q<N></h2>
-  <p class="section-prose">{2–4 sentences in business language}</p>
+**Lightweight & mobile-responsive (required).** No JavaScript, no images, no base64
+blobs, no extra web fonts beyond the two the stylesheet `@import`s. The sheet already
+handles responsiveness (fluid `clamp()` type; tables scroll on narrow screens). Do not
+add fixed pixel widths or inline `<style>` beyond inlining the provided sheet. Cap
+repeated rows (top-5 open deals, ≤5 action items).
 
-  <h2>What needs to happen in Q<N+1></h2>
-  <table>
-    <thead><tr><th>Prio</th><th>Action</th><th>Owner</th><th>Due</th></tr></thead>
-    <tbody>
-      <tr>
-        <td><span class="prio-badge p0">P0</span></td>
-        <td><strong>{action verb-led}</strong>
-          <div class="note">{expected outcome}</div>
-        </td>
-        <td>Partner Manager</td>
-        <td class="numeric">YYYY-MM-DD</td>
-      </tr>
-      ...up to 5 rows...
-    </tbody>
-  </table>
+**Tone classes follow the traffic light.** `.hero-eyebrow` and `.spotlight` take
+`amber`/`red` (or default brand) to match the partner's computed status.
 
-  <h2>Pipeline (lifetime)</h2>
-  <div class="stats-grid"> ...stat cards (omit Closed-lost if $0)... </div>
+### Required structure (component → meaning)
 
-  <h2>Top open deals</h2>
-  <div class="row">
-    <span class="row-name">{Deal name}</span>
-    <span class="row-meta">{stage}</span>
-    <span class="row-amount">${Amount}</span>
-  </div>
-  ...top 5 max; if >5, end with: <p class="note">+ N more open deals under $1K (...)</p>
+Follow [`assets/template.html`](assets/template.html). Sections, in order. Use ONLY
+class names defined in the stylesheet — never improvise colors, fonts, or classes.
 
-  <h2>Agreements</h2>
-  <div class="row">
-    <span class="row-name"><span class="status-pill {green|amber|red}">{emoji} {Status}</span> &nbsp; {agreement Name}</span>
-    <span class="row-meta">signed YYYY-MM-DD | unsigned</span>
-  </div>
+1. **Topbar** — `brand-mark` "Euler" + `brand-label` "Q{N} {Year} Review · {Partner}".
+2. **Hero** — `hero-eyebrow` (tone) "{Q period} · {partner_status}"; `<h1>` "{Partner} —
+   <span class="accent">Q{N} {Year}</span>"; subtitle = the one-line state + a
+   `.data-pill` (complete/partial/stale).
+3. **Quick facts** (`.quick-facts` → `.fact`): period headline metrics — Closed-won
+   (Q{N}), Deals closed, Win rate, Commissions paid. **Zero-denominator collapse**
+   (Rule 4): when 0 deals closed in the period, OMIT the Win rate fact entirely
+   (don't render "0.00%"). Numerals render mono via `.fact-value`.
+4. **Spotlight** (`.spotlight` tone) — the TL;DR. `<h2>` one-line state; `<p>` 2–3
+   sentences (biggest signal · biggest risk · the number that matters) ending with
+   `<strong>Recommended next step:</strong> {one focused action}`. Wrap key figures
+   in `<span class="num">`.
+5. **01 · Next quarter** (action items): `.table-wrap` table — Prio (`status-pill`
+   red=P0 / amber=P1 / gray=P2) · Action (`<strong>` + `.cell-note` expected outcome)
+   · Owner · Due (numeric, `YYYY-MM-DD`). Cap 5 rows, sorted by priority.
+6. **02 · Pipeline (lifetime)**: a `.quick-facts` cluster (Open deals, Closed-won
+   lifetime, Avg deal size — omit a Closed-lost fact if $0) + a `.table-wrap` of the
+   **top 5 open deals** by Amount (Deal · Stage · Amount). `.note` for the rollup
+   ("+ N more open deals under $1K (…)"). **Omit the whole section if no deals.**
+7. **03 · Attribution** (`.dist` chips): Sourced / Influenced / Sourced & influenced,
+   from `influenced_sourced_deals`. **Omit if no attribution data.**
+8. **04 · Agreements**: `.table-wrap` — Status (`status-pill` 🟢/🟡/🔴) · Agreement ·
+   Signed (numeric date or "—"). **Omit if none.**
+9. **05 · Referrals (lifetime)**: `.quick-facts` (Total submitted, In Q{N}, Most
+   recent) + `.note` (most-recent detail + test-data note if applicable). **Omit if
+   none.**
+10. **06 · Commissions** — `.note` prose ("Total paid in Q{N}: $X …"). **CONDITIONAL:
+    omit the whole section if empty.**
+11. **07 · Invoices** — `.note` prose ("N invoices, $X total …"). **CONDITIONAL: omit
+    if empty.**
+12. **Footer** — `brand-mark footer-mark` "Euler" + "Q{N} {Year} Business Review ·
+    {Partner}" + `.mono` "euler · generate-qbr".
 
-  <h2>Referrals (lifetime)</h2>
-  <div class="stats-grid cols-3"> ...3 stat cards... </div>
-  <p class="section-prose">Most recent: ... Submitted in period: ... Test-data note if applicable.</p>
-
-  <h2>Commissions</h2>  <!-- CONDITIONAL: omit if empty -->
-  <p class="section-prose">Total paid in Q<N>: $X. ...</p>
-
-  <h2>Invoices</h2>  <!-- CONDITIONAL: omit if empty -->
-  <p class="section-prose">N invoices, $X total. ...</p>
-</div>
-```
+Model output is the complete HTML (`<!DOCTYPE html>` → `</html>`) — no surrounding
+markdown, no preamble.
 
 ### Status pill labels (QBR vocabulary)
 
@@ -279,7 +276,7 @@ aging data. Limit yourself to what stage name + Amount actually tell you:
   When there are more, append a `<p class="note">` summarizing the
   rollup (e.g. *"+ 5 more open deals under $1K (Names...)"*).
 - Closed-won stat card shows total; if test-data heuristic fires (Rule 14),
-  add a `stat-sub` like *"7 real deals · 4 test entries excluded ($699)"*.
+  add a `.fact-sub` on the Closed-won fact like *"7 real deals · 4 test entries excluded ($699)"*.
 - Closed-lost stat card: **omit entirely if $0** (Rule 1).
 
 ### What is NOT in the rendered output
@@ -459,20 +456,24 @@ attach the file or a link — pasting raw HTML into Slack does not render.)
 
 ## v0.8 output enhancements
 
-The detailed rules for Q-over-Q comparison, sparklines, the Impact column
-in action items, the data confidence indicator, and known limitations
-live in [`references/output-enhancements.md`](references/output-enhancements.md).
-Consult that file when rendering the output. Summary of what's in there:
+[`references/output-enhancements.md`](references/output-enhancements.md) has the
+detailed rules for Q-over-Q, the Impact line, and the data-confidence indicator.
 
-- **Q-over-Q:** fetch current + prev quarter via `performance`; render
-  delta inline + `Δ vs Q<N-1>` column with arrow + %. Omit `0 → 0`.
-- **Sparklines:** SVG inline 100×24, 5-quarter trend, brand-600 stroke.
-  Skip when all-zero or flat.
-- **Impact column:** every action row gets an `<span class="impact">` line
-  citing concrete numbers from the data ("$50K stalled deal", "7 referrals
-  × $15K avg ACV"). Never invented.
-- **Data confidence pill:** `complete` / `partial` / `stale` next to the
-  status pill, indicating fetch completeness with a tooltip listing gaps.
+> **Note:** that reference predates the modern template. Its old class names
+> (`.impact` spans, stat-card inline-SVG sparklines) are **superseded** by the
+> component mapping below. Apply this mapping, not the old class names.
+
+- **Q-over-Q (opt-in):** fetch current + prev quarter via `performance`; render the
+  delta as text in the relevant hero `.fact-sub` (e.g. "↑ +12% vs Q3") and/or in the
+  spotlight prose. No separate column. Omit `0 → 0`.
+- **Sparklines:** **dropped** in the modern template — the `.fact` cards don't host
+  inline charts. Use the Q-over-Q delta text instead. (Revisit only if a charting
+  component is added to the design system.)
+- **Impact:** every action row's `.cell-note` (in the `01 · Next quarter` table)
+  cites concrete numbers from the data ("$50K stalled deal", "7 referrals × $15K avg
+  ACV"). Never invented. This replaces the old `.impact` span.
+- **Data confidence pill:** the `.data-pill` (`complete` / `partial` / `stale`) in the
+  hero subtitle, indicating fetch completeness.
 
 ## Why this skill exists
 
