@@ -452,7 +452,9 @@ Claude:
 9. partner_artifacts(action: 'invoices', partner_id) → empty
 10. Renders markdown QBR per the template above.
 
-User: copies output → pastes into Slack / Google Doc / email to the partner.
+User: opens the HTML in a browser → saves as PDF, or copies the rendered
+page into an email / Google Doc to send to the partner. (To share in Slack,
+attach the file or a link — pasting raw HTML into Slack does not render.)
 ```
 
 ## v0.8 output enhancements

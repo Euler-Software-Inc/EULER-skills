@@ -70,10 +70,11 @@ instead of a quarter. Skip steps only if the user's framing excludes them
 | 9 | `performance(action: 'partner', partner_id, prev_window_dates)` | Previous window (e.g. 30 days before the current 30-day window) for delta indicators in stat cards. |
 
 For exact field paths per tool, consult
-[`../generate-qbr/references/mcp-field-paths.md`](../generate-qbr/references/mcp-field-paths.md).
-The same backend serves both skills; the same gotchas apply (date format
-`YYYY-MM-DD` for `performance`, `last_stage_change_date` is a duration
-not a timestamp, JSON serialization bugs on `referrals(for_partner)`).
+[`references/mcp-field-paths.md`](references/mcp-field-paths.md).
+The same backend serves this skill and `generate-qbr`; the same gotchas
+apply (date format `YYYY-MM-DD` for `performance`, `last_stage_change_date`
+is a duration not a timestamp, JSON serialization bugs on
+`referrals(for_partner)`).
 
 ### Error handling
 
@@ -100,9 +101,10 @@ manager glances at it before reading anything else.
 ## Output format
 
 Render a **single self-contained HTML file** — no external CSS, no
-external fonts, no script tags. The user copies the file or opens it
-in a browser; portability across Slack / email / Notion / PDF print
-demands a self-contained artifact.
+external fonts, no script tags. The user opens it in a browser, prints
+to PDF, or shares the file / link (email, Notion, Slack). Note: pasting
+raw HTML into Slack does not render — share the file or a link instead.
+Portability across these targets demands a self-contained artifact.
 
 **Target length:** ~200 words of body content. The point is 30-second
 readability before walking into a call.
@@ -172,16 +174,9 @@ readability before walking into a call.
 
 ### Section omission rules
 
-- **Stat cards** that are zero — omit the entire card (don't render "Closed-won: $0")
-- **"Recent touchpoints" rows** when no parseable date exists for that entity type
-- **Entire "Recent touchpoints" section** when both rows would be omitted
-- **Entire "What you should bring up" section** when no derivable items exist from data
-
-### Section omission rules
-
 Briefings are short; empty sections kill the format. Omit:
 
-- **"Quick stats" rows** that are zero (don't print "Closed-won: $0")
+- **"Quick stats" stat cards** that are zero — omit the whole card (don't render "Closed-won: $0")
 - **"Recent touchpoints" rows** when the underlying entity has no parseable date
 - **The entire "Recent touchpoints" section** if both rows would be omitted
 - **The "What you should bring up" section** if you cannot derive at least one item from data (rare — usually there's an unsigned agreement or pending referral)
@@ -290,7 +285,7 @@ Claude:
 7. partner_artifacts(action: 'agreements', partner_id) → 3 Complete + 2 Pending
 8. Renders briefing markdown per the template.
 
-User: copies into Slack DM to self before the call.
+User: opens the HTML in a browser (or saves as PDF) to skim before the call.
 ```
 
 ## Vs-previous-window delta (default-on as of v0.8.0)
