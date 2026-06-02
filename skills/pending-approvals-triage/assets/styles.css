@@ -189,6 +189,13 @@ td strong { color: var(--gray-950); font-weight: 600; }
 .note { font-size: 12.5px; line-height: 1.55; color: var(--gray-500); margin: 12px 0 0; }
 .note code { font-family: var(--mono); background: var(--gray-100); color: var(--brand-700); padding:1px 5px; border-radius:4px; }
 
+/* ─── Progress bar (onboarding / completion) ─── */
+.progress { height: 8px; background: var(--gray-200); border-radius: 9999px; overflow: hidden; margin: 6px 0 12px; }
+.progress > .bar { height: 100%; width: 0; background: var(--brand-600); border-radius: 9999px; }
+.progress.green > .bar { background: var(--success-500); }
+.progress.amber > .bar { background: var(--warning-500); }
+.progress.red   > .bar { background: var(--error-500); }
+
 /* ─── Footer ─── */
 footer { background: var(--gray-950); color: var(--gray-400); padding: 32px 0; margin-top: clamp(40px, 8vw, 56px); }
 .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
