@@ -1,4 +1,4 @@
-/* portfolio-pulse — Euler design system, modern report treatment
+/* my-onboarding — Euler design system, modern report treatment
  * Goals: LIGHTWEIGHT (fast first paint) + MOBILE-FIRST responsive.
  * - No JS, no images, no external assets except the two web fonts (brand
  *   shown as a text wordmark — the remote logo SVG renders broken in Claude).
@@ -6,7 +6,7 @@
  *   fallback, so text paints instantly and never blocks open. Pair with
  *   <link rel="preconnect"> in <head> (see template.html).
  * - Fluid type via clamp() → scales across phones→desktop with few breakpoints.
- * Tokens are the Euler design system. Used only by portfolio-pulse.
+ * Tokens are the Euler design system. Used only by my-onboarding.
  */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
