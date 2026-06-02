@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Onboarding — {{CUSTOMER}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+/* Inline the FULL contents of assets/styles.css here (self-contained).
+   Lightweight: no JS, no images (brand is a text wordmark — the remote
+   logo SVG renders broken in Claude); fonts load with display=swap. */
+</style>
+</head>
+<body>
+
+<!-- ─── Topbar (text wordmark) ─── -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">Euler</span>
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-label">My Onboarding · {{CUSTOMER}}</span>
+    </div>
+  </div>
+</header>
+
+<!-- ─── Hero + quick facts ─── -->
+<!-- hero-eyebrow tone (default | amber | red) follows the worst per-flow status -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-eyebrow amber"><span class="dot" aria-hidden="true"></span>{{CUSTOMER}} · {{N}} flows</span>
+    <h1>Your onboarding — <span class="accent">{{OVERALL_PCT}}</span> complete</h1>
+    <p>{{ONE_LINE_STATE}} <span class="data-pill complete">Complete data</span></p>
+
+    <div class="quick-facts">
+      <div class="fact"><div class="fact-label">Flows assigned</div><div class="fact-value">{{N}}</div><div class="fact-sub">{{FLOWS_SUB}}</div></div>
+      <div class="fact"><div class="fact-label">Overall complete</div><div class="fact-value">{{OVERALL_PCT}}</div><div class="fact-sub">{{DONE_STEPS}}/{{TOTAL_STEPS}} steps</div></div>
+      <div class="fact"><div class="fact-label">Overdue steps</div><div class="fact-value">{{OVERDUE}}</div><div class="fact-sub">{{OVERDUE_SUB}}</div></div>
+      <div class="fact"><div class="fact-label">Next due</div><div class="fact-value" style="font-size:clamp(15px,3vw,18px)">{{NEXT_DUE}}</div><div class="fact-sub">{{NEXT_DUE_FLOW}}</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Spotlight: the one most-urgent move (tone: default | amber | red) ─── -->
+<section style="padding-bottom:0">
+  <div class="container">
+    <div class="spotlight amber">
+      <div class="spotlight-inner">
+        <span class="spotlight-eyebrow">Do this next</span>
+        <h2>{{MOST_URGENT_HEADLINE}}</h2>
+        <p>{{MOST_URGENT_DETAIL}} Wrap dates/counts in <span class="num">3 steps</span>-style chips.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Per-flow section (repeat; order overdue → due-soon → in-progress → done) ─── -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">01 · {{FLOW_TITLE}}</div>
+      <h2 class="section-title">{{FLOW_PCT}}% complete <span style="font-weight:400;color:var(--gray-500)">· {{FLOW_DONE}}/{{FLOW_TOTAL}} steps · {{FLOW_TYPE}}</span> <span class="status-pill amber">🟡 In progress</span></h2>
+    </div>
+    <!-- progress bar: tone class (green|amber|red) matches the flow status; width inline -->
+    <div class="progress amber"><div class="bar" style="width:{{FLOW_PCT}}%"></div></div>
+    <!-- only the to_do + overdue steps; done collapsed into the header count above -->
+    <div class="attention">
+      <div class="att-row">
+        <div class="att-left"><span class="status-pill red">🔴 Overdue</span><span class="att-name">{{STEP_TITLE}}</span></div>
+        <div class="att-meta">{{STEP_TYPE}} · due {{STEP_DUE}}</div>
+      </div>
+      <!-- …to_do rows use <span class="status-pill gray">⚪ To do</span>; cap the list, footnote overflow… -->
+    </div>
+    <!-- certification badge line ONLY when certification_badge is a real URL: -->
+    <p class="note">🏅 Certification badge earned.</p>
+  </div>
+</section>
+
+<!-- ─── Footer (text wordmark) ─── -->
+<footer>
+  <div class="container footer-inner">
+    <span class="brand-mark footer-mark">Euler</span>
+    <p>My Onboarding · {{CUSTOMER}}</p>
+    <p class="mono">euler · my-onboarding</p>
+  </div>
+</footer>
+
+</body>
+</html>
