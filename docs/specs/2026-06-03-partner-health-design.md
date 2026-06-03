@@ -149,3 +149,64 @@ team if useful.
 - [ ] `action:'portfolio'` ranks desc by score, paginates, and returns per-band counts.
 - [ ] The tool `description` passes the public-surface guard (no internal architecture vocabulary; observable behavior only).
 - [ ] Zero-data partner → score 0 / band At-risk (or Ramping if pre-production status), never an error.
+
+## 12. Draft catalog entry (hand-off — ready to paste into `src/catalog/tools.ts`)
+
+The tool **contract** is fully specified below; the **scoring step + data access** behind the
+two workflow names is the euler-mcp team's to build (and to empirically verify per the W1 rule).
+Ships `enabled: false` + `requires_privacy_audit: true` until that step is wired and the 4-point
+privacy audit is signed off — so it's catalogued for visibility but hidden from clients. Workflow
+names are placeholders to confirm. `[Category]` prefix is added at registration, so the
+description stays clean (no internal vocabulary — passes the public-surface guard).
+
+```ts
+// ─── Partner Health (READ) — authoritative per-partner health score ──────────
+// PROPOSAL 2026-06-03 (see docs/specs/2026-06-03-partner-health-design.md).
+// Single server-side scoring step over existing signals (performance /
+// partner_artifacts / referrals / partner status). Weights + band thresholds are
+// documented constants (spec §4). enabled:false + requires_privacy_audit:true
+// until the scoring step is wired and the privacy audit is signed off.
+{
+  name: "partner_health",
+  category: "partners",
+  scope: "customer",
+  description:
+    "Returns a 0-100 health score, a health band (Healthy / Watch / At-risk / Ramping), and the factor breakdown behind it. action='partner' (requires partner_id) returns one partner's score plus the full factor breakdown; action='portfolio' returns every partner ranked by score (paginated). Factors: production (closed revenue + deals), open pipeline, referral engagement, agreement foundation, and recency over the selected window (default last 90 days). Use it to find which partners need attention and to explain why.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      action: { type: "string", enum: ["partner", "portfolio"] },
+      partner_id: {
+        type: "string",
+        description:
+          "Required for action='partner'. Resolve via partners(action:'list', filter_name) or list_accounts. IDs from partner_directory_search are profile_ids and are rejected.",
+      },
+      start_date: {
+        type: "string",
+        description: "YYYY-MM-DD. Window start for production / engagement / recency factors. Default: today - 90 days.",
+      },
+      end_date: { type: "string", description: "YYYY-MM-DD. Window end. Default: today." },
+      ...PAGINATION_PROPS, // action='portfolio'
+      ...MESSAGE_ID,
+    },
+    required: ["action"],
+    additionalProperties: false,
+  },
+  annotations: {
+    title: "Partner Health Score",
+    readOnlyHint: true,
+    openWorldHint: false,
+  },
+  routes: {
+    partner:   { workflow: "tool_get_partner_health",   required: ["partner_id"] },
+    portfolio: { workflow: "tool_get_portfolio_health", fixedParams: { page: "1", limit: "20" } },
+  },
+  requires_privacy_audit: true,
+  enabled: false,
+},
+```
+
+**When the team enables it (checklist for them):** wire the two workflows; flip `enabled: true`
++ `requires_privacy_audit: false` after the 4-point audit; bump `MIN_EXPECTED_TOOLS` +
+`test/catalog.test.ts` counts; update `docs/api-mapping/*`; (READ tool → non-material, no
+Directory re-cycle needed). Then we integrate it into `portfolio-pulse` + `generate-qbr` (§9).
