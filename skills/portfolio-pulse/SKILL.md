@@ -53,7 +53,7 @@ the partner program). It is NOT usable from a partner-only account.
 
 No partner is named — this is the entire portfolio.
 
-## Orchestration sequence (~5 fixed calls, no per-partner loop)
+## Orchestration sequence (~5 fixed calls + a capped bottom-K deep-dive)
 
 | # | Tool call | Provides |
 |---|-----------|----------|
@@ -64,8 +64,10 @@ No partner is named — this is the entire portfolio.
 | 5 | `partners(action: 'list', page: 1, limit: 100)` | Roster (name + status) — **the canonical source for the status distribution AND the at-risk segment**. Page if needed; note if truncated. |
 
 `overall` is terminal — it returns ranking + aggregates together; do NOT loop
-per-partner `partner_artifacts`/`commissions` for a pulse. If the user wants depth
-on one partner, suggest `/euler:generate-qbr <partner>`.
+per-partner `partner_artifacts`/`commissions` across the WHOLE portfolio for a pulse.
+The only per-partner fetch is the **capped bottom-K deep-dive** (K ≈ 5, the at-risk/watch
+tail — see §Segmentation), which upgrades just those few to a full health score. If the user
+wants depth on one partner, suggest `/euler:generate-qbr <partner>`.
 
 > **Roster status comes from `partners(list)`, not `summary`.** On the 2026-06-01
 > live run, `summary` returned a status breakdown that only accounted for 35 of 42
@@ -86,22 +88,35 @@ gotchas apply (dates `YYYY-MM-DD`; numerics arrive as strings; loose JSON parsin
 - Any single tool empty/errors → continue; add a one-line footnote at the END of
   the TL;DR naming the missing section. No giant banner.
 
-## Segmentation (cheap signals only — no per-partner deep fetch)
+## Segmentation (coarse rank from the 2 existing calls; deep-dive only the bottom-K tail)
 
 - **Portfolio totals**: partner count (from `list`/`summary`), revenue/deals in window
   (from `company` + `overall`).
 - **Status distribution** (count `partners(list)` entries — NOT `summary`):
   Active / Onboarding / Prospecting / Inactive / **No status set**.
 - **Top performers** (overall): top N by revenue (billed/invoiced), with deal count.
-- **Needs attention** (from `partners(list)` status + ranking absence), top by severity:
-  - **No status configured** cohort → if it's a large share, this is the #1 item:
-    the program can't be measured/worked until the roster is segmented. Action =
-    "segment the roster & assign statuses", not pipeline.
-  - `Inactive` partners → reactivate-or-offboard.
-  - `Active` partners with zero production in the window (active but absent from the
-    revenue ranking).
-  - Each row: status pill + name + reason (cheap signal) + one action + deep-link
-    ("run `/euler:generate-qbr` for <partner>").
+
+### Partner health (coarse rank → deep-dive the tail)
+
+Score the portfolio per [`docs/partner-health-model.md`](../../docs/partner-health-model.md) in
+**coarse** mode — Production (from `performance(action:'overall')`) + Status (from
+`partners(action:'list')`), the two calls this skill already makes. Rank all partners by the
+coarse score and segment by band (the hard-rule caps still apply: Inactive → At-risk, etc.).
+
+Then **deep-dive only the bottom-K** (K ≈ 5, the at-risk/watch tail): fetch their per-partner
+sources and upgrade them to a **full** score + a one-line reason for "Needs attention". Cap K so
+the call budget stays small. **Label clearly** that the leaderboard is coarse-ranked and only the
+tail was deep-scored — never imply every partner got the full model. Deep-link each at-risk row to
+`/euler:generate-qbr <partner>` for the full picture.
+
+Portfolio-specific notes that still hold:
+
+- The **No status configured** cohort is a real coarse signal in its own right — Status feeds the
+  coarse score, so a large no-status share is the #1 item (the program can't be measured/worked
+  until the roster is segmented; action = "segment the roster & assign statuses", not pipeline).
+- Count statuses from `partners(list)`, NOT `summary` (the summary breakdown proved unreliable).
+- Each "Needs attention" row: band pill (At-risk / Watch) + name + the deep-dived one-line reason +
+  one action + the `generate-qbr` deep-link.
 - **Coverage gaps**: producing vs dormant share; concentration (top partner = X% of
   ranked revenue).
   - **When producing ≤ 1**, concentration is meaningless (100% of a single record is
@@ -160,8 +175,13 @@ Follow [`assets/template.html`](assets/template.html). Sections, in order:
    (biggest signal · biggest risk · first move). Wrap key figures in `<span class="num">`.
 5. **Top performers** (`01 · Leaderboard`): `.table-wrap` table — `#` (`.rank`, rank 1
    = `.rank.top`), Partner (+ optional `.cell-note`), Revenue, Deals (numeric cols mono).
-6. **Needs attention** (`02 · Action`): `.attention` → `.att-row` (status-pill + name +
-   reason/action). Cap ~6, top by severity. **Omit the whole section if empty.**
+   **Label the depth** (per the model's "always label depth" rule): a `.cell-note` / section
+   caption stating the board is **coarse-ranked** (Production + Status) and only the at-risk/watch
+   tail was deep-scored to a full health score — never imply every partner got the full model.
+6. **Needs attention** (`02 · Action`): `.attention` → `.att-row` (status-pill carrying the
+   **band** label — At-risk / Watch — + name + the deep-dived one-line reason/action). These are
+   the deep-dived bottom-K tail (full score + reason), NOT every partner. Cap ~6, top by severity.
+   **Omit the whole section if empty.**
 7. **Status distribution** (`03 · Roster`): `.dist` → `.dist-chip` per status
    (Active/Onboarding/Prospecting/Inactive/No status set), counted from `partners(list)`.
 8. **Footer** — Euler `brand-mark footer-mark` wordmark + "Portfolio Pulse · {Customer} · {window}".
@@ -189,8 +209,10 @@ Silence empty sections (no "No X data" placeholders). The absence is the signal.
    while `company` showed 0 closed-won deals. Label the metric "Revenue (window)";
    only say "closed-won" when the deal count is actually > 0. Never conflate with
    commissions. State the basis in `.fact-sub` (e.g. "billed · 0 closed-won deals").
-2. **At-risk reasons limited to cheap signals** (status + zero-production in window).
-   NO "stalled N days" / aging claims — portfolio-pulse has no per-partner aging data.
+2. **Coarse ranking uses cheap signals only** (Production + Status) — the leaderboard has no
+   per-partner aging data, so no "stalled N days" claims about partners outside the tail. The
+   deep-dived bottom-K DO fetch their per-partner sources, so their one-line reason may cite the
+   full-model factors (incl. recency); keep every such claim grounded in that fetched data.
 3. **Label window-filtered vs current-state.** `overall`/`company` are window-filtered;
    `summary`/`list` are current state. Don't imply a status count is "this quarter".
 4. **Currency normalization.** `""`/`"$"`/`"$0"` → `$0`; thousand separators on non-zero.
@@ -219,8 +241,11 @@ Claude:
 4. performance(action: 'company', '2026-04-01', '2026-06-30') → company aggregate.
 5. performance(action: 'overall', entity_key: 'revenue', dates, page: 1, limit: 10) →
    ranked top 10 partners by closed-won revenue + aggregates.
-6. partners(action: 'list') → roster → derive: 8 inactive, 5 active-zero-production.
-7. Renders the portfolio-pulse HTML per the template.
+6. partners(action: 'list') → roster → coarse-score every partner (Production + Status) per the
+   shared health model; segment by band. Deep-dive only the bottom-K (~5) tail to a full score +
+   reason for "Needs attention".
+7. Renders the portfolio-pulse HTML per the template (leaderboard labelled coarse-ranked; only the
+   tail deep-scored).
 
 User: opens the HTML in a browser / saves as PDF. Deep-links into generate-qbr for
 the two partners flagged "Needs attention".
