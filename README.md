@@ -18,6 +18,8 @@
 | `referral-workflow` | 🚧 Planned | End-to-end referral submission flow (list accounts → get form → submit) |
 | `flow-onboarding-setup` | 🚧 Planned | Scaffold a new onboarding flow with steps + assignments |
 
+**Shared model:** `generate-qbr` and `portfolio-pulse` both derive partner-health signals from the same model — see [`docs/partner-health-model.md`](./docs/partner-health-model.md).
+
 ## Installation
 
 This repo is structured as a **Claude Code plugin marketplace** (`euler-plugins`)
