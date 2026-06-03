@@ -148,23 +148,21 @@ Sections marked **CONDITIONAL** are omitted entirely when their
 underlying data is empty. Do not print "No X data" placeholders —
 silence the section.
 
-### Status traffic light (computed)
+## Partner health score (computed — see the shared model)
 
-Compute the partner's status indicator once, at the start, by these rules
-in order (first match wins):
+Compute the partner's health per [`docs/partner-health-model.md`](../../docs/partner-health-model.md)
+in **full** mode (all 5 factors — you already fetch every source in the Orchestration sequence, so
+this adds no extra calls). Produce: a **score 0–100**, a **band** (Healthy / Watch / At-risk /
+Ramping), the **factor breakdown** (each factor's normalized value × weight = contribution), and
+the **reason** (the 2–3 factors driving the score, plus any cap that fired).
 
-| Indicator | Conditions |
-|-----------|------------|
-| ⚪ **Inactive** | `partner_status` = "Inactive" — frame as reactivate-or-offboard decision |
-| 🔴 **Red** | `partner_status` = "Active" AND `total_deals_count` (period) = 0 AND open pipeline ≤ 1 deal AND lifetime closed-won = 0 (partner can't operate or hasn't produced) |
-| 🔴 **Red** | `partner_status` = "Active" AND foundational agreement (MNDA / master / partner / agency agreement) unsigned AND lifetime closed-won = 0 (foundational gap blocks revenue) |
-| 🟡 **Amber** | `partner_status` = "Active" AND lifetime closed-won ≥ 1 AND any operational concern (0 closes in period, unsigned agreements, stale pipeline). Partner is producing but has a real gap. |
-| 🟡 **Amber** | `partner_status` ∈ {"Onboarding", "Prospecting"} — pre-production stages, low activity is the baseline |
-| 🟢 **Green** | `partner_status` = "Active" AND closed-won in period ≥ 1 AND no foundational agreement gap |
+Render:
+- **Hero:** the score + band. Band → tone (per the model's tone mapping): At-risk → `red`,
+  Watch → `amber`, Healthy / Ramping → default (brand). Show the band in the `hero-eyebrow`.
+- **Spotlight:** the breakdown as the "why" — e.g. "Production 28/35 · Recency 3/10 (last
+  activity 41d ago)" — and name any cap ("capped at Watch: 0 closed deals in Q1").
 
-> Heuristic: an unsigned agreement at a partner with lifetime production is
-> an Amber concern, not a Red blocker — they're already operating. Red is
-> reserved for partners who literally cannot or did not produce.
+This replaces the old green/amber/red heuristic — `band` is now the single, model-consistent signal.
 
 ### Euler design system (modern report treatment)
 
@@ -186,8 +184,9 @@ handles responsiveness (fluid `clamp()` type; tables scroll on narrow screens). 
 add fixed pixel widths or inline `<style>` beyond inlining the provided sheet. Cap
 repeated rows (top-5 open deals, ≤5 action items).
 
-**Tone classes follow the traffic light.** `.hero-eyebrow` and `.spotlight` take
-`amber`/`red` (or default brand) to match the partner's computed status.
+**Tone classes follow the health band.** `.hero-eyebrow` and `.spotlight` take
+`amber`/`red` (or default brand) to match the partner's computed band (At-risk →
+`red`, Watch → `amber`, Healthy / Ramping → default brand).
 
 ### Required structure (component → meaning)
 
@@ -195,17 +194,18 @@ Follow [`assets/template.html`](assets/template.html). Sections, in order. Use O
 class names defined in the stylesheet — never improvise colors, fonts, or classes.
 
 1. **Topbar** — `brand-mark` "Euler" + `brand-label` "Q{N} {Year} Review · {Partner}".
-2. **Hero** — `hero-eyebrow` (tone) "{Q period} · {partner_status}"; `<h1>` "{Partner} —
-   <span class="accent">Q{N} {Year}</span>"; subtitle = the one-line state + a
-   `.data-pill` (complete/partial/stale).
+2. **Hero** — `hero-eyebrow` (tone) "{Q period} · {health band}" (the band from the health
+   model, tone-matched per above); `<h1>` "{Partner} — <span class="accent">Q{N} {Year}</span>";
+   subtitle = the one-line state + a `.data-pill` (complete/partial/stale).
 3. **Quick facts** (`.quick-facts` → `.fact`): period headline metrics — Closed-won
    (Q{N}), Deals closed, Win rate, Commissions paid. **Zero-denominator collapse**
    (Rule 4): when 0 deals closed in the period, OMIT the Win rate fact entirely
    (don't render "0.00%"). Numerals render mono via `.fact-value`.
-4. **Spotlight** (`.spotlight` tone) — the TL;DR. `<h2>` one-line state; `<p>` 2–3
-   sentences (biggest signal · biggest risk · the number that matters) ending with
-   `<strong>Recommended next step:</strong> {one focused action}`. Wrap key figures
-   in `<span class="num">`.
+4. **Spotlight** (`.spotlight` tone) — the TL;DR + the health "why". `<h2>` one-line state;
+   `<p>` 2–3 sentences (biggest signal · biggest risk · the number that matters) plus the
+   health breakdown (the 2–3 driving factors, e.g. "Production 28/35 · Recency 3/10") and any
+   cap that fired, ending with `<strong>Recommended next step:</strong> {one focused action}`.
+   Wrap key figures in `<span class="num">`.
 5. **01 · Next quarter** (action items): `.table-wrap` table — Prio (`status-pill`
    red=P0 / amber=P1 / gray=P2) · Action (`<strong>` + `.cell-note` expected outcome)
    · Owner · Due (numeric, `YYYY-MM-DD`). Cap 5 rows, sorted by priority.
@@ -230,18 +230,21 @@ class names defined in the stylesheet — never improvise colors, fonts, or clas
 Model output is the complete HTML (`<!DOCTYPE html>` → `</html>`) — no surrounding
 markdown, no preamble.
 
-### Status pill labels (QBR vocabulary)
+### Health band labels (QBR vocabulary)
 
-| Emoji | Pill label | Conditions (recap from traffic-light table) |
-|-------|-----------|---------------------------------------------|
-| 🟢 | `On track` | Active + closed-won in period |
-| 🟡 | `Watch` | Active with operational concern, OR Onboarding/Prospecting |
-| 🔴 | `At risk` | Active + 0 lifetime closed-won + (no pipeline OR unsigned foundational) |
-| ⚪ | `Inactive` | partner_status = "Inactive" |
+The pill label IS the band from [`docs/partner-health-model.md`](../../docs/partner-health-model.md).
+Use the band as the `status-pill` text; tone follows the model's mapping.
 
-Do not write the pill label as `🟡 Amber` — that's internal jargon.
-The semantic label (`Watch`, `At risk`, etc.) tells the reader what
-the colour MEANS.
+| `status-pill` tone | Pill label | Band (from the health model) |
+|--------------------|-----------|------------------------------|
+| (default brand) | `Healthy` | score ≥ 70 |
+| `amber` | `Watch` | 40 ≤ score < 70 (or a cap that fires Watch) |
+| `red` | `At-risk` | score < 40, or `status = Inactive` (cap → At-risk) |
+| (default brand) | `Ramping` | status ∈ {Onboarding, Prospecting} |
+
+Write the pill label as the band name (`Healthy` / `Watch` / `At-risk` / `Ramping`) —
+never the internal tone word (`amber`, `red`). The band tells the reader what the
+state MEANS.
 
 ### Action item generation rules
 - Each item is derived from a finding ACTUALLY IN THE DATA (agreement
@@ -376,7 +379,7 @@ These rules are **not optional**. Every QBR must follow them.
     No giant red banner — the doc must still be presentable.
 
 12. **One partner per invocation.** A QBR is partner-specific by design
-    — narratives, action items, and traffic-light status only make
+    — narratives, action items, and the health band only make
     sense in context of a single partner. If the user asks for a batch
     ("QBR for all my partners"), explain the scope and offer to loop
     the skill once per partner rather than rolling up into a summary.
