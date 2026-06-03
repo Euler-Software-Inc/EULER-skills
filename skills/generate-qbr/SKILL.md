@@ -143,6 +143,12 @@ into in 2 minutes. No internal field paths, no system terminology.
    aren't defined in the stylesheet.
 3. Model output is the complete HTML — `<!DOCTYPE html>` through
    `</html>`. No surrounding markdown, no preamble.
+4. **Language — the EULER product is multilingual.** Render ALL report copy (headings, labels,
+   prose, the health factor labels, action items) in the **language the user used for the
+   request** — e.g. a Portuguese request → a Portuguese QBR (`<html lang="pt-BR">`). Localize the
+   five health factor labels too (Production → "Produção", etc.) but keep all five factors and the
+   exact weights. Proper nouns, currency, metric values, and dates stay as-is. (This applies to the
+   rendered report only — these SKILL instructions and CSS class names stay English.)
 
 Sections marked **CONDITIONAL** are omitted entirely when their
 underlying data is empty. Do not print "No X data" placeholders —
@@ -151,18 +157,36 @@ silence the section.
 ## Partner health score (computed — see the shared model)
 
 Compute the partner's health per [`docs/partner-health-model.md`](../../docs/partner-health-model.md)
-in **full** mode (all 5 factors — you already fetch every source in the Orchestration sequence, so
-this adds no extra calls). Produce: a **score 0–100**, a **band** (Healthy / Watch / At-risk /
-Ramping), the **factor breakdown** (each factor's normalized value × weight = contribution), and
-the **reason** (the 2–3 factors driving the score, plus any cap that fired).
+in **full** mode — you already fetch every source in the Orchestration sequence, so this adds no
+extra calls. **Use exactly these five factors and weights — do not rename, drop, re-weight, or
+invent factors** (no "Compliance", no 4-factor variants):
+
+| Factor | Weight | From |
+|---|---|---|
+| Production | 35 | closed-won revenue + deals (window) |
+| Pipeline | 20 | open pipeline value |
+| Engagement | 20 | referrals submitted + recency |
+| Foundation | 15 | foundational agreements signed |
+| Recency | 10 | days since last deal/referral |
+
+`score = Σ(factor_norm × weight ÷ 100)` → an integer **0–100**. The per-factor normalization
+thresholds, band cutoffs, and hard-rule caps live in the model doc — apply them verbatim.
+
+Produce: the **score 0–100**, the **band** (Healthy / Watch / At-risk / Ramping), the **factor
+breakdown** (each factor's value out of its weight — e.g. "Production 28/35" — **all five shown**),
+and the **reason** (the 2–3 factors driving it + any cap that fired).
 
 Render:
-- **Hero:** the score + band. Band → tone (per the model's tone mapping): At-risk → `red`,
-  Watch → `amber`, Healthy / Ramping → default (brand). Show the band in the `hero-eyebrow`.
-- **Spotlight:** the breakdown as the "why" — e.g. "Production 28/35 · Recency 3/10 (last
-  activity 41d ago)" — and name any cap ("capped at Watch: 0 closed deals in Q1").
+- **Hero:** show the **number** (e.g. "Health 64/100") **and** the band. Band → tone: At-risk →
+  `red`, Watch → `amber`, Healthy / Ramping → default (brand). Band in the `hero-eyebrow`.
+- **Spotlight:** the breakdown across **all five** factors as the "why".
 
-This replaces the old green/amber/red heuristic — `band` is now the single, model-consistent signal.
+**Caps — apply only the model's exact rules; never invent one.** A partner with lifetime
+closed-won is NOT capped merely for 0 closes in the period — its band comes from the score. The
+Watch cap fires only when its full condition holds (0 in-window AND 0 lifetime closed-won, or an
+unsigned foundational agreement AND 0 lifetime closed-won). Name a cap in the reason only then.
+
+This replaces the old green/amber/red heuristic — score + `band` are the single, model-consistent signal.
 
 ### Euler design system (modern report treatment)
 
