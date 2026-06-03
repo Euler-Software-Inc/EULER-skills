@@ -169,6 +169,11 @@ class names defined in the stylesheet.
 Model output is the complete HTML (`<!DOCTYPE html>` → `</html>`) — no surrounding
 markdown, no preamble.
 
+**Language — the EULER product is multilingual.** Render all briefing copy in the language the
+user used for the request (e.g. a Portuguese request → a Portuguese briefing, `<html lang="pt-BR">`).
+Proper nouns, currency, metric values, and dates stay as-is. Applies to the rendered report only —
+these SKILL instructions + CSS class names stay English.
+
 ### Status-pill labels (briefing variant — 30-day window)
 
 | Emoji | Pill label | Meaning |

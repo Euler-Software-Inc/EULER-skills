@@ -145,6 +145,11 @@ two-layer shadows. Use ONLY class names defined there; never improvise colors or
 fonts. Use the skeleton in [`assets/template.html`](assets/template.html). Model
 output is the complete HTML (`<!DOCTYPE html>` → `</html>`) — no surrounding markdown.
 
+**Language — the EULER product is multilingual.** Render all report copy (headings, labels,
+prose) in the language the user used for the request (e.g. a Portuguese request → a Portuguese
+report, `<html lang="pt-BR">`). Proper nouns, currency, metric values, and dates stay as-is.
+Applies to the rendered report only — these SKILL instructions + CSS class names stay English.
+
 **Brand is a text wordmark, not an image.** Render `<span class="brand-mark">Euler</span>`
 in the topbar and `<span class="brand-mark footer-mark">Euler</span>` in the footer — do
 NOT use an `<img>` logo (the remote brand SVG renders broken in Claude's artifact viewer).
