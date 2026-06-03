@@ -90,6 +90,11 @@ skeleton in [`assets/template.html`](assets/template.html). Output is the comple
 HTML (`<!DOCTYPE html>` → `</html>`), no surrounding markdown. Keep the
 `<link rel="preconnect">` tags.
 
+**Language — the EULER product is multilingual.** Render all worklist copy in the language the
+user used for the request (e.g. a Portuguese request → a Portuguese worklist, `<html lang="pt-BR">`).
+Proper nouns, currency, metric values, and dates stay as-is. Applies to the rendered report only —
+these SKILL instructions + CSS class names stay English.
+
 ### Structure (sections in order)
 1. **Topbar** — Euler wordmark + "Pending Approvals · {Customer}".
 2. **Hero** — `hero-eyebrow` (tone red/amber/green by worst SLA) "{total} waiting ·
