@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lumon Industries — Q1 2026 Business Review</title>
+<title>My Performance — Martus</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
-/* generate-qbr — Euler design system, modern report treatment
+/* my-performance — Euler design system, modern report treatment
  * Goals: LIGHTWEIGHT (fast first paint) + MOBILE-FIRST responsive.
  * - No JS, no images, no external assets except the two web fonts (brand
  *   shown as a text wordmark — the remote logo SVG renders broken in Claude).
@@ -15,7 +15,7 @@
  *   fallback, so text paints instantly and never blocks open. Pair with
  *   <link rel="preconnect"> in <head> (see template.html).
  * - Fluid type via clamp() → scales across phones→desktop with few breakpoints.
- * Tokens are the Euler design system. Used only by generate-qbr.
+ * Tokens are the Euler design system. Used only by my-performance.
  */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -225,207 +225,136 @@ footer { background: var(--gray-950); color: var(--gray-400); padding: 32px 0; m
 </head>
 <body>
 
-<!-- ─── Topbar (text wordmark — no image) ─── -->
+<!-- ─── Topbar (text wordmark) ─── -->
 <header class="topbar">
   <div class="container topbar-inner">
     <div class="brand">
       <span class="brand-mark">Euler</span>
       <span class="brand-divider" aria-hidden="true"></span>
-      <span class="brand-label">Q1 2026 Review · Lumon Industries</span>
+      <span class="brand-label">My Performance · Martus</span>
     </div>
   </div>
 </header>
 
-<!-- ─── Hero + quick facts ─── -->
-<!-- Band = Ramping (status Onboarding) → default brand tone (no amber/red) -->
+<!-- ─── Hero — health score front and center (eyebrow/spotlight tone by band) ─── -->
 <section class="hero">
   <div class="container">
-    <span class="hero-eyebrow"><span class="dot" aria-hidden="true"></span>Q1 2026 · Ramping · Health 67/100</span>
-    <h1>Lumon Industries — <span class="accent">Q1 2026</span></h1>
-    <p>Onboarding partner already carrying Active-tier production — $115K lifetime closed-won and a complete agreement set, with no new direct closes booked this quarter. <span class="data-pill complete">Complete data</span></p>
+    <span class="hero-eyebrow amber"><span class="dot" aria-hidden="true"></span>Last 90 days · Watch</span>
+    <h1>Your performance — <span class="accent">65/100</span> (Watch)</h1>
+    <p>You're in Watch territory with Martus — your engagement and foundation are strong, but a thin open pipeline is what's holding the score back. <span class="data-pill complete">Complete data</span></p>
 
-    <!-- Period headline metrics. Win rate fact OMITTED — 0 deals closed in Q1
-         (zero-denominator collapse: never render "0.00%"). -->
     <div class="quick-facts">
-      <div class="fact">
-        <div class="fact-label">Closed-won (Q1)</div>
-        <div class="fact-value">$0</div>
-        <div class="fact-sub">No deals booked in the period</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Deals closed</div>
-        <div class="fact-value">0</div>
-        <div class="fact-sub">Onboarding — zero closes is on-track</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Closed-won (lifetime)</div>
-        <div class="fact-value">$115,396</div>
-        <div class="fact-sub">5 real deals · Acme $100K leads</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Commissions paid</div>
-        <div class="fact-value">$0</div>
-        <div class="fact-sub">No payouts in the period</div>
-      </div>
+      <div class="fact"><div class="fact-label">Revenue (window)</div><div class="fact-value">$22,000</div><div class="fact-sub">2 deals closed-won · 33% win rate</div></div>
+      <div class="fact"><div class="fact-label">Deals closed</div><div class="fact-value">2</div><div class="fact-sub">$11,000 ACV · 38-day cycle</div></div>
+      <div class="fact"><div class="fact-label">Commissions</div><div class="fact-value">$2,200</div><div class="fact-sub">earned this window</div></div>
+      <div class="fact"><div class="fact-label">Referrals</div><div class="fact-value">4</div><div class="fact-sub">lifetime · most recent ~48 days ago</div></div>
     </div>
   </div>
 </section>
 
-<!-- ─── Spotlight: the TL;DR / executive read (tone: default brand — Ramping) ─── -->
+<!-- ─── Spotlight: the read + the next lever (tone by band) ─── -->
 <section style="padding-bottom:0">
   <div class="container">
-    <div class="spotlight">
+    <div class="spotlight amber">
       <div class="spotlight-inner">
-        <span class="spotlight-eyebrow">The read</span>
-        <h2>An Onboarding partner with the production record of an Active one.</h2>
-        <p>Lumon holds <span class="num">$115,396</span> in lifetime closed-won across 5 real deals — anchored by a <span class="num">$100,000</span> Acme close — plus <span class="num">$62,300</span> in open pipeline and <span class="num">18</span> lifetime referrals, yet still sits in Onboarding with zero Q1 closes on record. The biggest signal is that production already exists; the biggest risk is a status/coverage mismatch — two foundational agreement copies remain unsigned and several recent referrals look like test entries. Health <span class="num">67/100</span> is driven by Pipeline <span class="num">20/20</span> and Engagement <span class="num">19/20</span>, dragged by Production <span class="num">9/35</span> and Foundation <span class="num">9/15</span>; the band is Ramping (Onboarding status), so the number is not capped down. <strong>Recommended next step:</strong> run a tier review and promote Lumon from Onboarding to Active to match the lifetime production already on file.</p>
+        <span class="spotlight-eyebrow">Your read</span>
+        <h2>Solid foundation and steady referrals — pipeline is the one thing keeping you out of Healthy.</h2>
+        <p>Your score breaks down as Production <span class="num">19/35</span>, Pipeline <span class="num">6/20</span>, Engagement <span class="num">18/20</span>, Foundation <span class="num">15/15</span>, and Recency <span class="num">7/10</span>. Engagement and Foundation are carrying you; Production is mid-pack on <span class="num">$22k</span> across 2 deals. Your biggest lift: <strong>Pipeline 6/20</strong> — only <span class="num">$15k</span> is open right now, well under the <span class="num">$50k</span> the model rewards in full. Adding <span class="num">~$35k</span> of qualified open pipeline alone would move Pipeline from 6 toward 20 and lift you into the Healthy band.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── 01 · Next quarter (action items) ─── -->
+<!-- ─── 01 · Health breakdown — the 5 model factors, one .progress bar each ─── -->
 <section>
   <div class="container">
     <div class="section-header">
-      <div class="section-eyebrow">01 · Next quarter</div>
-      <h2 class="section-title">What needs to happen in Q2</h2>
-      <p class="section-subtitle">Each item traces to a finding in the data. Priority pill: 🔴 P0 blocks revenue · 🟡 P1 material risk · ⚪ P2 hygiene.</p>
+      <div class="section-eyebrow">01 · Health breakdown</div>
+      <h2 class="section-title">65/100 · Watch</h2>
+      <p class="section-subtitle">How Martus's health model reads you — and where the points are. Same five factors and weights your partner manager sees.</p>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Prio</th><th>Action</th><th>Owner</th><th class="numeric">Due</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><span class="status-pill red">🔴 P0</span></td>
-            <td><strong>Tier review — promote Lumon from Onboarding to Active</strong><div class="cell-note">$115,396 lifetime closed-won and $62,300 open pipeline already exceed Active-tier expectations.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-04-14</td>
-          </tr>
-          <tr>
-            <td><span class="status-pill red">🔴 P0</span></td>
-            <td><strong>Sign the 2 pending Standard Affiliate / Agency Agreement copies</strong><div class="cell-note">Two foundational copies sit unsigned; the $62,300 open pipeline can't fully advance under partial coverage.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-04-14</td>
-          </tr>
-          <tr>
-            <td><span class="status-pill amber">🟡 P1</span></td>
-            <td><strong>Resolve the 2 CRM-write errors on recent referrals (Sierra, LLK)</strong><div class="cell-note">Both returned "Error creating deal in CRM" — referrals are stuck and won't convert until the write is fixed.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-04-28</td>
-          </tr>
-          <tr>
-            <td><span class="status-pill amber">🟡 P1</span></td>
-            <td><strong>Triage the early-Q2 referral surge — approve real prospects, reject duplicates</strong><div class="cell-note">7 new referrals landed (incl. duplicate Ace Corp and a Lumon self-referral) against an 18-strong lifetime base.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-04-28</td>
-          </tr>
-          <tr>
-            <td><span class="status-pill gray">⚪ P2</span></td>
-            <td><strong>Clean suspected test data before Q2 reporting</strong><div class="cell-note">4 micro closed-won ($49–$352, $699 total), a "lucas test" deal, "Big Tree" with no amount, and the "sss" referral all look like staging entries.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-05-26</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <p style="margin:0 0 4px;font-size:14px"><strong>Production</strong> <span style="color:var(--gray-500)">19/35</span></p>
+    <div class="progress amber"><div class="bar" style="width:53%"></div></div>
+    <p style="margin:0 0 4px;font-size:14px"><strong>Pipeline</strong> <span style="color:var(--gray-500)">6/20</span></p>
+    <div class="progress red"><div class="bar" style="width:30%"></div></div>
+    <p style="margin:0 0 4px;font-size:14px"><strong>Engagement</strong> <span style="color:var(--gray-500)">18/20</span></p>
+    <div class="progress green"><div class="bar" style="width:92%"></div></div>
+    <p style="margin:0 0 4px;font-size:14px"><strong>Foundation</strong> <span style="color:var(--gray-500)">15/15</span></p>
+    <div class="progress green"><div class="bar" style="width:100%"></div></div>
+    <p style="margin:0 0 4px;font-size:14px"><strong>Recency</strong> <span style="color:var(--gray-500)">7/10</span></p>
+    <div class="progress amber"><div class="bar" style="width:68%"></div></div>
+    <p class="note">No cap fired — your MNDA is signed and you have lifetime closed-won, so your band comes straight from the score. Pipeline is your lowest contribution (6/20): it's the single highest-leverage factor to grow next. Recency sits at 7/10 because your last deal or referral was ~48 days ago; consistent activity inside the last 14 days takes it to 10.</p>
   </div>
 </section>
 
-<!-- ─── 02 · Pipeline (lifetime) ─── -->
+<!-- ─── 02 · Pipeline — top open deals ─── -->
 <section style="padding-top:0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">02 · Pipeline</div>
-      <h2 class="section-title">Pipeline <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
-      <p class="section-subtitle">All-time deal pipeline — not period-filtered.</p>
+      <h2 class="section-title">Your open pipeline</h2>
     </div>
-    <div class="quick-facts">
-      <div class="fact"><div class="fact-label">Open deals</div><div class="fact-value">9</div><div class="fact-sub">$62,300 in flight</div></div>
-      <div class="fact"><div class="fact-label">Closed-won (lifetime)</div><div class="fact-value">$115,396</div><div class="fact-sub">5 real deals · 4 test entries excluded ($699)</div></div>
-      <div class="fact"><div class="fact-label">Avg deal size</div><div class="fact-value">$23,079</div><div class="fact-sub">closed-won</div></div>
-    </div>
-    <div class="table-wrap" style="margin-top:18px">
+    <div class="table-wrap">
       <table>
-        <thead><tr><th>Top open deals</th><th>Stage</th><th class="numeric">Amount</th></tr></thead>
+        <thead><tr><th>Deal</th><th>Stage</th><th class="numeric">Amount</th></tr></thead>
         <tbody>
-          <tr><td><strong>Acme</strong></td><td>Stage 1</td><td class="numeric">$50,000</td></tr>
-          <tr><td><strong>MailMasters</strong></td><td>won</td><td class="numeric">$4,000</td></tr>
-          <tr><td><strong>Kodak</strong></td><td>Negotiating</td><td class="numeric">$3,000</td></tr>
-          <tr><td><strong>The Coffee Shop</strong></td><td>Qualification</td><td class="numeric">$2,450</td></tr>
-          <tr><td><strong>Chocolate Chip</strong></td><td>Demo Scheduled</td><td class="numeric">$1,250</td></tr>
+          <tr><td><strong>Renewal expansion</strong></td><td>Proposal Sent</td><td class="numeric">$8,000</td></tr>
+          <tr><td><strong>Pilot rollout</strong></td><td>Discovery</td><td class="numeric">$5,000</td></tr>
+          <tr><td><strong>Add-on seats</strong></td><td>Discovery</td><td class="numeric">$2,000</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="note">+ 4 more open deals under $1.1K (Oatmeal Chocolate Chip, No bake, lucas test, The Digit co Referral); "Big Tree" carries no amount and is excluded from the rollup.</p>
+    <p class="note">3 open deals totalling <code>$15,000</code> — all shown. You're <code>$35,000</code> short of the <code>$50,000</code> open-pipeline mark the health model rewards in full, so new qualified deals are your fastest path to a higher Pipeline score.</p>
   </div>
 </section>
 
-<!-- ─── 03 · Attribution (Sourced vs Influenced) ─── -->
+<!-- ─── 03 · Commissions ─── -->
 <section style="padding-top:0">
   <div class="container">
     <div class="section-header">
-      <div class="section-eyebrow">03 · Attribution</div>
-      <h2 class="section-title">Deal attribution <span style="font-weight:400;color:var(--gray-500)">(Q1 2026)</span></h2>
-      <p class="section-subtitle">Credit split — partners care about influenced deals, not just sourced.</p>
+      <div class="section-eyebrow">03 · Commissions</div>
+      <h2 class="section-title">Commissions <span style="font-weight:400;color:var(--gray-500)">(last 90 days)</span></h2>
     </div>
-    <div class="dist">
-      <div class="dist-chip"><span class="swatch brand" aria-hidden="true"></span><span class="k">Sourced</span><span class="v">0</span></div>
-      <div class="dist-chip"><span class="swatch cyan" aria-hidden="true"></span><span class="k">Influenced</span><span class="v">9</span></div>
-      <div class="dist-chip"><span class="swatch green" aria-hidden="true"></span><span class="k">Sourced &amp; influenced</span><span class="v">0</span></div>
-    </div>
-    <p class="note">All Q1 credit is influence-only — Lumon touched 9 deals but originated none, reinforcing the sourced-deal coaching focus for the tier conversation.</p>
+    <p class="note" style="font-size:14px;color:var(--gray-700)">Earned in this window: <strong>$2,200</strong> — 1 payout (20% on an $11,000 deal, paid 2026-04-18). As your closed-won revenue grows, commissions track with it.</p>
   </div>
 </section>
 
-<!-- ─── 04 · Agreements ─── -->
+<!-- ─── 04 · Referrals — lifetime ─── -->
 <section style="padding-top:0">
   <div class="container">
     <div class="section-header">
-      <div class="section-eyebrow">04 · Agreements</div>
-      <h2 class="section-title">Agreements <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
+      <div class="section-eyebrow">04 · Referrals</div>
+      <h2 class="section-title">Referrals <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
+    </div>
+    <p class="note" style="font-size:14px;color:var(--gray-700)">4 referrals submitted lifetime; most recent 2026-04-16 (~48 days ago). One entry ("test acct") looks like a placeholder — it's still counted here, but it's yours to clean up. A fresh referral inside the last 30 days keeps your Engagement near full.</p>
+  </div>
+</section>
+
+<!-- ─── 05 · Agreements ─── -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">05 · Agreements</div>
+      <h2 class="section-title">Agreements</h2>
     </div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Status</th><th>Agreement</th><th class="numeric">Signed</th></tr></thead>
         <tbody>
-          <tr><td><span class="status-pill green">🟢 Complete</span></td><td><strong>Standard Agency Agreement</strong></td><td class="numeric">2023-08-18</td></tr>
-          <tr><td><span class="status-pill green">🟢 Complete</span></td><td><strong>MNDA</strong></td><td class="numeric">2023-08-01</td></tr>
-          <tr><td><span class="status-pill green">🟢 Complete</span></td><td><strong>Standard Affiliate Agreement</strong></td><td class="numeric">2025-02-12</td></tr>
-          <tr><td><span class="status-pill amber">🟡 Pending</span></td><td><strong>Standard Agency Agreement</strong></td><td class="numeric">—</td></tr>
-          <tr><td><span class="status-pill amber">🟡 Pending</span></td><td><strong>Standard Affiliate Agreement</strong></td><td class="numeric">—</td></tr>
+          <tr><td><span class="status-pill green">🟢 Active</span></td><td><strong>MNDA</strong></td><td class="numeric">2025-09-22</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="note">Every foundational agreement type (Agency, MNDA, Affiliate) has a signed copy on file; the two pending rows are unsigned duplicate copies to close out.</p>
+    <p class="note">Your foundational agreement is signed, so Foundation scores the full 15/15 and no cap applies to your band.</p>
   </div>
 </section>
-
-<!-- ─── 05 · Referrals (lifetime) ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">05 · Referrals</div>
-      <h2 class="section-title">Referrals <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
-    </div>
-    <div class="quick-facts">
-      <div class="fact"><div class="fact-label">Total submitted</div><div class="fact-value">18</div><div class="fact-sub">11 pending · 5 rejected · 2 CRM-error</div></div>
-      <div class="fact"><div class="fact-label">In Q1</div><div class="fact-value">1</div><div class="fact-sub">submitted this period</div></div>
-      <div class="fact"><div class="fact-label">Most recent</div><div class="fact-value" style="font-size:clamp(15px,3vw,18px)">2026-04-22</div><div class="fact-sub">LLK — CRM-write error</div></div>
-    </div>
-    <p class="note">The single Q1 referral ("sss", Feb 20 2026) and several pending entries ("lumon industries" self-referral, "LLC", "kraken") appear to be test submissions — folded into the P2 cleanup above.</p>
-  </div>
-</section>
-
-<!-- ─── 06 · Commissions — omitted: no commissions paid in Q1 (CONDITIONAL) ─── -->
-<!-- ─── 07 · Invoices — omitted: no invoices on file (CONDITIONAL) ─── -->
 
 <!-- ─── Footer (text wordmark) ─── -->
 <footer>
   <div class="container footer-inner">
     <span class="brand-mark footer-mark">Euler</span>
-    <p>Q1 2026 Business Review · Lumon Industries</p>
-    <p class="mono">euler · generate-qbr</p>
+    <p>My Performance · Martus</p>
+    <p class="mono">euler · my-performance</p>
   </div>
 </footer>
 

@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lumon Industries — Q1 2026 Business Review</title>
+<title>My Deals — Martus</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
-/* generate-qbr — Euler design system, modern report treatment
+/* my-deals — Euler design system, modern report treatment
  * Goals: LIGHTWEIGHT (fast first paint) + MOBILE-FIRST responsive.
  * - No JS, no images, no external assets except the two web fonts (brand
  *   shown as a text wordmark — the remote logo SVG renders broken in Claude).
@@ -15,7 +15,7 @@
  *   fallback, so text paints instantly and never blocks open. Pair with
  *   <link rel="preconnect"> in <head> (see template.html).
  * - Fluid type via clamp() → scales across phones→desktop with few breakpoints.
- * Tokens are the Euler design system. Used only by generate-qbr.
+ * Tokens are the Euler design system. Used only by my-deals.
  */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -225,207 +225,150 @@ footer { background: var(--gray-950); color: var(--gray-400); padding: 32px 0; m
 </head>
 <body>
 
-<!-- ─── Topbar (text wordmark — no image) ─── -->
+<!-- ─── Topbar (text wordmark) ─── -->
 <header class="topbar">
   <div class="container topbar-inner">
     <div class="brand">
       <span class="brand-mark">Euler</span>
       <span class="brand-divider" aria-hidden="true"></span>
-      <span class="brand-label">Q1 2026 Review · Lumon Industries</span>
+      <span class="brand-label">My Deals · Martus</span>
     </div>
   </div>
 </header>
 
-<!-- ─── Hero + quick facts ─── -->
-<!-- Band = Ramping (status Onboarding) → default brand tone (no amber/red) -->
+<!-- ─── Hero — pipeline totals front and center ─── -->
 <section class="hero">
   <div class="container">
-    <span class="hero-eyebrow"><span class="dot" aria-hidden="true"></span>Q1 2026 · Ramping · Health 67/100</span>
-    <h1>Lumon Industries — <span class="accent">Q1 2026</span></h1>
-    <p>Onboarding partner already carrying Active-tier production — $115K lifetime closed-won and a complete agreement set, with no new direct closes booked this quarter. <span class="data-pill complete">Complete data</span></p>
+    <span class="hero-eyebrow"><span class="dot" aria-hidden="true"></span>6 open deals · Lumon Industries</span>
+    <h1>Your pipeline</h1>
+    <p>You have 6 open deals worth $68,800 spread across 4 stages, with a deal already in Contracting. <span class="data-pill complete">Complete data</span></p>
 
-    <!-- Period headline metrics. Win rate fact OMITTED — 0 deals closed in Q1
-         (zero-denominator collapse: never render "0.00%"). -->
     <div class="quick-facts">
-      <div class="fact">
-        <div class="fact-label">Closed-won (Q1)</div>
-        <div class="fact-value">$0</div>
-        <div class="fact-sub">No deals booked in the period</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Deals closed</div>
-        <div class="fact-value">0</div>
-        <div class="fact-sub">Onboarding — zero closes is on-track</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Closed-won (lifetime)</div>
-        <div class="fact-value">$115,396</div>
-        <div class="fact-sub">5 real deals · Acme $100K leads</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Commissions paid</div>
-        <div class="fact-value">$0</div>
-        <div class="fact-sub">No payouts in the period</div>
-      </div>
+      <div class="fact"><div class="fact-label">Open deals</div><div class="fact-value">6</div><div class="fact-sub">across 4 stages</div></div>
+      <div class="fact"><div class="fact-label">Open value</div><div class="fact-value">$68,800</div><div class="fact-sub">total pipeline</div></div>
+      <div class="fact"><div class="fact-label">Closed-won</div><div class="fact-value">2</div><div class="fact-sub">$33,500 lifetime</div></div>
+      <div class="fact"><div class="fact-label">Avg deal size</div><div class="fact-value">$11,467</div><div class="fact-sub">open deals average</div></div>
     </div>
   </div>
 </section>
 
-<!-- ─── Spotlight: the TL;DR / executive read (tone: default brand — Ramping) ─── -->
-<section style="padding-bottom:0">
-  <div class="container">
-    <div class="spotlight">
-      <div class="spotlight-inner">
-        <span class="spotlight-eyebrow">The read</span>
-        <h2>An Onboarding partner with the production record of an Active one.</h2>
-        <p>Lumon holds <span class="num">$115,396</span> in lifetime closed-won across 5 real deals — anchored by a <span class="num">$100,000</span> Acme close — plus <span class="num">$62,300</span> in open pipeline and <span class="num">18</span> lifetime referrals, yet still sits in Onboarding with zero Q1 closes on record. The biggest signal is that production already exists; the biggest risk is a status/coverage mismatch — two foundational agreement copies remain unsigned and several recent referrals look like test entries. Health <span class="num">67/100</span> is driven by Pipeline <span class="num">20/20</span> and Engagement <span class="num">19/20</span>, dragged by Production <span class="num">9/35</span> and Foundation <span class="num">9/15</span>; the band is Ramping (Onboarding status), so the number is not capped down. <strong>Recommended next step:</strong> run a tier review and promote Lumon from Onboarding to Active to match the lifetime production already on file.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── 01 · Next quarter (action items) ─── -->
+<!-- ─── 01 · Open pipeline — grouped by stage ─── -->
 <section>
   <div class="container">
     <div class="section-header">
-      <div class="section-eyebrow">01 · Next quarter</div>
-      <h2 class="section-title">What needs to happen in Q2</h2>
-      <p class="section-subtitle">Each item traces to a finding in the data. Priority pill: 🔴 P0 blocks revenue · 🟡 P1 material risk · ⚪ P2 hygiene.</p>
+      <div class="section-eyebrow">01 · Open pipeline</div>
+      <h2 class="section-title">Deals by stage</h2>
+      <p class="section-subtitle">Grouped by stage · largest amount first within each stage.</p>
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Prio</th><th>Action</th><th>Owner</th><th class="numeric">Due</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>Deal</th>
+            <th class="numeric">Amount</th>
+          </tr>
+        </thead>
         <tbody>
+          <!-- Qualified ×2 -->
           <tr>
-            <td><span class="status-pill red">🔴 P0</span></td>
-            <td><strong>Tier review — promote Lumon from Onboarding to Active</strong><div class="cell-note">$115,396 lifetime closed-won and $62,300 open pipeline already exceed Active-tier expectations.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-04-14</td>
+            <td><strong>Qualified</strong></td>
+            <td>
+              <strong>Lumon – Severance Floor Expansion</strong>
+              <!-- last_stage_change_date = 9999 → sentinel, no aging -->
+            </td>
+            <td class="numeric">$9,800</td>
           </tr>
           <tr>
-            <td><span class="status-pill red">🔴 P0</span></td>
-            <td><strong>Sign the 2 pending Standard Affiliate / Agency Agreement copies</strong><div class="cell-note">Two foundational copies sit unsigned; the $62,300 open pipeline can't fully advance under partial coverage.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-04-14</td>
+            <td><strong>Qualified</strong></td>
+            <td>
+              <strong>Lumon – Macrodata Refinement Seats</strong>
+              <div class="cell-note">27 days in stage</div>
+            </td>
+            <td class="numeric">$6,400</td>
+          </tr>
+          <!-- Demo ×2 -->
+          <tr>
+            <td><strong>Demo</strong></td>
+            <td>
+              <strong>Lumon – Optics &amp; Design Rollout</strong>
+              <div class="cell-note">41 days in stage</div>
+            </td>
+            <td class="numeric">$18,500</td>
           </tr>
           <tr>
-            <td><span class="status-pill amber">🟡 P1</span></td>
-            <td><strong>Resolve the 2 CRM-write errors on recent referrals (Sierra, LLK)</strong><div class="cell-note">Both returned "Error creating deal in CRM" — referrals are stuck and won't convert until the write is fixed.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-04-28</td>
+            <td><strong>Demo</strong></td>
+            <td>
+              <strong>Lumon – Wellness Center Module</strong>
+              <!-- last_stage_change_date = 9999 → sentinel, no aging -->
+            </td>
+            <td class="numeric">$7,300</td>
           </tr>
+          <!-- Negotiating ×1 -->
           <tr>
-            <td><span class="status-pill amber">🟡 P1</span></td>
-            <td><strong>Triage the early-Q2 referral surge — approve real prospects, reject duplicates</strong><div class="cell-note">7 new referrals landed (incl. duplicate Ace Corp and a Lumon self-referral) against an 18-strong lifetime base.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-04-28</td>
+            <td><strong>Negotiating</strong></td>
+            <td>
+              <strong>Lumon – Compliance &amp; Egress Tier</strong>
+              <div class="cell-note">12 days in stage</div>
+            </td>
+            <td class="numeric">$15,200</td>
           </tr>
+          <!-- Contracting ×1 -->
           <tr>
-            <td><span class="status-pill gray">⚪ P2</span></td>
-            <td><strong>Clean suspected test data before Q2 reporting</strong><div class="cell-note">4 micro closed-won ($49–$352, $699 total), a "lucas test" deal, "Big Tree" with no amount, and the "sss" referral all look like staging entries.</div></td>
-            <td>Partner Manager</td>
-            <td class="numeric">2026-05-26</td>
+            <td><strong>Contracting</strong></td>
+            <td>
+              <strong>Lumon – Mammalians Nurturable Renewal</strong>
+              <div class="cell-note">5 days in stage</div>
+            </td>
+            <td class="numeric">$11,600</td>
           </tr>
         </tbody>
       </table>
     </div>
+    <p class="note">Total open: $68,800 across 6 deals in 4 stages. Two deals — Severance Floor Expansion and Wellness Center Module — have no recorded stage-change date, so no aging is shown.</p>
   </div>
 </section>
 
-<!-- ─── 02 · Pipeline (lifetime) ─── -->
+<!-- ─── 02 · By stage — distribution chips ─── -->
 <section style="padding-top:0">
   <div class="container">
     <div class="section-header">
-      <div class="section-eyebrow">02 · Pipeline</div>
-      <h2 class="section-title">Pipeline <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
-      <p class="section-subtitle">All-time deal pipeline — not period-filtered.</p>
-    </div>
-    <div class="quick-facts">
-      <div class="fact"><div class="fact-label">Open deals</div><div class="fact-value">9</div><div class="fact-sub">$62,300 in flight</div></div>
-      <div class="fact"><div class="fact-label">Closed-won (lifetime)</div><div class="fact-value">$115,396</div><div class="fact-sub">5 real deals · 4 test entries excluded ($699)</div></div>
-      <div class="fact"><div class="fact-label">Avg deal size</div><div class="fact-value">$23,079</div><div class="fact-sub">closed-won</div></div>
-    </div>
-    <div class="table-wrap" style="margin-top:18px">
-      <table>
-        <thead><tr><th>Top open deals</th><th>Stage</th><th class="numeric">Amount</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Acme</strong></td><td>Stage 1</td><td class="numeric">$50,000</td></tr>
-          <tr><td><strong>MailMasters</strong></td><td>won</td><td class="numeric">$4,000</td></tr>
-          <tr><td><strong>Kodak</strong></td><td>Negotiating</td><td class="numeric">$3,000</td></tr>
-          <tr><td><strong>The Coffee Shop</strong></td><td>Qualification</td><td class="numeric">$2,450</td></tr>
-          <tr><td><strong>Chocolate Chip</strong></td><td>Demo Scheduled</td><td class="numeric">$1,250</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="note">+ 4 more open deals under $1.1K (Oatmeal Chocolate Chip, No bake, lucas test, The Digit co Referral); "Big Tree" carries no amount and is excluded from the rollup.</p>
-  </div>
-</section>
-
-<!-- ─── 03 · Attribution (Sourced vs Influenced) ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">03 · Attribution</div>
-      <h2 class="section-title">Deal attribution <span style="font-weight:400;color:var(--gray-500)">(Q1 2026)</span></h2>
-      <p class="section-subtitle">Credit split — partners care about influenced deals, not just sourced.</p>
+      <div class="section-eyebrow">02 · By stage</div>
+      <h2 class="section-title">Stage breakdown</h2>
+      <p class="section-subtitle">Count of open deals per stage.</p>
     </div>
     <div class="dist">
-      <div class="dist-chip"><span class="swatch brand" aria-hidden="true"></span><span class="k">Sourced</span><span class="v">0</span></div>
-      <div class="dist-chip"><span class="swatch cyan" aria-hidden="true"></span><span class="k">Influenced</span><span class="v">9</span></div>
-      <div class="dist-chip"><span class="swatch green" aria-hidden="true"></span><span class="k">Sourced &amp; influenced</span><span class="v">0</span></div>
+      <div class="dist-chip">
+        <span class="swatch brand"></span>
+        <span class="k">Qualified</span>
+        <span class="v">2</span>
+      </div>
+      <div class="dist-chip">
+        <span class="swatch amber"></span>
+        <span class="k">Demo</span>
+        <span class="v">2</span>
+      </div>
+      <div class="dist-chip">
+        <span class="swatch violet"></span>
+        <span class="k">Negotiating</span>
+        <span class="v">1</span>
+      </div>
+      <div class="dist-chip">
+        <span class="swatch green"></span>
+        <span class="k">Contracting</span>
+        <span class="v">1</span>
+      </div>
     </div>
-    <p class="note">All Q1 credit is influence-only — Lumon touched 9 deals but originated none, reinforcing the sourced-deal coaching focus for the tier conversation.</p>
+    <p class="note">Your pipeline spans the full funnel — four deals sit early (Qualified and Demo) and two are late-stage in Negotiating and Contracting. Your largest open deal, Optics &amp; Design Rollout ($18,500), is still in Demo.</p>
   </div>
 </section>
-
-<!-- ─── 04 · Agreements ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">04 · Agreements</div>
-      <h2 class="section-title">Agreements <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Status</th><th>Agreement</th><th class="numeric">Signed</th></tr></thead>
-        <tbody>
-          <tr><td><span class="status-pill green">🟢 Complete</span></td><td><strong>Standard Agency Agreement</strong></td><td class="numeric">2023-08-18</td></tr>
-          <tr><td><span class="status-pill green">🟢 Complete</span></td><td><strong>MNDA</strong></td><td class="numeric">2023-08-01</td></tr>
-          <tr><td><span class="status-pill green">🟢 Complete</span></td><td><strong>Standard Affiliate Agreement</strong></td><td class="numeric">2025-02-12</td></tr>
-          <tr><td><span class="status-pill amber">🟡 Pending</span></td><td><strong>Standard Agency Agreement</strong></td><td class="numeric">—</td></tr>
-          <tr><td><span class="status-pill amber">🟡 Pending</span></td><td><strong>Standard Affiliate Agreement</strong></td><td class="numeric">—</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="note">Every foundational agreement type (Agency, MNDA, Affiliate) has a signed copy on file; the two pending rows are unsigned duplicate copies to close out.</p>
-  </div>
-</section>
-
-<!-- ─── 05 · Referrals (lifetime) ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">05 · Referrals</div>
-      <h2 class="section-title">Referrals <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
-    </div>
-    <div class="quick-facts">
-      <div class="fact"><div class="fact-label">Total submitted</div><div class="fact-value">18</div><div class="fact-sub">11 pending · 5 rejected · 2 CRM-error</div></div>
-      <div class="fact"><div class="fact-label">In Q1</div><div class="fact-value">1</div><div class="fact-sub">submitted this period</div></div>
-      <div class="fact"><div class="fact-label">Most recent</div><div class="fact-value" style="font-size:clamp(15px,3vw,18px)">2026-04-22</div><div class="fact-sub">LLK — CRM-write error</div></div>
-    </div>
-    <p class="note">The single Q1 referral ("sss", Feb 20 2026) and several pending entries ("lumon industries" self-referral, "LLC", "kraken") appear to be test submissions — folded into the P2 cleanup above.</p>
-  </div>
-</section>
-
-<!-- ─── 06 · Commissions — omitted: no commissions paid in Q1 (CONDITIONAL) ─── -->
-<!-- ─── 07 · Invoices — omitted: no invoices on file (CONDITIONAL) ─── -->
 
 <!-- ─── Footer (text wordmark) ─── -->
 <footer>
   <div class="container footer-inner">
     <span class="brand-mark footer-mark">Euler</span>
-    <p>Q1 2026 Business Review · Lumon Industries</p>
-    <p class="mono">euler · generate-qbr</p>
+    <p>My Deals · Martus</p>
+    <p class="mono">euler · my-deals</p>
   </div>
 </footer>
 
