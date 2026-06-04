@@ -126,17 +126,47 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 .footer-links a{color:var(--gray-300)}
 .footer-note{width:100%;font-size:12.5px;color:var(--gray-500);margin:14px 0 0;line-height:1.5}
 
-/* A4 report modal */
-.modal-overlay{position:fixed;inset:0;z-index:100;display:none;align-items:flex-start;justify-content:center;background:rgba(21,23,30,.64);backdrop-filter:blur(3px);padding:clamp(10px,3vw,30px)}
+/* Claude-style split artifact modal: simulated chat (left) + artifact (right) */
+.modal-overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(21,23,30,.55);backdrop-filter:blur(3px);padding:clamp(8px,2vw,26px)}
 .modal-overlay.open{display:flex}
-.modal-doc{width:100%;max-width:800px;margin:auto;background:var(--white);border-radius:12px;box-shadow:0 28px 70px -14px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column;height:min(1123px, calc(100vh - clamp(20px,6vw,60px)))}
-.modal-bar{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--white);border-bottom:1px solid var(--gray-200);flex-shrink:0}
-.modal-dot{width:10px;height:10px;border-radius:50%;background:var(--gray-300);flex-shrink:0}
-.modal-title{font-size:13px;font-weight:600;color:var(--gray-700);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.modal-bar .btn{padding:7px 12px;font-size:12.5px}
-.modal-close{appearance:none;border:1px solid var(--gray-300);background:var(--white);color:var(--gray-600);width:32px;height:32px;border-radius:8px;font-size:20px;line-height:1;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.modal-close:hover{border-color:var(--error-500);color:var(--error-600)}
-.modal-frame{flex:1 1 auto;min-height:0;width:100%;border:0;background:#fff;display:block}
+.sim-window{width:100%;max-width:1380px;height:min(880px,calc(100vh - clamp(16px,4vw,52px)));background:var(--white);border-radius:14px;box-shadow:0 30px 80px -16px rgba(0,0,0,.55);overflow:hidden;display:flex}
+.sim-chat{flex:0 0 44%;max-width:600px;min-width:0;display:flex;flex-direction:column;background:#f5f4ef;border-right:1px solid var(--gray-200)}
+.sim-chat-head{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid rgba(0,0,0,.06);flex-shrink:0}
+.sim-chat-head .ico{width:20px;height:20px;border-radius:6px;background:rgba(0,0,0,.07);flex-shrink:0}
+.sim-chat-title{font-size:14px;font-weight:600;color:#3d3d3a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.sim-chat-title .car{color:#a3a299;font-size:10px;margin-left:6px}
+.sim-scroll{flex:1;overflow-y:auto;padding:22px 20px 14px;display:flex;flex-direction:column;gap:17px}
+.sim-user{align-self:flex-end;max-width:86%;background:#ecebe3;color:#2b2b28;border-radius:15px;padding:11px 15px;font-size:14.5px;line-height:1.5}
+.sim-step{display:flex;flex-direction:column;gap:5px}
+.sim-step-head{display:flex;align-items:center;gap:8px;cursor:pointer}
+.sim-step-head .chev{font-size:9px;color:#b0afa6;transition:transform .15s ease}
+.sim-step.collapsed .chev{transform:rotate(-90deg)}
+.sim-step-head .t{font-size:13.5px;font-weight:500;color:#6f6e66}
+.sim-step-body{font-family:Georgia,'Times New Roman',serif;font-size:14.5px;line-height:1.62;color:#2b2b28;padding-left:17px}
+.sim-step.collapsed .sim-step-body{display:none}
+.sim-tool{display:inline-flex;align-items:center;gap:7px;margin-top:9px;font-family:var(--mono);font-size:11.5px;color:var(--brand-700);background:#ecebf7;border:1px solid #dcd8f1;border-radius:7px;padding:5px 9px}
+.sim-tool .pulse{width:6px;height:6px;border-radius:50%;background:var(--brand-600);flex-shrink:0}
+.sim-input{flex-shrink:0;padding:12px 16px 9px;border-top:1px solid rgba(0,0,0,.06)}
+.sim-input-box{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--gray-300);border-radius:13px;padding:10px 13px;box-shadow:var(--shadow-xs)}
+.sim-input-box .plus{width:22px;height:22px;border-radius:6px;border:1px solid var(--gray-300);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sim-input-box .ph{flex:1;color:var(--gray-500);font-size:14px}
+.sim-input-box .model{font-size:12px;color:var(--gray-600);font-weight:500;white-space:nowrap}
+.sim-input-box .mic{width:15px;height:15px;border-radius:50%;background:var(--gray-300);flex-shrink:0}
+.sim-disclaimer{text-align:center;font-size:11px;color:var(--gray-500);margin:8px 0 0}
+.sim-artifact{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--white)}
+.sim-art-bar{display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:1px solid var(--gray-200);flex-shrink:0}
+.sim-toggle{display:flex;gap:2px;background:var(--gray-100);border:1px solid var(--gray-200);border-radius:8px;padding:2px;flex-shrink:0}
+.sim-toggle span{height:22px;padding:0 8px;border-radius:6px;display:flex;align-items:center;font-size:11px;color:var(--gray-500);font-family:var(--mono)}
+.sim-toggle span.on{background:var(--white);color:var(--brand-600);box-shadow:var(--shadow-xs)}
+.sim-art-title{font-size:13px;font-weight:600;color:var(--gray-700);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.sim-art-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.sim-copy{appearance:none;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--gray-700);background:var(--white);border:1px solid var(--gray-300);border-radius:8px;padding:6px 12px;cursor:pointer}
+.sim-copy:hover{border-color:var(--brand-300);color:var(--brand-700)}
+.sim-copy.ok{background:var(--success-500);border-color:var(--success-500);color:#fff}
+.sim-iconbtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--gray-300);background:var(--white);color:var(--gray-600);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0}
+.sim-iconbtn:hover{border-color:var(--brand-300);color:var(--brand-700)}
+.sim-frame{flex:1;min-height:0;width:100%;border:0;background:#fff;display:block}
+@media(max-width:900px){.sim-window{flex-direction:column;height:calc(100vh - 24px);max-width:none}.sim-chat{flex:0 0 44%;max-width:none;border-right:0;border-bottom:1px solid var(--gray-200)}}
 </style>
 </head>
 <body>
@@ -305,16 +335,29 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
   </div>
 </footer>
 
-<!-- A4 report modal -->
+<!-- Claude-style split artifact modal -->
 <div class="modal-overlay" id="report-modal" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-doc">
-    <div class="modal-bar">
-      <span class="modal-dot"></span>
-      <span class="modal-title" id="modal-title">Report</span>
-      <button class="btn btn-ghost" id="modal-download">Download</button>
-      <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+  <div class="sim-window">
+    <div class="sim-chat">
+      <div class="sim-chat-head"><span class="ico"></span><span class="sim-chat-title" id="sim-chat-title">Conversation</span></div>
+      <div class="sim-scroll" id="sim-scroll"></div>
+      <div class="sim-input">
+        <div class="sim-input-box"><span class="plus">+</span><span class="ph">Reply to Claude…</span><span class="model">Opus 4.8 · High</span><span class="mic"></span></div>
+        <p class="sim-disclaimer">Claude can make mistakes. Please double-check responses.</p>
+      </div>
     </div>
-    <iframe class="modal-frame" id="modal-frame" title="Report (A4)"></iframe>
+    <div class="sim-artifact">
+      <div class="sim-art-bar">
+        <span class="sim-toggle"><span class="on">Preview</span><span>&lt;/&gt;</span></span>
+        <span class="sim-art-title" id="sim-art-title">artifact · HTML</span>
+        <span class="sim-art-actions">
+          <button class="sim-copy" id="modal-copy">Copy</button>
+          <button class="sim-iconbtn" id="modal-download" title="Download .html">⤓</button>
+          <button class="sim-iconbtn" id="modal-close" title="Close" aria-label="Close">&times;</button>
+        </span>
+      </div>
+      <iframe class="sim-frame" id="modal-frame" title="Artifact"></iframe>
+    </div>
   </div>
 </div>
 
@@ -3805,11 +3848,7 @@ footer { background: var(--gray-950); color: var(--gray-400); padding: 32px 0; m
 <script>
 (function(){
   function reportHTML(id){var el=document.getElementById(id);return el?el.textContent:'';}
-  // Render each card preview from its embedded report
-  document.querySelectorAll('.preview-scale iframe[data-report]').forEach(function(f){
-    var html=reportHTML(f.getAttribute('data-report'));
-    if(html){f.srcdoc=html;}
-  });
+  document.querySelectorAll('.preview-scale iframe[data-report]').forEach(function(f){var h=reportHTML(f.getAttribute('data-report'));if(h){f.srcdoc=h;}});
   function flash(btn,txt){var o=btn.dataset._o||btn.textContent;btn.dataset._o=o;btn.textContent=txt;btn.classList.add('ok');setTimeout(function(){btn.textContent=o;btn.classList.remove('ok');},1400);}
   function fallbackCopy(text,btn){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.top='-1000px';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}document.body.removeChild(ta);flash(btn,ok?'Copied!':'Copy failed');}
   function copyText(text,btn){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){flash(btn,'Copied!');},function(){fallbackCopy(text,btn);});}else{fallbackCopy(text,btn);}}
@@ -3819,16 +3858,99 @@ footer { background: var(--gray-950); color: var(--gray-400); padding: 32px 0; m
   function filenameFor(id){return 'euler-'+id.replace('rpt-','')+'-example.html';}
   function downloadReport(id){var a=document.createElement('a');a.href=blobURL(id);a.download=filenameFor(id);document.body.appendChild(a);a.click();document.body.removeChild(a);}
   document.querySelectorAll('.download-doc').forEach(function(b){b.addEventListener('click',function(){downloadReport(b.getAttribute('data-report'));});});
-  // A4 modal
-  var modal=document.getElementById('report-modal'),mframe=document.getElementById('modal-frame'),mtitle=document.getElementById('modal-title');
+  var CHATS={
+    'rpt-generate-qbr':{title:'Lumon Industries — QBR Q1 2026',prompt:'Generate a QBR for Lumon Industries for Q1 2026',steps:[
+      {t:'Read the QBR playbook',body:'Reading the skill and its reference files — field paths, the health model, template and styles — before starting.'},
+      {t:'Resolved the partner',body:'The customer is Martus. Resolving the partner “Lumon Industries”.',tool:'list_accounts → partners · list'},
+      {t:'Pulled period metrics',body:'Fetching Q1 2026 performance — deals closed, revenue, win rate, ACV.',tool:'performance · partner'},
+      {t:'Loaded pipeline, commissions & referrals',body:'Pulling the all-time pipeline, commissions paid and submitted referrals from the EULER MCP.',tool:'partner_artifacts · commissions · referrals'},
+      {t:'Computed the health score',body:'Scoring the 5-factor model (Production, Pipeline, Engagement, Foundation, Recency) from the data in hand.'},
+      {t:'Rendered the QBR',body:'Composing the self-contained HTML report in the Euler design system.'}]},
+    'rpt-partner-briefing':{title:'Lumon Industries — pre-call briefing',prompt:'Prep me for my call with Lumon Industries',steps:[
+      {t:'Read the briefing playbook',body:'Loading the skill and reference field paths before pulling data.'},
+      {t:'Resolved the partner',body:'Customer Martus; resolving partner “Lumon Industries”.',tool:'list_accounts → partners · list'},
+      {t:'Pulled the last 30 days',body:'Fetching recent performance, open pipeline, commissions and referrals for the window.',tool:'performance · partner_artifacts · referrals'},
+      {t:'Picked the talking points',body:'Deriving what they’ll raise and what you should bring up from real records — pending agreements, aging deals, recent activity.'},
+      {t:'Rendered the briefing',body:'Composing the 30-second read as self-contained HTML.'}]},
+    'rpt-portfolio-pulse':{title:'Martus — portfolio pulse',prompt:'How is my partner portfolio doing this quarter?',steps:[
+      {t:'Read the playbook',body:'Loading the portfolio-pulse skill and the shared health-model bands.'},
+      {t:'Pulled company totals',body:'Fetching portfolio totals and the company-wide aggregate for the quarter.',tool:'partners · summary → performance · company'},
+      {t:'Ranked the leaderboard',body:'Getting the top partners by billed revenue in one terminal call.',tool:'performance · overall'},
+      {t:'Counted the roster',body:'Building the status distribution from the partner roster (not the summary).',tool:'partners · list'},
+      {t:'Coarse-scored, deep-dived the tail',body:'Coarse-ranking every partner, then upgrading the at-risk/watch tail to a full score.'},
+      {t:'Rendered the pulse',body:'Composing the one-screen portfolio HTML.'}]},
+    'rpt-pending-approvals-triage':{title:'Martus — approvals triage',prompt:'What is waiting on me to approve?',steps:[
+      {t:'Read the playbook',body:'Loading the triage skill before querying the queues.'},
+      {t:'Pulled partner applications',body:'Fetching partner applications awaiting approval.',tool:'partners · pending'},
+      {t:'Pulled pending referrals & deal regs',body:'Fetching pending referrals and deal registrations — two scoped calls.',tool:'referrals · search (Referral / Deal Registration)'},
+      {t:'Merged & aged the worklist',body:'Merging all three queues into one list, oldest-first, with SLA colors by waiting age.'},
+      {t:'Rendered the worklist',body:'Composing the age-sorted triage HTML.'}]},
+    'rpt-my-performance':{title:'My performance — Martus',prompt:'How am I doing with Martus this quarter?',steps:[
+      {t:'Checked the account',body:'Confirming a partner connection and resolving my partner_id for customer Martus.',tool:'list_accounts'},
+      {t:'Pulled my numbers',body:'Fetching my window performance, open pipeline, commissions and referrals.',tool:'performance · partner_artifacts · commissions · referrals'},
+      {t:'Scored my health',body:'Running the 5-factor health model on my own data — the same model my customer sees.'},
+      {t:'Found the lever',body:'The lowest-contribution factor is Pipeline — that’s my biggest lift.'},
+      {t:'Rendered the scorecard',body:'Composing my self-service scorecard as HTML.'}]},
+    'rpt-my-onboarding':{title:'My onboarding — Martus',prompt:'Where am I in my onboarding?',steps:[
+      {t:'Checked the account',body:'Resolving my partner connection with Martus.',tool:'list_accounts'},
+      {t:'Listed my flows',body:'Fetching the flows assigned to me.',tool:'partner_flow_details'},
+      {t:'Pulled per-flow progress',body:'Getting completion, step buckets and due dates for each flow.',tool:'partner_flow_progress ×N'},
+      {t:'Found what’s overdue',body:'One certification step is overdue — surfacing it first.'},
+      {t:'Rendered the progress report',body:'Composing the onboarding HTML with a progress bar per flow.'}]},
+    'rpt-my-referrals':{title:'My referrals — Martus',prompt:'What referrals have I submitted to Martus?',steps:[
+      {t:'Checked the account',body:'Resolving my partner connection with Martus.',tool:'list_accounts'},
+      {t:'Queried my referrals on EULER',body:'Pulling every referral and deal registration I’ve submitted, with status.',tool:'referrals · for_partner'},
+      {t:'Sorted & flagged',body:'Sorting most-recent first and flagging one likely test entry (kept in the counts).'},
+      {t:'Rendered the worklist',body:'Composing my referrals worklist as HTML.'}]},
+    'rpt-my-deals':{title:'My deals — Martus',prompt:'Show me my pipeline with Martus',steps:[
+      {t:'Checked the account',body:'Resolving my partner connection with Martus.',tool:'list_accounts'},
+      {t:'Fetched my deal pipeline',body:'Pulling my full deal list — stage, amount, last stage change.',tool:'partner_artifacts · deals'},
+      {t:'Grouped by stage',body:'Grouping open deals by funnel stage; aging only where the date is real (the ≥9999-day sentinel is ignored).'},
+      {t:'Rendered the pipeline',body:'Composing my deal pipeline as HTML.'}]},
+    'rpt-submit-a-referral':{title:'Submit a referral — Martus',prompt:'I want to register a new deal with Martus',steps:[
+      {t:'Checked the account',body:'Confirming I’m connected as a partner before any write.',tool:'list_accounts'},
+      {t:'Fetched the referral form',body:'Getting Martus’s current referral form and its questions.',tool:'referrals · get_form_for_partner'},
+      {t:'Collected & confirmed',body:'Collecting the answers (company, contact, deal size) and reading them back for confirmation.'},
+      {t:'Submitted once',body:'Sending the referral — one write, no retries.',tool:'submit_referral'},
+      {t:'Confirmed',body:'Status “Created”. Rendering the confirmation card.'}]},
+    'rpt-my-tracking-links':{title:'Tracking links — Martus',prompt:'Create a tracking link for my Spring 2026 campaign',steps:[
+      {t:'Checked the account',body:'Confirming I’m connected as a partner.',tool:'list_accounts'},
+      {t:'Confirmed the link details',body:'Destination URL plus the label “Spring 2026 campaign”, read back for confirmation.'},
+      {t:'Created the link',body:'Creating the tracking link — idempotent, one write.',tool:'create_tracking_link'},
+      {t:'Confirmed',body:'Status “Created”. Rendering the link card.'}]}
+  };
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function renderChat(id){
+    var c=CHATS[id],scroll=document.getElementById('sim-scroll');scroll.innerHTML='';
+    document.getElementById('sim-chat-title').innerHTML=esc(c?c.title:'Conversation')+'<span class="car">▾</span>';
+    var u=document.createElement('div');u.className='sim-user';u.textContent=c?c.prompt:'';scroll.appendChild(u);
+    (c?c.steps:[]).forEach(function(s){
+      var st=document.createElement('div');st.className='sim-step';
+      var head=document.createElement('div');head.className='sim-step-head';
+      head.innerHTML='<span class="chev">▼</span><span class="t">'+esc(s.t)+'</span>';
+      var body=document.createElement('div');body.className='sim-step-body';
+      body.innerHTML=esc(s.body)+(s.tool?'<span class="sim-tool"><span class="pulse"></span>'+esc(s.tool)+'</span>':'');
+      head.addEventListener('click',function(){st.classList.toggle('collapsed');});
+      st.appendChild(head);st.appendChild(body);scroll.appendChild(st);
+    });
+    scroll.scrollTop=0;
+  }
+  var modal=document.getElementById('report-modal'),mframe=document.getElementById('modal-frame'),mArtTitle=document.getElementById('sim-art-title');
   var currentId=null;
-  function openModal(id,title){currentId=id;mtitle.textContent=(title||'Report')+' — example';mframe.onload=function(){try{mframe.contentWindow.scrollTo(0,0);}catch(e){}};mframe.srcdoc=reportHTML(id);modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function openModal(id){
+    currentId=id;renderChat(id);
+    mArtTitle.textContent=id.replace('rpt-','')+' · HTML';
+    mframe.onload=function(){try{mframe.contentWindow.scrollTo(0,0);}catch(e){}};
+    mframe.srcdoc=reportHTML(id);
+    modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+    document.getElementById('sim-scroll').scrollTop=0;
+  }
   function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');mframe.srcdoc='';document.body.style.overflow='';currentId=null;}
-  function titleFor(el){var card=el.closest('.card');var h=card?card.querySelector('.card-head h3'):null;return h?h.textContent:'Report';}
-  document.querySelectorAll('.open-full').forEach(function(b){b.addEventListener('click',function(){openModal(b.getAttribute('data-report'),titleFor(b));});});
-  document.querySelectorAll('.preview[data-report]').forEach(function(p){p.addEventListener('click',function(){openModal(p.getAttribute('data-report'),titleFor(p));});});
+  document.querySelectorAll('.open-full').forEach(function(b){b.addEventListener('click',function(){openModal(b.getAttribute('data-report'));});});
+  document.querySelectorAll('.preview[data-report]').forEach(function(p){p.addEventListener('click',function(){openModal(p.getAttribute('data-report'));});});
   document.getElementById('modal-close').addEventListener('click',closeModal);
   document.getElementById('modal-download').addEventListener('click',function(){if(currentId)downloadReport(currentId);});
+  var mc=document.getElementById('modal-copy');if(mc){mc.addEventListener('click',function(){if(currentId)copyText(reportHTML(currentId),mc);});}
   modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closeModal();});
 })();
