@@ -1,6 +1,6 @@
 ---
 name: my-performance
-description: Generate a partner's own performance scorecard with one customer — their EULER health score (0–100), key stats (revenue, deals, commissions, referrals), and the single biggest thing to improve — using EULER MCP tools. Use this skill whenever a partner wants their personal performance read — phrases like "how am I doing", "my performance", "my numbers", "my partner scorecard", "how's my pipeline", "am I on track with <customer>". Partner-facing (a partner viewing their OWN numbers), NOT a customer admin reviewing partners — that distinction selects this over generate-qbr / portfolio-pulse.
+description: Generate a partner's own performance scorecard with one customer — their EULER health score (0–100), key stats (revenue, deals, commissions, referrals), and the single biggest thing to improve — using EULER MCP tools. Use this skill whenever a partner wants their personal performance read — phrases like "how am I doing", "my performance", "my numbers", "my partner scorecard", "how's my pipeline", "am I on track this quarter". Partner-facing (a partner viewing their OWN numbers), NOT a customer admin reviewing partners — that distinction selects this over generate-qbr / portfolio-pulse.
 ---
 
 # my-performance — your performance scorecard

@@ -1,6 +1,6 @@
 ---
 name: submit-a-referral
-description: Submit a new referral or deal registration on behalf of a partner through chat — fetches the partner's referral form, collects the answers, and sends it via EULER MCP tools. Use this skill whenever a partner wants to register/submit a referral or deal — phrases like "submit a referral", "register a deal", "send a new referral", "I want to refer a company", "register <company> as a deal". Partner-facing write action (only a partner can submit their own referrals — a customer admin cannot).
+description: Submit a new referral or deal registration on behalf of a partner through chat — fetches the partner's referral form, collects the answers, and sends it via EULER MCP tools. Use this skill whenever a partner wants to register/submit a referral or deal — phrases like "submit a referral", "register a deal", "send a new referral", "I want to refer a company", "register a company as a deal". Partner-facing write action (only a partner can submit their own referrals — a customer admin cannot).
 ---
 
 # submit-a-referral — register a referral through chat
