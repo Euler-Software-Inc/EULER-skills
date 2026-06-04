@@ -1,6 +1,6 @@
 ---
 name: my-tracking-links
-description: Create and list a partner's own affiliate tracking links with one customer — wraps a destination URL with an auto-generated tracking id — using EULER MCP tools. Use this skill whenever a partner wants a tracking/affiliate link — phrases like "create a tracking link", "make me an affiliate link", "my tracking links", "a link for my <campaign> campaign", "track this URL". Partner-facing (a partner managing their OWN links).
+description: Create and list a partner's own affiliate tracking links with one customer — wraps a destination URL with an auto-generated tracking id — using EULER MCP tools. Use this skill whenever a partner wants a tracking/affiliate link — phrases like "create a tracking link", "make me an affiliate link", "my tracking links", "a link for my campaign", "track this URL". Partner-facing (a partner managing their OWN links).
 ---
 
 # my-tracking-links — your affiliate tracking links

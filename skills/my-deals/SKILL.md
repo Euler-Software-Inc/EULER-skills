@@ -1,6 +1,6 @@
 ---
 name: my-deals
-description: Show a partner's own deal pipeline with one customer — open deals by stage with amounts, plus closed-won/lost — using EULER MCP tools. Use this skill whenever a partner wants their deals view — phrases like "my deals", "my pipeline", "what deals do I have open", "my deal pipeline", "look up my <deal name> deal". Partner-facing (a partner viewing their OWN deals); for a full self scorecard use my-performance, for a customer admin's review use generate-qbr.
+description: Show a partner's own deal pipeline with one customer — open deals by stage with amounts, plus closed-won/lost — using EULER MCP tools. Use this skill whenever a partner wants their deals view — phrases like "my deals", "my pipeline", "what deals do I have open", "my deal pipeline", "look up a deal by name". Partner-facing (a partner viewing their OWN deals); for a full self scorecard use my-performance, for a customer admin's review use generate-qbr.
 ---
 
 # my-deals — your deal pipeline
