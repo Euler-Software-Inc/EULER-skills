@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "euler",
   "displayName": "EULER",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "Skills that orchestrate the EULER MCP tools for partner-relationship workflows — QBR generation, pre-meeting partner briefings, and more. Self-contained HTML output styled with the EULER design system.",
   "author": {
     "name": "EULER Software Inc.",

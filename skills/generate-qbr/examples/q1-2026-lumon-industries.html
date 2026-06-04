@@ -3,444 +3,431 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lumon Industries — Q1 2026</title>
+<title>Lumon Industries — Q1 2026 Business Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* generate-qbr — Euler design system, modern report treatment
+ * Goals: LIGHTWEIGHT (fast first paint) + MOBILE-FIRST responsive.
+ * - No JS, no images, no external assets except the two web fonts (brand
+ *   shown as a text wordmark — the remote logo SVG renders broken in Claude).
+ * - Web fonts (Inter + JetBrains Mono) load with display=swap and a system
+ *   fallback, so text paints instantly and never blocks open. Pair with
+ *   <link rel="preconnect"> in <head> (see template.html).
+ * - Fluid type via clamp() → scales across phones→desktop with few breakpoints.
+ * Tokens are the Euler design system. Used only by generate-qbr.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --white: #FEFEFE; --black: #030303;
-  --brand-50: #F1F5FE; --brand-100: #DEE8FC; --brand-500: #5283EF; --brand-600: #2563EB; --brand-700: #124CC9;
-  --gray-50: #FEFEFE; --gray-100: #F6F7F8; --gray-200: #EEEFF1; --gray-300: #D7DADF;
-  --gray-400: #B1B5BE; --gray-500: #9196A1; --gray-600: #707C8F; --gray-700: #546078;
-  --gray-800: #3F495A; --gray-900: #2A2F3C; --gray-950: #15171E;
-  --success-50: #EFFAF6; --success-500: #2D9F75; --success-700: #155B42;
-  --warning-50: #FEF7EC; --warning-500: #D8901D; --warning-700: #8D5216;
-  --error-50: #FFF0F1; --error-500: #D32836; --error-700: #AC1622;
+  /* Brand */
+  --brand-50:#F1F5FE; --brand-100:#DEE8FC; --brand-200:#C2D3FA; --brand-300:#B0C6F8;
+  --brand-400:#81A5F3; --brand-500:#5283EF; --brand-600:#2563EB; --brand-700:#124CC9;
+  --brand-800:#0E3A9A; --brand-900:#0A286B; --brand-950:#06173D;
+  /* Gray */
+  --gray-50:#FEFEFE; --gray-100:#F6F7F8; --gray-200:#EEEFF1; --gray-300:#D7DADF;
+  --gray-400:#B1B5BE; --gray-500:#9196A1; --gray-600:#707C8F; --gray-700:#546078;
+  --gray-800:#3F495A; --gray-900:#2A2F3C; --gray-950:#15171E;
+  /* Status */
+  --error-50:#FFF0F1; --error-100:#FFCCD0; --error-500:#D32836; --error-600:#BE1826; --error-700:#AC1622;
+  --warning-50:#FEF7EC; --warning-100:#FCEBCF; --warning-500:#D8901D; --warning-600:#B0661C; --warning-700:#8D5216;
+  --success-50:#EFFAF6; --success-100:#DAF7EA; --success-500:#2D9F75; --success-600:#247F5E; --success-700:#155B42;
+  /* Utility accents */
+  --violet-50:#FAF8FB; --violet-500:#8F6DB0; --violet-700:#422E56;
+  --cyan-50:#ECFDFF; --cyan-500:#16B7CA; --cyan-700:#0E7481;
+  --pink-50:#FDF1FA; --pink-500:#EC51BD; --pink-700:#C11574;
+
+  --white:#FEFEFE;
+  /* JetBrains Mono when loaded; instant system-mono fallback so nothing waits */
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
   --shadow-xs: 0 0 4px -1px rgba(75,75,88,0.06), 0 1px 8px -1px rgba(75,75,88,0.06);
+  --shadow-sm: 0 1px 6px -1px rgba(74,74,88,0.08), 0 2px 8px -2px rgba(75,75,88,0.06);
   --shadow-md: 0 1px 8px -2px rgba(74,74,88,0.12), 0 4px 10px -4px rgba(74,74,88,0.08);
-  --radius-xs: 4px; --radius-md: 8px; --radius-lg: 10px; --radius-xl: 12px; --radius-full: 9999px;
+  --shadow-xl: 0 4px 16px -8px rgba(74,74,88,0.12), 0 8px 20px -10px rgba(74,74,88,0.10);
 }
 
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
+*,*::before,*::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 14px; line-height: 20px; color: var(--gray-950); background: var(--gray-100);
-  padding: 48px 20px;
-  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px; line-height: 1.5;
+  color: var(--gray-950); background: var(--gray-100);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
-.container {
-  position: relative; max-width: 820px; margin: 0 auto; background: var(--white);
-  border: 1px solid var(--gray-200); border-radius: var(--radius-xl);
-  padding: 48px 56px; box-shadow: var(--shadow-md); overflow: hidden;
+img { max-width: 100%; height: auto; }
+/* Fluid gutter: 16px on phones → 24px on desktop */
+.container { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 24px); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* ─── Topbar ─── */
+.topbar {
+  background: rgba(254,254,254,0.92); border-bottom: 1px solid var(--gray-200);
+  padding: 14px 0; position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px);
 }
-.container::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0;
-  height: 4px; background: linear-gradient(90deg, var(--brand-600) 0%, var(--brand-500) 100%);
+.topbar-inner { display: flex; align-items: center; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand-mark { font-weight: 700; font-size: 17px; letter-spacing: -0.01em; color: var(--brand-600); }
+.brand-divider { width: 1px; height: 22px; background: var(--gray-200); flex-shrink: 0; }
+.brand-label {
+  font-size: 12px; font-weight: 600; color: var(--gray-600);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.header { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--gray-200); }
-h1 {
-  font-family: 'Inter', sans-serif;
-  font-size: 28px; line-height: 38px; font-weight: 600; letter-spacing: -0.01em;
-  color: var(--gray-950); margin: 0 0 14px 0;
+
+/* ─── Hero ─── */
+.hero {
+  padding: clamp(36px, 7vw, 56px) 0 clamp(28px, 6vw, 44px);
+  background: linear-gradient(180deg, var(--white) 0%, var(--gray-100) 100%);
+  border-bottom: 1px solid var(--gray-200);
 }
-.meta {
-  display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
-  font-size: 14px; line-height: 20px; color: var(--gray-600);
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--brand-50); color: var(--brand-700);
+  padding: 6px 12px; border-radius: 9999px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase;
+  margin-bottom: 18px;
 }
-.meta-separator { color: var(--gray-400); }
-.status-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 2px 10px; border-radius: var(--radius-full);
-  font-size: 12px; line-height: 18px; font-weight: 600;
-  white-space: nowrap; border: 1px solid transparent;
+.hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brand-600); flex-shrink: 0; }
+.hero-eyebrow.amber { background: var(--warning-50); color: var(--warning-700); }
+.hero-eyebrow.amber .dot { background: var(--warning-500); }
+.hero-eyebrow.red { background: var(--error-50); color: var(--error-700); }
+.hero-eyebrow.red .dot { background: var(--error-500); }
+.hero h1 {
+  font-size: clamp(26px, 6vw, 40px); line-height: 1.14; font-weight: 700;
+  letter-spacing: -0.02em; margin: 0 0 14px; color: var(--gray-950); max-width: 820px;
 }
+.hero h1 .accent {
+  background: linear-gradient(90deg, var(--brand-600), var(--brand-500));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero p { font-size: clamp(15px, 2.4vw, 17px); line-height: 1.6; color: var(--gray-600); margin: 0; max-width: 760px; }
+
+/* Quick facts (auto-collapses to 1 col on phones) */
+.quick-facts {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px; margin-top: clamp(24px, 5vw, 32px);
+}
+.fact {
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: 14px; padding: 18px; box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+.fact:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--brand-200); }
+.fact-label { font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+.fact-value { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: clamp(22px, 5vw, 28px); font-weight: 500; color: var(--gray-950); line-height: 1.1; letter-spacing: -0.02em; }
+.fact-sub { font-size: 12.5px; color: var(--gray-600); margin-top: 8px; line-height: 1.4; }
+
+/* ─── Sections ─── */
+section { padding: clamp(32px, 6vw, 48px) 0; }
+.section-header { margin-bottom: clamp(20px, 4vw, 28px); max-width: 760px; }
+.section-eyebrow { font-size: 12px; font-weight: 700; color: var(--brand-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.section-title { font-size: clamp(21px, 4.5vw, 26px); font-weight: 700; letter-spacing: -0.01em; margin: 0 0 8px; color: var(--gray-950); }
+.section-subtitle { font-size: clamp(14px, 2.2vw, 16px); color: var(--gray-600); margin: 0; line-height: 1.6; }
+
+/* ─── Spotlight panel ─── */
+.spotlight {
+  border-radius: 20px; padding: clamp(24px, 5vw, 36px); color: var(--white);
+  position: relative; overflow: hidden; box-shadow: var(--shadow-xl);
+  background: linear-gradient(135deg, var(--brand-950) 0%, var(--brand-800) 100%);
+}
+.spotlight.amber { background: linear-gradient(135deg, #5A3A0E 0%, var(--warning-700) 100%); }
+.spotlight.red   { background: linear-gradient(135deg, #5C0F18 0%, var(--error-700) 100%); }
+.spotlight::before { content:''; position:absolute; top:-120px; right:-100px; width:320px; height:320px; border-radius:50%; background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, transparent 70%); }
+.spotlight-inner { position: relative; z-index: 1; }
+.spotlight-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); color: var(--white);
+  padding: 5px 11px; border-radius: 9999px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 16px;
+}
+.spotlight h2 { font-size: clamp(19px, 4vw, 24px); font-weight: 700; margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.3; }
+.spotlight p { margin: 0; color: rgba(254,254,254,0.78); font-size: clamp(14px, 2.2vw, 15px); line-height: 1.65; max-width: 760px; }
+.spotlight .num { font-family: var(--mono); background: rgba(255,255,255,0.14); padding: 1px 7px; border-radius: 5px; font-size: 0.92em; }
+
+/* ─── Status pills ─── */
+.status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 11px; border-radius: 9999px; font-size: 12px; line-height: 18px; font-weight: 600; white-space: nowrap; border: 1px solid transparent; }
 .status-pill.green { background: var(--success-50); color: var(--success-700); border-color: #C7EAD8; }
 .status-pill.amber { background: var(--warning-50); color: var(--warning-700); border-color: #FBE4BC; }
-.status-pill.red   { background: var(--error-50);   color: var(--error-700);   border-color: #FFCED4; }
-.status-pill.gray  { background: var(--gray-100);   color: var(--gray-700);    border-color: var(--gray-300); }
+.status-pill.red   { background: var(--error-50); color: var(--error-700); border-color: #FFCED4; }
+.status-pill.gray  { background: var(--gray-100); color: var(--gray-700); border-color: var(--gray-300); }
+.status-pill.violet{ background: var(--violet-50); color: var(--violet-700); border-color: #E0D7EA; }
 
-.data-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 2px 9px; border-radius: var(--radius-full);
-  font-size: 11px; line-height: 16px; font-weight: 600;
-  white-space: nowrap; border: 1px solid transparent; cursor: default;
-}
-.data-pill::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%; display: inline-block;
-}
-.data-pill.complete { background: var(--success-50); color: var(--success-700); border-color: #C7EAD8; }
-.data-pill.complete::before { background: var(--success-500); }
-.data-pill.partial  { background: var(--warning-50); color: var(--warning-700); border-color: #FBE4BC; }
-.data-pill.partial::before { background: var(--warning-500); }
-.data-pill.stale    { background: var(--gray-100); color: var(--gray-700); border-color: var(--gray-300); }
-.data-pill.stale::before { background: var(--gray-500); }
-
-.tldr {
-  margin: 28px 0; padding: 22px 26px; border-radius: var(--radius-lg);
-  background: var(--gray-50); border: 1px solid var(--gray-200);
-  border-left-width: 3px; border-left-color: var(--gray-500);
-}
-.tldr.green { background: var(--success-50); border-color: #C7EAD8; border-left-color: var(--success-500); }
-.tldr.amber { background: var(--warning-50); border-color: #FBE4BC; border-left-color: var(--warning-500); }
-.tldr.red   { background: var(--error-50);   border-color: #FFCED4; border-left-color: var(--error-500); }
-.tldr-headline {
-  font-size: 16px; line-height: 24px; font-weight: 600; margin: 0 0 10px 0;
-  color: var(--gray-950); letter-spacing: -0.005em;
-}
-.tldr-body { font-size: 14px; line-height: 22px; margin: 0; color: var(--gray-800); }
-.tldr-cta {
-  font-size: 14px; line-height: 22px; margin: 14px 0 0 0;
-  padding-top: 12px; border-top: 1px dashed rgba(21,23,30,0.10);
-  color: var(--gray-800);
-}
-.tldr-cta strong { font-weight: 600; color: var(--gray-950); }
-
-h2 {
-  font-size: 11px; line-height: 18px; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--gray-500); margin: 32px 0 12px 0;
-}
-h2:first-of-type { margin-top: 0; }
-.section-prose { font-size: 14px; line-height: 22px; color: var(--gray-800); margin: 0; }
-ul { margin: 8px 0; padding-left: 22px; }
-li { margin-bottom: 8px; line-height: 22px; color: var(--gray-800); }
-li::marker { color: var(--gray-400); }
-li strong { color: var(--gray-950); font-weight: 600; }
-
-table {
-  width: 100%; border-collapse: separate; border-spacing: 0;
-  margin: 12px 0 20px 0; font-size: 13px; background: var(--white);
-  border: 1px solid var(--gray-200); border-radius: var(--radius-md); overflow: hidden;
-}
-th {
-  text-align: left; font-weight: 600; color: var(--gray-600);
-  font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
-  padding: 10px 14px; border-bottom: 1px solid var(--gray-200); background: var(--gray-100);
-}
-td {
-  padding: 14px; border-bottom: 1px solid var(--gray-200); vertical-align: top;
-  line-height: 20px; color: var(--gray-800);
-}
+/* ─── Leaderboard table (scrolls horizontally on narrow screens) ─── */
+.table-wrap { background: var(--white); border: 1px solid var(--gray-200); border-radius: 16px; box-shadow: var(--shadow-sm); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; min-width: 440px; }
+th { text-align: left; font-weight: 600; color: var(--gray-600); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 14px 16px; border-bottom: 1px solid var(--gray-200); background: var(--gray-100); }
+th.numeric { text-align: right; }
+td { padding: 14px 16px; border-bottom: 1px solid var(--gray-200); vertical-align: middle; color: var(--gray-800); }
 tr:last-child td { border-bottom: none; }
-td.numeric { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--gray-700); font-weight: 500; }
+tbody tr { transition: background 0.12s ease; }
+tbody tr:hover { background: var(--gray-50); }
+td.numeric { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; color: var(--gray-700); }
 td strong { color: var(--gray-950); font-weight: 600; }
-td .note { margin-top: 4px; font-size: 12px; line-height: 18px; color: var(--gray-600); font-style: normal; }
-td .impact {
-  display: block; margin-top: 6px; font-size: 12px; line-height: 18px;
-  color: var(--brand-700); font-weight: 500;
-}
-.prio-badge {
-  display: inline-block; padding: 3px 9px; border-radius: var(--radius-xs);
-  font-weight: 700; font-size: 11px; line-height: 14px; letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-}
-.prio-badge.p0 { background: var(--error-50);   color: var(--error-700);   border: 1px solid #FFCED4; }
-.prio-badge.p1 { background: var(--warning-50); color: var(--warning-700); border: 1px solid #FBE4BC; }
-.prio-badge.p2 { background: var(--gray-100);   color: var(--gray-700);    border: 1px solid var(--gray-300); }
+.rank { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 8px; font-family: var(--mono); font-size: 12px; font-weight: 600; background: var(--gray-100); color: var(--gray-700); }
+.rank.top { background: var(--brand-600); color: var(--white); }
+.cell-note { font-size: 12px; color: var(--gray-500); margin-top: 4px; line-height: 1.4; }
 
-.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 12px 0 20px 0; }
-@media (min-width: 600px) { .stats-grid.cols-3 { grid-template-columns: repeat(3, 1fr); } }
-.stat {
-  padding: 16px 18px; background: var(--white); border: 1px solid var(--gray-200);
-  border-radius: var(--radius-md); box-shadow: var(--shadow-xs);
-}
-.stat-label {
-  font-size: 11px; text-transform: uppercase; color: var(--gray-500);
-  letter-spacing: 0.06em; margin-bottom: 8px; font-weight: 600;
-}
-.stat-value {
-  font-size: 22px; line-height: 28px; font-weight: 600;
-  font-variant-numeric: tabular-nums; letter-spacing: -0.015em; color: var(--gray-950);
-}
-.stat-sub { font-size: 12px; line-height: 16px; color: var(--gray-600); margin-top: 6px; }
+/* ─── Needs-attention rows (stack on phones) ─── */
+.attention { display: flex; flex-direction: column; gap: 12px; }
+.att-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: var(--white); border: 1px solid var(--gray-200); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow-xs); transition: box-shadow 0.15s ease, transform 0.15s ease; }
+.att-row:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); border-color: var(--brand-200); }
+.att-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 220px; }
+.att-name { font-weight: 600; color: var(--gray-950); }
+.att-meta { color: var(--gray-600); font-size: 13px; text-align: right; line-height: 1.45; flex: 1 1 200px; }
+.att-meta code, .att-meta .mono { font-family: var(--mono); font-size: 12px; background: var(--gray-100); color: var(--brand-700); padding: 1px 6px; border-radius: 4px; }
 
-.sparkline { display: block; margin-top: 10px; overflow: visible; }
-.sparkline polyline { stroke: var(--brand-600); stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.sparkline .spark-fill { fill: var(--brand-100); opacity: 0.5; stroke: none; }
-.sparkline .spark-dot { fill: var(--brand-600); }
-.sparkline-labels {
-  display: flex; justify-content: space-between;
-  font-size: 9px; color: var(--gray-400); margin-top: 3px;
-  font-variant-numeric: tabular-nums; letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
+/* ─── Distribution chips ─── */
+.dist { display: flex; flex-wrap: wrap; gap: 10px; }
+.dist-chip { display: inline-flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px; padding: 10px 14px; box-shadow: var(--shadow-xs); }
+.dist-chip .swatch { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.dist-chip .k { font-size: 13px; color: var(--gray-700); font-weight: 500; }
+.dist-chip .v { font-family: var(--mono); font-weight: 600; color: var(--gray-950); }
+.swatch.green { background: var(--success-500); } .swatch.amber { background: var(--warning-500); }
+.swatch.brand { background: var(--brand-500); } .swatch.gray { background: var(--gray-400); }
+.swatch.violet { background: var(--violet-500); } .swatch.cyan { background: var(--cyan-500); }
 
-.delta {
-  display: inline-flex; align-items: center; gap: 3px;
-  font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums;
-  margin-top: 6px; padding: 2px 7px; border-radius: var(--radius-xs);
-  letter-spacing: 0.01em;
-}
-.delta.up   { background: var(--success-50); color: var(--success-700); }
-.delta.down { background: var(--error-50);   color: var(--error-700); }
-.delta.flat { background: var(--gray-100);   color: var(--gray-600); }
+/* ─── Data confidence pill + notes ─── */
+.data-pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; line-height: 16px; font-weight: 600; white-space: nowrap; border: 1px solid transparent; }
+.data-pill::before { content:''; width:6px; height:6px; border-radius:50%; display:inline-block; }
+.data-pill.complete { background: var(--success-50); color: var(--success-700); border-color:#C7EAD8; }
+.data-pill.complete::before { background: var(--success-500); }
+.data-pill.partial { background: var(--warning-50); color: var(--warning-700); border-color:#FBE4BC; }
+.data-pill.partial::before { background: var(--warning-500); }
+.data-pill.stale { background: var(--gray-100); color: var(--gray-700); border-color: var(--gray-300); }
+.data-pill.stale::before { background: var(--gray-500); }
+.note { font-size: 12.5px; line-height: 1.55; color: var(--gray-500); margin: 12px 0 0; }
+.note code { font-family: var(--mono); background: var(--gray-100); color: var(--brand-700); padding:1px 5px; border-radius:4px; }
 
-.row {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--gray-200);
-}
-.row:last-child { border-bottom: none; }
-.row-name {
-  font-weight: 500; color: var(--gray-900);
-  display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
-}
-.row-meta { color: var(--gray-600); font-size: 13px; line-height: 18px; }
-.row-amount {
-  font-variant-numeric: tabular-nums; color: var(--gray-950);
-  font-size: 13px; font-weight: 600; white-space: nowrap;
-}
-.row-aging {
-  font-size: 11px; color: var(--warning-700); font-weight: 600;
-  background: var(--warning-50); padding: 2px 7px; border-radius: var(--radius-xs);
-  margin-left: 8px;
-}
+/* ─── Progress bar (onboarding / completion) ─── */
+.progress { height: 8px; background: var(--gray-200); border-radius: 9999px; overflow: hidden; margin: 6px 0 12px; }
+.progress > .bar { height: 100%; width: 0; background: var(--brand-600); border-radius: 9999px; }
+.progress.green > .bar { background: var(--success-500); }
+.progress.amber > .bar { background: var(--warning-500); }
+.progress.red   > .bar { background: var(--error-500); }
 
-.note { font-size: 12px; line-height: 18px; color: var(--gray-500); font-style: italic; margin: 8px 0 0 0; }
+/* ─── Footer ─── */
+footer { background: var(--gray-950); color: var(--gray-400); padding: 32px 0; margin-top: clamp(40px, 8vw, 56px); }
+.footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.footer-inner p { margin: 0; font-size: 13px; }
+.footer-mark { font-weight: 700; font-size: 16px; letter-spacing: -0.01em; color: var(--white); }
+.footer-inner .mono { color: var(--gray-500); }
 
+/* ─── Print ─── */
 @media print {
-  body { background: white; padding: 0; font-size: 11px; }
-  .container { box-shadow: none; border: none; border-radius: 0; padding: 28px; max-width: none; }
-  .container::before { display: none; }
-  h2 { margin-top: 22px; }
-  .tldr, tr, .stat, .row { break-inside: avoid; }
-  .stat { box-shadow: none; }
+  body { background: white; }
+  .topbar { position: static; }
+  .fact:hover, .att-row:hover, tbody tr:hover { box-shadow: var(--shadow-xs); transform: none; background: none; }
+  .spotlight, .att-row, .fact, tr { break-inside: avoid; }
+  footer { background: none; color: var(--gray-600); }
+  .footer-mark { color: var(--gray-950); }
 }
 </style>
 </head>
 <body>
 
-<div class="container">
-
-  <div class="header">
-    <h1>Lumon Industries — Q1 2026</h1>
-    <div class="meta">
-      <span class="status-pill amber">🟡 Watch</span>
-      <span class="data-pill complete" title="All 12 data sources fetched successfully">Data: complete</span>
-      <span class="meta-separator">·</span>
-      <span>Period: 2026-01-01 to 2026-03-31</span>
-      <span class="meta-separator">·</span>
-      <span>Partner status: Onboarding</span>
+<!-- ─── Topbar (text wordmark — no image) ─── -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">Euler</span>
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-label">Q1 2026 Review · Lumon Industries</span>
     </div>
   </div>
+</header>
 
-  <div class="tldr amber">
-    <p class="tldr-headline">Onboarding partner sitting on Active-tier production — $27,685 in influenced Closed Won this quarter, $120K lifetime, complete agreement set — but no sourced deals and no new direct revenue in Q1.</p>
-    <p class="tldr-body">Lumon influenced 9 Closed Won deals worth $27,685 in Q1 2026 (Yeti $5K, Peloton $4.8K, Outdoor Voices $4.5K, Patagonia $3.8K, Glossier $3.2K, Under Armour $2K, Stance $1.6K, Warby Parker $1.5K, Allbirds $1.25K) — yet sourced zero deals of their own. Status remains Onboarding despite being one of only 2 Onboarding partners across Martus's 42-partner portfolio. Foundational agreements (Standard Agency, MNDA, Standard Affiliate) all signed; 2 additional Affiliate Agreements still Pending.</p>
-    <p class="tldr-cta"><strong>Recommended next step:</strong> promote Lumon from Onboarding to Active and shift the conversation toward sourced deals — they're clearly capable of influence but haven't originated.</p>
-  </div>
+<!-- ─── Hero + quick facts ─── -->
+<!-- Band = Ramping (status Onboarding) → default brand tone (no amber/red) -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-eyebrow"><span class="dot" aria-hidden="true"></span>Q1 2026 · Ramping · Health 67/100</span>
+    <h1>Lumon Industries — <span class="accent">Q1 2026</span></h1>
+    <p>Onboarding partner already carrying Active-tier production — $115K lifetime closed-won and a complete agreement set, with no new direct closes booked this quarter. <span class="data-pill complete">Complete data</span></p>
 
-  <h2>What happened in Q1</h2>
-  <p class="section-prose">
-    Lumon's direct revenue line (sourced deals) was zero in Q1 2026 — matching Q4 2025 and continuing a pattern: their last booked deal was a $352 close in Q2 2025. But influenced deals tell a different story: 10 deals attributed to Lumon's involvement, 9 of which closed-won, totaling $27,685. The largest individual influence was Yeti at $5,000. Pipeline carries Acme at $50K still in Stage 1 (sitting there for 346 days — last touched ~June 2025) and a fresh Closed Won on Everest at $10K from earlier this month. Eight new referrals landed in early Q2 2026 (post-period) including two that hit CRM-write errors awaiting your manual entry.
-  </p>
-
-  <h2>Key numbers</h2>
-  <div class="stats-grid cols-3">
-    <div class="stat">
-      <div class="stat-label">Influenced Closed-Won (Q1)</div>
-      <div class="stat-value">$27,685</div>
-      <div class="stat-sub">9 deals · 1 Negotiating ($1,888)</div>
-      <span class="delta up">NEW</span>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Sourced deals (Q1)</div>
-      <div class="stat-value">0</div>
-      <div class="stat-sub">No partner-originated deals this quarter</div>
-      <span class="delta flat">→ same as Q4 2025</span>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Billings revenue (Q1)</div>
-      <div class="stat-value">$0</div>
-      <svg class="sparkline" width="100%" height="28" viewBox="0 0 100 28" preserveAspectRatio="none">
-        <polygon class="spark-fill" points="0,27.99 25,0 50,27.84 75,28 100,28 100,28 0,28"/>
-        <polyline points="0,27.99 25,0 50,27.84 75,28 100,28"/>
-        <circle class="spark-dot" cx="100" cy="28" r="2.5"/>
-      </svg>
-      <div class="sparkline-labels"><span>Q1 25</span><span>Q1 26</span></div>
-      <div class="stat-sub">5-Q trend: $90 → <strong>$340K</strong> → $2.3K → $0 → $0</div>
+    <!-- Period headline metrics. Win rate fact OMITTED — 0 deals closed in Q1
+         (zero-denominator collapse: never render "0.00%"). -->
+    <div class="quick-facts">
+      <div class="fact">
+        <div class="fact-label">Closed-won (Q1)</div>
+        <div class="fact-value">$0</div>
+        <div class="fact-sub">No deals booked in the period</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Deals closed</div>
+        <div class="fact-value">0</div>
+        <div class="fact-sub">Onboarding — zero closes is on-track</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Closed-won (lifetime)</div>
+        <div class="fact-value">$115,396</div>
+        <div class="fact-sub">5 real deals · Acme $100K leads</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Commissions paid</div>
+        <div class="fact-value">$0</div>
+        <div class="fact-sub">No payouts in the period</div>
+      </div>
     </div>
   </div>
+</section>
 
-  <h2>What needs to happen in Q2</h2>
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 56px;">Prio</th>
-        <th>Action</th>
-        <th style="width: 140px;">Owner</th>
-        <th style="width: 110px;">Due</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="prio-badge p0">P0</span></td>
-        <td>
-          <strong>Tier review — promote Lumon to Active</strong>
-          <div class="note">Status mismatch: only 2 Onboarding partners of 42, but Lumon influenced $27.7K of revenue this quarter alone.</div>
-          <span class="impact">Impact: aligns commission rate + contractual expectations with $120K lifetime production. Unlocks the "sourced vs influenced" coaching conversation.</span>
-        </td>
-        <td>Partner Manager</td>
-        <td class="numeric">2026-06-07</td>
-      </tr>
-      <tr>
-        <td><span class="prio-badge p0">P0</span></td>
-        <td>
-          <strong>Sign 2 pending Standard Affiliate Agreements</strong>
-          <div class="note">Both unsigned despite the original Standard Affiliate Agreement signed Feb 2025.</div>
-          <span class="impact">Impact: removes operational friction. The $58.3K open pipeline (Acme $50K leading) can't fully advance under partial agreements.</span>
-        </td>
-        <td>Partner Manager</td>
-        <td class="numeric">2026-06-14</td>
-      </tr>
-      <tr>
-        <td><span class="prio-badge p1">P1</span></td>
-        <td>
-          <strong>Triage 7 pending early-Q2 referrals + resolve 2 CRM errors</strong>
-          <div class="note">Sierra and LLK referrals returned "Error creating deal in crm". Plus duplicate Ace Corp entries and a self-referral ("lumon industries") to clean.</div>
-          <span class="impact">Impact: 7 referrals × Lumon's avg influenced ACV of ~$3,076 ≈ $21,500 potential pipeline waiting on your decision.</span>
-        </td>
-        <td>Partner Manager</td>
-        <td class="numeric">2026-06-10</td>
-      </tr>
-      <tr>
-        <td><span class="prio-badge p1">P1</span></td>
-        <td>
-          <strong>Push or disqualify Acme ($50K, Stage 1 for 346 days)</strong>
-          <div class="note">Sitting in Stage 1 since ~Jun 2025. Largest open deal in the pipeline by 12.5×.</div>
-          <span class="impact">Impact: $50K largest open deal stalled for nearly a year. Either resurrect or remove from forecast — keeping it inflates pipeline metrics misleadingly.</span>
-        </td>
-        <td>Partner-side</td>
-        <td class="numeric">2026-06-14</td>
-      </tr>
-      <tr>
-        <td><span class="prio-badge p2">P2</span></td>
-        <td>
-          <strong>Clear 942-day-old Demo-stage deals (Oatmeal Chocolate Chip, No bake)</strong>
-          <div class="note">$1,500 of combined zombie pipeline. Likely test/staging data given dessert-themed names.</div>
-          <span class="impact">Impact: cleans forecast by removing 2.6-year-old artifacts. Cosmetic but important for accurate reporting.</span>
-        </td>
-        <td>Partner Manager</td>
-        <td class="numeric">2026-06-30</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h2>Influenced deals (Q1 2026)</h2>
-  <p class="section-prose">10 deals attributed to Lumon's involvement, 9 closed-won. Top 5:</p>
-  <div class="row">
-    <span class="row-name">Yeti</span>
-    <span class="row-meta">Closed Won</span>
-    <span class="row-amount">$5,000</span>
-  </div>
-  <div class="row">
-    <span class="row-name">Peloton</span>
-    <span class="row-meta">Closed Won</span>
-    <span class="row-amount">$4,789</span>
-  </div>
-  <div class="row">
-    <span class="row-name">Outdoor Voices</span>
-    <span class="row-meta">Closed Won</span>
-    <span class="row-amount">$4,500</span>
-  </div>
-  <div class="row">
-    <span class="row-name">Patagonia</span>
-    <span class="row-meta">Closed Won</span>
-    <span class="row-amount">$3,845</span>
-  </div>
-  <div class="row">
-    <span class="row-name">Glossier</span>
-    <span class="row-meta">Closed Won</span>
-    <span class="row-amount">$3,200</span>
-  </div>
-  <p class="note">+ 4 more closed-won under $2K (Under Armour, Stance, Warby Parker, Allbirds) and 1 in Negotiating (Levi's, $1,888)</p>
-
-  <h2>Open pipeline (lifetime)</h2>
-  <div class="stats-grid">
-    <div class="stat">
-      <div class="stat-label">Open pipeline (sourced)</div>
-      <div class="stat-value">$58,300</div>
-      <div class="stat-sub">10 deals · Acme $50K leading</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Closed-won (lifetime)</div>
-      <div class="stat-value">$119,896</div>
-      <div class="stat-sub">7 real deals · 4 test entries excluded ($699)</div>
+<!-- ─── Spotlight: the TL;DR / executive read (tone: default brand — Ramping) ─── -->
+<section style="padding-bottom:0">
+  <div class="container">
+    <div class="spotlight">
+      <div class="spotlight-inner">
+        <span class="spotlight-eyebrow">The read</span>
+        <h2>An Onboarding partner with the production record of an Active one.</h2>
+        <p>Lumon holds <span class="num">$115,396</span> in lifetime closed-won across 5 real deals — anchored by a <span class="num">$100,000</span> Acme close — plus <span class="num">$62,300</span> in open pipeline and <span class="num">18</span> lifetime referrals, yet still sits in Onboarding with zero Q1 closes on record. The biggest signal is that production already exists; the biggest risk is a status/coverage mismatch — two foundational agreement copies remain unsigned and several recent referrals look like test entries. Health <span class="num">67/100</span> is driven by Pipeline <span class="num">20/20</span> and Engagement <span class="num">19/20</span>, dragged by Production <span class="num">9/35</span> and Foundation <span class="num">9/15</span>; the band is Ramping (Onboarding status), so the number is not capped down. <strong>Recommended next step:</strong> run a tier review and promote Lumon from Onboarding to Active to match the lifetime production already on file.</p>
+      </div>
     </div>
   </div>
+</section>
 
-  <h2>Top open deals</h2>
-  <div class="row">
-    <span class="row-name">Acme <span class="row-aging">346 days in stage</span></span>
-    <span class="row-meta">Stage 1</span>
-    <span class="row-amount">$50,000</span>
-  </div>
-  <div class="row">
-    <span class="row-name">MailMasters</span>
-    <span class="row-meta">won <em>(unusual lowercase)</em></span>
-    <span class="row-amount">$4,000</span>
-  </div>
-  <div class="row">
-    <span class="row-name">Kodak</span>
-    <span class="row-meta">Negotiating</span>
-    <span class="row-amount">$3,000</span>
-  </div>
-  <div class="row">
-    <span class="row-name">The Coffee Shop</span>
-    <span class="row-meta">Qualification</span>
-    <span class="row-amount">$2,450</span>
-  </div>
-  <div class="row">
-    <span class="row-name">Chocolate Chip</span>
-    <span class="row-meta">Demo Scheduled</span>
-    <span class="row-amount">$1,250</span>
-  </div>
-  <p class="note">+ 5 more open deals under $1K (Oatmeal Chocolate Chip and No bake both 942 days in stage; lucas test 355 days; The Digit co Referral and Big Tree)</p>
-
-  <h2>Agreements</h2>
-  <div class="row">
-    <span class="row-name"><span class="status-pill green">🟢 Complete</span>Standard Agency Agreement</span>
-    <span class="row-meta">signed 2023-08-18</span>
-  </div>
-  <div class="row">
-    <span class="row-name"><span class="status-pill green">🟢 Complete</span>MNDA</span>
-    <span class="row-meta">signed 2023-08-01</span>
-  </div>
-  <div class="row">
-    <span class="row-name"><span class="status-pill green">🟢 Complete</span>Standard Affiliate Agreement</span>
-    <span class="row-meta">signed 2025-02-12</span>
-  </div>
-  <div class="row">
-    <span class="row-name"><span class="status-pill amber">🟡 Pending</span>Standard Agency Agreement</span>
-    <span class="row-meta">unsigned</span>
-  </div>
-  <div class="row">
-    <span class="row-name"><span class="status-pill amber">🟡 Pending</span>Standard Affiliate Agreement</span>
-    <span class="row-meta">unsigned</span>
-  </div>
-
-  <h2>Referrals (lifetime)</h2>
-  <div class="stats-grid cols-3">
-    <div class="stat">
-      <div class="stat-label">Total on record</div>
-      <div class="stat-value">18</div>
+<!-- ─── 01 · Next quarter (action items) ─── -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">01 · Next quarter</div>
+      <h2 class="section-title">What needs to happen in Q2</h2>
+      <p class="section-subtitle">Each item traces to a finding in the data. Priority pill: 🔴 P0 blocks revenue · 🟡 P1 material risk · ⚪ P2 hygiene.</p>
     </div>
-    <div class="stat">
-      <div class="stat-label">Pending review</div>
-      <div class="stat-value">11</div>
-      <div class="stat-sub">7 of these landed in early Q2 (post-period)</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Submitted in Q1</div>
-      <div class="stat-value">1</div>
-      <div class="stat-sub">"sss" — appears to be test</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Prio</th><th>Action</th><th>Owner</th><th class="numeric">Due</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="status-pill red">🔴 P0</span></td>
+            <td><strong>Tier review — promote Lumon from Onboarding to Active</strong><div class="cell-note">$115,396 lifetime closed-won and $62,300 open pipeline already exceed Active-tier expectations.</div></td>
+            <td>Partner Manager</td>
+            <td class="numeric">2026-04-14</td>
+          </tr>
+          <tr>
+            <td><span class="status-pill red">🔴 P0</span></td>
+            <td><strong>Sign the 2 pending Standard Affiliate / Agency Agreement copies</strong><div class="cell-note">Two foundational copies sit unsigned; the $62,300 open pipeline can't fully advance under partial coverage.</div></td>
+            <td>Partner Manager</td>
+            <td class="numeric">2026-04-14</td>
+          </tr>
+          <tr>
+            <td><span class="status-pill amber">🟡 P1</span></td>
+            <td><strong>Resolve the 2 CRM-write errors on recent referrals (Sierra, LLK)</strong><div class="cell-note">Both returned "Error creating deal in CRM" — referrals are stuck and won't convert until the write is fixed.</div></td>
+            <td>Partner Manager</td>
+            <td class="numeric">2026-04-28</td>
+          </tr>
+          <tr>
+            <td><span class="status-pill amber">🟡 P1</span></td>
+            <td><strong>Triage the early-Q2 referral surge — approve real prospects, reject duplicates</strong><div class="cell-note">7 new referrals landed (incl. duplicate Ace Corp and a Lumon self-referral) against an 18-strong lifetime base.</div></td>
+            <td>Partner Manager</td>
+            <td class="numeric">2026-04-28</td>
+          </tr>
+          <tr>
+            <td><span class="status-pill gray">⚪ P2</span></td>
+            <td><strong>Clean suspected test data before Q2 reporting</strong><div class="cell-note">4 micro closed-won ($49–$352, $699 total), a "lucas test" deal, "Big Tree" with no amount, and the "sss" referral all look like staging entries.</div></td>
+            <td>Partner Manager</td>
+            <td class="numeric">2026-05-26</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-  <p class="section-prose">
-    Most recent: 2026-04-22 — LLK (Error creating deal in crm). Several pending entries appear to be test submissions ("sss", "lumon industries" self-referral, "LLC", "kraken") — recommend cleanup as part of the Q2 referral triage above.
-  </p>
+</section>
 
-</div>
+<!-- ─── 02 · Pipeline (lifetime) ─── -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">02 · Pipeline</div>
+      <h2 class="section-title">Pipeline <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
+      <p class="section-subtitle">All-time deal pipeline — not period-filtered.</p>
+    </div>
+    <div class="quick-facts">
+      <div class="fact"><div class="fact-label">Open deals</div><div class="fact-value">9</div><div class="fact-sub">$62,300 in flight</div></div>
+      <div class="fact"><div class="fact-label">Closed-won (lifetime)</div><div class="fact-value">$115,396</div><div class="fact-sub">5 real deals · 4 test entries excluded ($699)</div></div>
+      <div class="fact"><div class="fact-label">Avg deal size</div><div class="fact-value">$23,079</div><div class="fact-sub">closed-won</div></div>
+    </div>
+    <div class="table-wrap" style="margin-top:18px">
+      <table>
+        <thead><tr><th>Top open deals</th><th>Stage</th><th class="numeric">Amount</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Acme</strong></td><td>Stage 1</td><td class="numeric">$50,000</td></tr>
+          <tr><td><strong>MailMasters</strong></td><td>won</td><td class="numeric">$4,000</td></tr>
+          <tr><td><strong>Kodak</strong></td><td>Negotiating</td><td class="numeric">$3,000</td></tr>
+          <tr><td><strong>The Coffee Shop</strong></td><td>Qualification</td><td class="numeric">$2,450</td></tr>
+          <tr><td><strong>Chocolate Chip</strong></td><td>Demo Scheduled</td><td class="numeric">$1,250</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">+ 4 more open deals under $1.1K (Oatmeal Chocolate Chip, No bake, lucas test, The Digit co Referral); "Big Tree" carries no amount and is excluded from the rollup.</p>
+  </div>
+</section>
+
+<!-- ─── 03 · Attribution (Sourced vs Influenced) ─── -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">03 · Attribution</div>
+      <h2 class="section-title">Deal attribution <span style="font-weight:400;color:var(--gray-500)">(Q1 2026)</span></h2>
+      <p class="section-subtitle">Credit split — partners care about influenced deals, not just sourced.</p>
+    </div>
+    <div class="dist">
+      <div class="dist-chip"><span class="swatch brand" aria-hidden="true"></span><span class="k">Sourced</span><span class="v">0</span></div>
+      <div class="dist-chip"><span class="swatch cyan" aria-hidden="true"></span><span class="k">Influenced</span><span class="v">9</span></div>
+      <div class="dist-chip"><span class="swatch green" aria-hidden="true"></span><span class="k">Sourced &amp; influenced</span><span class="v">0</span></div>
+    </div>
+    <p class="note">All Q1 credit is influence-only — Lumon touched 9 deals but originated none, reinforcing the sourced-deal coaching focus for the tier conversation.</p>
+  </div>
+</section>
+
+<!-- ─── 04 · Agreements ─── -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">04 · Agreements</div>
+      <h2 class="section-title">Agreements <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Status</th><th>Agreement</th><th class="numeric">Signed</th></tr></thead>
+        <tbody>
+          <tr><td><span class="status-pill green">🟢 Complete</span></td><td><strong>Standard Agency Agreement</strong></td><td class="numeric">2023-08-18</td></tr>
+          <tr><td><span class="status-pill green">🟢 Complete</span></td><td><strong>MNDA</strong></td><td class="numeric">2023-08-01</td></tr>
+          <tr><td><span class="status-pill green">🟢 Complete</span></td><td><strong>Standard Affiliate Agreement</strong></td><td class="numeric">2025-02-12</td></tr>
+          <tr><td><span class="status-pill amber">🟡 Pending</span></td><td><strong>Standard Agency Agreement</strong></td><td class="numeric">—</td></tr>
+          <tr><td><span class="status-pill amber">🟡 Pending</span></td><td><strong>Standard Affiliate Agreement</strong></td><td class="numeric">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Every foundational agreement type (Agency, MNDA, Affiliate) has a signed copy on file; the two pending rows are unsigned duplicate copies to close out.</p>
+  </div>
+</section>
+
+<!-- ─── 05 · Referrals (lifetime) ─── -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">05 · Referrals</div>
+      <h2 class="section-title">Referrals <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
+    </div>
+    <div class="quick-facts">
+      <div class="fact"><div class="fact-label">Total submitted</div><div class="fact-value">18</div><div class="fact-sub">11 pending · 5 rejected · 2 CRM-error</div></div>
+      <div class="fact"><div class="fact-label">In Q1</div><div class="fact-value">1</div><div class="fact-sub">submitted this period</div></div>
+      <div class="fact"><div class="fact-label">Most recent</div><div class="fact-value" style="font-size:clamp(15px,3vw,18px)">2026-04-22</div><div class="fact-sub">LLK — CRM-write error</div></div>
+    </div>
+    <p class="note">The single Q1 referral ("sss", Feb 20 2026) and several pending entries ("lumon industries" self-referral, "LLC", "kraken") appear to be test submissions — folded into the P2 cleanup above.</p>
+  </div>
+</section>
+
+<!-- ─── 06 · Commissions — omitted: no commissions paid in Q1 (CONDITIONAL) ─── -->
+<!-- ─── 07 · Invoices — omitted: no invoices on file (CONDITIONAL) ─── -->
+
+<!-- ─── Footer (text wordmark) ─── -->
+<footer>
+  <div class="container footer-inner">
+    <span class="brand-mark footer-mark">Euler</span>
+    <p>Q1 2026 Business Review · Lumon Industries</p>
+    <p class="mono">euler · generate-qbr</p>
+  </div>
+</footer>
 
 </body>
 </html>
