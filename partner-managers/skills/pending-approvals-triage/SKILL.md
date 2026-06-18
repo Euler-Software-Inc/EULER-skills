@@ -12,7 +12,7 @@ Invoke when a customer admin wants to clear their approval backlog:
 - "What's pending approval / waiting on me?"
 - "My approval queue", "triage approvals"
 - "Any pending partners, referrals, or deal registrations?"
-- `/euler:pending-approvals-triage`
+- `/euler-partner-managers:pending-approvals-triage`
 
 DO NOT invoke for:
 

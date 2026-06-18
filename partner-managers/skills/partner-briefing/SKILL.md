@@ -14,7 +14,7 @@ Invoke whenever the user types something like:
 - "What should I know before I meet <partner>?"
 - "Give me a quick read on <partner>"
 - "I have a call with <partner> in 30 minutes"
-- `/euler:partner-briefing`
+- `/euler-partner-managers:partner-briefing`
 
 DO NOT invoke for:
 

@@ -147,7 +147,7 @@ Follow [`assets/template.html`](assets/template.html). Sections in order:
    each stage sort descending by Amount. Amount is a `numeric` cell. For each deal, add a
    `.cell-note` with "N days in stage" **only** when `last_stage_change_date < 9999` — never
    render the sentinel value as aging. **Empty state**: skip the table, render a `.note`:
-   "No open deals yet — submit a referral with `/euler:submit-a-referral`." (localized).
+   "No open deals yet — submit a referral with `/euler-partners:submit-a-referral`." (localized).
    After the table: a `.note` rollup (e.g. "Total open: $72 k across 6 deals in 4 stages.").
 
 4. **02 · By stage** — `.section-eyebrow` "02 · By stage"; a `.dist` of `.dist-chip` elements,

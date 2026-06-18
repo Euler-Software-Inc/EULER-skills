@@ -57,7 +57,7 @@ the partner's own company name as the referred company) are likely test entries.
 Keep them in all counts — the partner owns that cleanup decision.
 
 **Empty state:** if `referrals[]` is empty or absent, skip the table and render a
-positive note: "No referrals yet — submit your first with `/euler:submit-a-referral`."
+positive note: "No referrals yet — submit your first with `/euler-partners:submit-a-referral`."
 
 **Pagination:** if `result_per_page` indicates more pages, fetch subsequent pages until
 all referrals are loaded. Cap the rendered table at ~50 rows; add a footnote if more.

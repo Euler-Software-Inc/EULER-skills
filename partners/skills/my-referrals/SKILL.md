@@ -13,7 +13,7 @@ the full worklist of referrals and deal registrations they've sent, with the cur
 - "My referrals" / "What referrals did I submit?"
 - "Status of my referrals" / "Did my referral get approved?"
 - "My deal registrations" / "Show me what I've referred"
-- `/euler:my-referrals`
+- `/euler-partners:my-referrals`
 
 DO NOT invoke for:
 
@@ -128,8 +128,8 @@ Follow [`assets/template.html`](assets/template.html). Sections in order:
    **Company · Type · Status · Submitted** (columns). Most-recent first. Status as `.status-pill`:
    `green` 🟢 Approved · `amber` 🟡 Pending · `red` 🔴 Rejected · `gray` other (raw value).
    Submitted date in a `numeric` cell. **Empty state**: skip the table, render a `.note`:
-   "No referrals yet — submit your first with `/euler:submit-a-referral`." (localized).
-   After the table: a `.note` CTA — "To submit a new referral, use `/euler:submit-a-referral`."
+   "No referrals yet — submit your first with `/euler-partners:submit-a-referral`." (localized).
+   After the table: a `.note` CTA — "To submit a new referral, use `/euler-partners:submit-a-referral`."
 4. **Footer** — `brand-mark footer-mark` "Euler" + "My Referrals · {Customer}" + `.mono`
    "euler · my-referrals".
 
@@ -154,7 +154,7 @@ of referrals, so keep it factual and actionable ("Pending review by Martus", "Su
 7. **One partner + one customer per invocation.** If the user has multiple partner accounts,
    ask which (see §Inputs); never aggregate across customers.
 8. **Read-only** — this skill shows referral status; it **never** submits a referral, changes a
-   status, or claims to have done so. Direct submission to `/euler:submit-a-referral`.
+   status, or claims to have done so. Direct submission to `/euler-partners:submit-a-referral`.
 
 ## Example user flow
 

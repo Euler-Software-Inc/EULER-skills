@@ -41,7 +41,7 @@ Do NOT proceed and do NOT surface a raw error. Say, in plain language:
 > "**portfolio-pulse** is for customer admins / partner managers (the company that
 > hosts the partner program). Your EULER connection is a **partner** account, so
 > this view isn't available. For your own data with a customer, try
-> **`/euler:my-performance`**. To manage your partner program, open your dashboard:
+> **`/euler-partners:my-performance`**. To manage your partner program, open your dashboard:
 > `<dashboard_url>` (from `list_accounts`)."
 
 Substitute the skill name + suggested alternative per skill.

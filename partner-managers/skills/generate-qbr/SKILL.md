@@ -13,7 +13,7 @@ Invoke this skill when the user types any of:
 - "Quarterly review of <partner>"
 - "Generate Q<N> business review for <partner>"
 - "Make a quarterly summary for <partner>"
-- `/euler:generate-qbr`
+- `/euler-partner-managers:generate-qbr`
 
 DO NOT invoke for:
 
