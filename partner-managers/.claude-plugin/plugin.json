@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "euler-partner-managers",
+  "displayName": "EULER for Partner managers",
+  "version": "0.18.0",
+  "description": "Skills for partner-relationship managers (customer-admin scope) that orchestrate the EULER MCP: generate a Quarterly Business Review, pre-meeting partner briefings, a whole-portfolio pulse, and approvals triage. Self-contained HTML output styled with the EULER design system.",
+  "author": {
+    "name": "EULER Software Inc.",
+    "email": "support@eulerapp.com",
+    "url": "https://eulerapp.com"
+  },
+  "homepage": "https://eulerapp.com",
+  "repository": "https://github.com/Euler-Software-Inc/EULER-skills",
+  "license": "MIT",
+  "keywords": [
+    "euler",
+    "partner-management",
+    "prm",
+    "qbr",
+    "quarterly-business-review",
+    "partner-briefing",
+    "portfolio",
+    "approvals",
+    "mcp"
+  ]
+}
