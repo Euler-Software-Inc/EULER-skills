@@ -10,5 +10,8 @@ build/
 *.tsbuildinfo
 
 # Per-skill working notes (raw runs, scratch findings). Sanitized outputs
-# live in skills/<name>/examples/ and are committed.
-skills/*/.scratch/
+# live in <plugin>/skills/<name>/examples/ and are committed.
+*/skills/*/.scratch/
+
+# Local presentation copy of the showcase (synced from showcase/index.html, not tracked).
+showcase/showcase-plugin-claude.html

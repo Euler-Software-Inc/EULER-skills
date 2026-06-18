@@ -16,7 +16,7 @@ Invoke this skill when the user types any of:
 - "<trigger phrase 1>"
 - "<trigger phrase 2>"
 - "<trigger phrase 3>"
-- `/euler:<skill-name>`
+- `/<plugin>:<skill-name>`
 
 DO NOT invoke for:
 
