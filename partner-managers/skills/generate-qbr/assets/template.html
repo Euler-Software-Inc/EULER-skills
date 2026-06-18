@@ -6,209 +6,119 @@
 <title>{{PARTNER}} — Q{{N}} {{YEAR}} Business Review</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<style>
-/* Inline the FULL contents of assets/styles.css here (self-contained).
-   Lightweight: no JS, no images (brand is a text wordmark — the remote
-   logo SVG renders broken in Claude); fonts load with display=swap so
-   text paints instantly. */
-</style>
+<style>/* Inline the FULL contents of assets/styles.css here (self-contained). No JS, no images. */</style>
 </head>
 <body>
 
-<!-- ─── Topbar (text wordmark — no image) ─── -->
-<header class="topbar">
-  <div class="container topbar-inner">
-    <div class="brand">
-      <span class="brand-mark">Euler</span>
-      <span class="brand-divider" aria-hidden="true"></span>
-      <span class="brand-label">Q{{N}} {{YEAR}} Review · {{PARTNER}}</span>
-    </div>
-  </div>
-</header>
+<!-- topbar (text wordmark) -->
+<header class="topbar"><div class="container topbar-inner">
+  <div class="brand"><span class="brand-mark">Euler</span><span class="brand-divider" aria-hidden="true"></span><span class="brand-label">Q{{N}} {{YEAR}} Review · {{PARTNER}}</span></div>
+</div></header>
 
-<!-- ─── Hero + quick facts ─── -->
-<!-- hero-eyebrow tone (default | amber | red) follows the traffic-light status -->
-<section class="hero">
-  <div class="container">
-    <span class="hero-eyebrow amber"><span class="dot" aria-hidden="true"></span>{{Q_PERIOD}} · {{PARTNER_STATUS}}</span>
-    <h1>{{PARTNER}} — <span class="accent">Q{{N}} {{YEAR}}</span></h1>
-    <p>{{ONE_LINE_STATE}} <span class="data-pill complete">Complete data</span></p>
-
-    <!-- Period headline metrics. Omit a fact (don't render $0/0.00%) when the
-         metric is undefined for the period — e.g. win rate when 0 deals closed. -->
-    <div class="quick-facts">
-      <div class="fact">
-        <div class="fact-label">Closed-won (Q{{N}})</div>
-        <div class="fact-value">{{REVENUE}}</div>
-        <div class="fact-sub">{{REVENUE_SUB}}</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Deals closed</div>
-        <div class="fact-value">{{DEALS_CLOSED}}</div>
-        <div class="fact-sub">{{DEALS_SUB}}</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Win rate</div>
-        <div class="fact-value">{{WIN_RATE}}</div>
-        <div class="fact-sub">{{WIN_RATE_SUB}}</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Commissions paid</div>
-        <div class="fact-value">{{COMMISSIONS}}</div>
-        <div class="fact-sub">{{COMMISSIONS_SUB}}</div>
-      </div>
-    </div>
+<!-- hero · eyebrow tone: `hero-eyebrow` | `+amber` | `+red` (traffic-light status) -->
+<section class="hero"><div class="container">
+  <span class="hero-eyebrow amber"><span class="dot" aria-hidden="true"></span>{{Q_PERIOD}} · {{PARTNER_STATUS}}</span>
+  <h1>{{PARTNER}} — <span class="accent">Q{{N}} {{YEAR}}</span></h1>
+  <p>{{ONE_LINE_STATE}} <span class="data-pill complete">Complete data</span></p>
+  <!-- fact · clone (max 4); omit a fact when undefined — don't render $0/0% -->
+  <div class="quick-facts">
+    <div class="fact"><div class="fact-label">Closed-won (Q{{N}})</div><div class="fact-value">{{REVENUE}}</div><div class="fact-sub">{{REVENUE_SUB}}</div></div>
+    <div class="fact"><div class="fact-label">Deals closed</div><div class="fact-value">{{DEALS_CLOSED}}</div><div class="fact-sub">{{DEALS_SUB}}</div></div>
+    <div class="fact"><div class="fact-label">Win rate</div><div class="fact-value">{{WIN_RATE}}</div><div class="fact-sub">{{WIN_RATE_SUB}}</div></div>
+    <div class="fact"><div class="fact-label">Commissions paid</div><div class="fact-value">{{COMMISSIONS}}</div><div class="fact-sub">{{COMMISSIONS_SUB}}</div></div>
   </div>
-</section>
+</div></section>
 
-<!-- ─── Spotlight: the TL;DR / executive read (tone: default | amber | red) ─── -->
-<section style="padding-bottom:0">
-  <div class="container">
-    <div class="spotlight amber">
-      <div class="spotlight-inner">
-        <span class="spotlight-eyebrow">The read</span>
-        <h2>{{ONE_LINE_STATE}}</h2>
-        <p>{{SIGNAL_RISK_AND_NEXT_STEP}} <strong>Recommended next step:</strong> {{NEXT_STEP}}</p>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- spotlight · TL;DR (tone: `spotlight` | `+amber` | `+red`) -->
+<section class="pb0"><div class="container">
+  <div class="spotlight amber"><div class="spotlight-inner">
+    <span class="spotlight-eyebrow">The read</span>
+    <h2>{{ONE_LINE_STATE}}</h2>
+    <p>{{SIGNAL_RISK_AND_NEXT_STEP}} <strong>Recommended next step:</strong> {{NEXT_STEP}}</p>
+  </div></div>
+</div></section>
 
-<!-- ─── 01 · Next quarter (action items) ─── -->
-<section>
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">01 · Next quarter</div>
-      <h2 class="section-title">What needs to happen in Q{{N_PLUS_1}}</h2>
-      <p class="section-subtitle">Each item traces to a finding in the data. Priority pill: 🔴 P0 blocks revenue · 🟡 P1 material risk · ⚪ P2 hygiene.</p>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Prio</th><th>Action</th><th>Owner</th><th class="numeric">Due</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><span class="status-pill red">🔴 P0</span></td>
-            <td><strong>{{ACTION_1}}</strong><div class="cell-note">{{IMPACT_1}}</div></td>
-            <td>{{OWNER_1}}</td>
-            <td class="numeric">{{DUE_1}}</td>
-          </tr>
-          <!-- …up to 5 rows, sorted by priority. Pills: red=P0, amber=P1, gray=P2.
-               Owner ∈ {Partner Manager, Partner-side, <real name only if given>} … -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
+<!-- 01 · Next quarter (action items) -->
+<section><div class="container">
+  <div class="section-header"><div class="section-eyebrow">01 · Next quarter</div><h2 class="section-title">What needs to happen in Q{{N_PLUS_1}}</h2>
+    <p class="section-subtitle">Each item traces to a finding. Pill: 🔴 P0 blocks revenue · 🟡 P1 material risk · ⚪ P2 hygiene.</p></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Prio</th><th>Action</th><th>Owner</th><th class="numeric">Due</th></tr></thead>
+    <tbody>
+      <!-- row · clone (max 5, sort by priority); pill red=P0 amber=P1 gray=P2 · Owner ∈ {Partner Manager, Partner-side, real name if given} -->
+      <tr><td><span class="status-pill red">🔴 P0</span></td><td><strong>{{ACTION_1}}</strong><div class="cell-note">{{IMPACT_1}}</div></td><td>{{OWNER_1}}</td><td class="numeric">{{DUE_1}}</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
 
-<!-- ─── 02 · Pipeline (lifetime) — omit section if no deals ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">02 · Pipeline</div>
-      <h2 class="section-title">Pipeline <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
-      <p class="section-subtitle">All-time deal pipeline — not period-filtered.</p>
-    </div>
-    <!-- Lifetime stat cluster — reuse .quick-facts. Omit Closed-lost when $0. -->
-    <div class="quick-facts">
-      <div class="fact"><div class="fact-label">Open deals</div><div class="fact-value">{{OPEN_COUNT}}</div><div class="fact-sub">{{OPEN_VALUE}} in flight</div></div>
-      <div class="fact"><div class="fact-label">Closed-won (lifetime)</div><div class="fact-value">{{CW_VALUE}}</div><div class="fact-sub">{{CW_COUNT}} deals{{CW_TESTNOTE}}</div></div>
-      <div class="fact"><div class="fact-label">Avg deal size</div><div class="fact-value">{{ACV}}</div><div class="fact-sub">closed-won</div></div>
-    </div>
-    <!-- Top open deals — max 5 by Amount desc -->
-    <div class="table-wrap" style="margin-top:18px">
-      <table>
-        <thead><tr><th>Top open deals</th><th>Stage</th><th class="numeric">Amount</th></tr></thead>
-        <tbody>
-          <tr><td><strong>{{DEAL_1}}</strong></td><td>{{STAGE_1}}</td><td class="numeric">{{AMOUNT_1}}</td></tr>
-          <!-- …max 5… -->
-        </tbody>
-      </table>
-    </div>
-    <p class="note">{{PIPELINE_ROLLUP_NOTE}}</p>
+<!-- 02 · Pipeline (lifetime) · omit section if no deals -->
+<section class="pt0"><div class="container">
+  <div class="section-header"><div class="section-eyebrow">02 · Pipeline</div><h2 class="section-title">Pipeline <span class="muted">(lifetime)</span></h2>
+    <p class="section-subtitle">All-time deal pipeline — not period-filtered.</p></div>
+  <!-- lifetime cluster · reuse quick-facts; omit Closed-lost when $0 -->
+  <div class="quick-facts">
+    <div class="fact"><div class="fact-label">Open deals</div><div class="fact-value">{{OPEN_COUNT}}</div><div class="fact-sub">{{OPEN_VALUE}} in flight</div></div>
+    <div class="fact"><div class="fact-label">Closed-won (lifetime)</div><div class="fact-value">{{CW_VALUE}}</div><div class="fact-sub">{{CW_COUNT}} deals{{CW_TESTNOTE}}</div></div>
+    <div class="fact"><div class="fact-label">Avg deal size</div><div class="fact-value">{{ACV}}</div><div class="fact-sub">closed-won</div></div>
   </div>
-</section>
+  <!-- row · top open deals, max 5 by Amount desc -->
+  <div class="table-wrap mt"><table>
+    <thead><tr><th>Top open deals</th><th>Stage</th><th class="numeric">Amount</th></tr></thead>
+    <tbody><tr><td><strong>{{DEAL_1}}</strong></td><td>{{STAGE_1}}</td><td class="numeric">{{AMOUNT_1}}</td></tr></tbody>
+  </table></div>
+  <p class="note">{{PIPELINE_ROLLUP_NOTE}}</p>
+</div></section>
 
-<!-- ─── 03 · Attribution (Sourced vs Influenced) — omit if no attribution data ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">03 · Attribution</div>
-      <h2 class="section-title">Deal attribution <span style="font-weight:400;color:var(--gray-500)">(Q{{N}})</span></h2>
-      <p class="section-subtitle">Credit split — partners care about influenced deals, not just sourced.</p>
-    </div>
-    <div class="dist">
-      <div class="dist-chip"><span class="swatch brand" aria-hidden="true"></span><span class="k">Sourced</span><span class="v">{{SOURCED}}</span></div>
-      <div class="dist-chip"><span class="swatch cyan" aria-hidden="true"></span><span class="k">Influenced</span><span class="v">{{INFLUENCED}}</span></div>
-      <div class="dist-chip"><span class="swatch green" aria-hidden="true"></span><span class="k">Sourced &amp; influenced</span><span class="v">{{BOTH}}</span></div>
-    </div>
+<!-- 03 · Attribution (sourced vs influenced) · omit if no attribution data -->
+<section class="pt0"><div class="container">
+  <div class="section-header"><div class="section-eyebrow">03 · Attribution</div><h2 class="section-title">Deal attribution <span class="muted">(Q{{N}})</span></h2>
+    <p class="section-subtitle">Credit split — partners care about influenced deals, not just sourced.</p></div>
+  <div class="dist">
+    <div class="dist-chip"><span class="swatch brand" aria-hidden="true"></span><span class="k">Sourced</span><span class="v">{{SOURCED}}</span></div>
+    <div class="dist-chip"><span class="swatch cyan" aria-hidden="true"></span><span class="k">Influenced</span><span class="v">{{INFLUENCED}}</span></div>
+    <div class="dist-chip"><span class="swatch green" aria-hidden="true"></span><span class="k">Sourced &amp; influenced</span><span class="v">{{BOTH}}</span></div>
   </div>
-</section>
+</div></section>
 
-<!-- ─── 04 · Agreements — omit if none ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">04 · Agreements</div>
-      <h2 class="section-title">Agreements <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Status</th><th>Agreement</th><th class="numeric">Signed</th></tr></thead>
-        <tbody>
-          <tr><td><span class="status-pill green">🟢 {{AGR_STATUS_1}}</span></td><td><strong>{{AGR_NAME_1}}</strong></td><td class="numeric">{{AGR_SIGNED_1}}</td></tr>
-          <!-- 🟢 signed/complete · 🟡 pending/draft/unsigned · 🔴 expired/terminated -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
+<!-- 04 · Agreements · omit if none -->
+<section class="pt0"><div class="container">
+  <div class="section-header"><div class="section-eyebrow">04 · Agreements</div><h2 class="section-title">Agreements <span class="muted">(lifetime)</span></h2></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Status</th><th>Agreement</th><th class="numeric">Signed</th></tr></thead>
+    <!-- row · pill 🟢 signed/complete · 🟡 pending/draft/unsigned · 🔴 expired/terminated -->
+    <tbody><tr><td><span class="status-pill green">🟢 {{AGR_STATUS_1}}</span></td><td><strong>{{AGR_NAME_1}}</strong></td><td class="numeric">{{AGR_SIGNED_1}}</td></tr></tbody>
+  </table></div>
+</div></section>
 
-<!-- ─── 05 · Referrals (lifetime) — omit if none ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">05 · Referrals</div>
-      <h2 class="section-title">Referrals <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
-    </div>
-    <div class="quick-facts">
-      <div class="fact"><div class="fact-label">Total submitted</div><div class="fact-value">{{REF_TOTAL}}</div><div class="fact-sub">{{REF_TESTNOTE}}</div></div>
-      <div class="fact"><div class="fact-label">In Q{{N}}</div><div class="fact-value">{{REF_PERIOD}}</div><div class="fact-sub">submitted this period</div></div>
-      <div class="fact"><div class="fact-label">Most recent</div><div class="fact-value" style="font-size:clamp(15px,3vw,18px)">{{REF_RECENT_DATE}}</div><div class="fact-sub">{{REF_RECENT_NAME}}</div></div>
-    </div>
-    <p class="note">{{REFERRALS_NOTE}}</p>
+<!-- 05 · Referrals (lifetime) · omit if none -->
+<section class="pt0"><div class="container">
+  <div class="section-header"><div class="section-eyebrow">05 · Referrals</div><h2 class="section-title">Referrals <span class="muted">(lifetime)</span></h2></div>
+  <div class="quick-facts">
+    <div class="fact"><div class="fact-label">Total submitted</div><div class="fact-value">{{REF_TOTAL}}</div><div class="fact-sub">{{REF_TESTNOTE}}</div></div>
+    <div class="fact"><div class="fact-label">In Q{{N}}</div><div class="fact-value">{{REF_PERIOD}}</div><div class="fact-sub">submitted this period</div></div>
+    <div class="fact"><div class="fact-label">Most recent</div><div class="fact-value" style="font-size:clamp(15px,3vw,18px)">{{REF_RECENT_DATE}}</div><div class="fact-sub">{{REF_RECENT_NAME}}</div></div>
   </div>
-</section>
+  <p class="note">{{REFERRALS_NOTE}}</p>
+</div></section>
 
-<!-- ─── 06 · Commissions — CONDITIONAL: omit entire section if empty ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">06 · Commissions</div>
-      <h2 class="section-title">Commissions <span style="font-weight:400;color:var(--gray-500)">(Q{{N}})</span></h2>
-    </div>
-    <p class="note" style="font-size:14px;color:var(--gray-700)">{{COMMISSIONS_PROSE}}</p>
-  </div>
-</section>
+<!-- 06 · Commissions · omit entire section if empty -->
+<section class="pt0"><div class="container">
+  <div class="section-header"><div class="section-eyebrow">06 · Commissions</div><h2 class="section-title">Commissions <span class="muted">(Q{{N}})</span></h2></div>
+  <p class="note" style="font-size:14px;color:var(--g7)">{{COMMISSIONS_PROSE}}</p>
+</div></section>
 
-<!-- ─── 07 · Invoices — CONDITIONAL: omit entire section if empty ─── -->
-<section style="padding-top:0">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">07 · Invoices</div>
-      <h2 class="section-title">Invoices</h2>
-    </div>
-    <p class="note" style="font-size:14px;color:var(--gray-700)">{{INVOICES_PROSE}}</p>
-  </div>
-</section>
+<!-- 07 · Invoices · omit entire section if empty -->
+<section class="pt0"><div class="container">
+  <div class="section-header"><div class="section-eyebrow">07 · Invoices</div><h2 class="section-title">Invoices</h2></div>
+  <p class="note" style="font-size:14px;color:var(--g7)">{{INVOICES_PROSE}}</p>
+</div></section>
 
-<!-- ─── Footer (text wordmark) ─── -->
-<footer>
-  <div class="container footer-inner">
-    <span class="brand-mark footer-mark">Euler</span>
-    <p>Q{{N}} {{YEAR}} Business Review · {{PARTNER}}</p>
-    <p class="mono">euler · generate-qbr</p>
-  </div>
-</footer>
+<!-- footer (text wordmark) -->
+<footer><div class="container footer-inner">
+  <span class="brand-mark footer-mark">Euler</span>
+  <p>Q{{N}} {{YEAR}} Business Review · {{PARTNER}}</p>
+  <p class="mono">euler · generate-qbr</p>
+</div></footer>
 
 </body>
 </html>
