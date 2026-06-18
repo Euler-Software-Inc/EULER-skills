@@ -7,7 +7,8 @@ and opinionated — read this before opening a PR.
 
 1. **Copy the template:**
    ```bash
-   mkdir -p skills/your-skill-name && cp template/SKILL.md skills/your-skill-name/SKILL.md
+   # <plugin> is partner-managers (customer-admin) or partners (self-service)
+   mkdir -p <plugin>/skills/your-skill-name && cp template/SKILL.md <plugin>/skills/your-skill-name/SKILL.md
    ```
    The folder name must be `kebab-case` and must match the `name:` field
    in `SKILL.md` frontmatter exactly.
@@ -34,9 +35,9 @@ and opinionated — read this before opening a PR.
    output + rules; references are loaded on demand. This matches the
    Anthropic Agent Skills progressive-disclosure pattern.
 
-   Save raw runs to `skills/<your-skill-name>/.scratch/` while iterating;
+   Save raw runs to `<plugin>/skills/<your-skill-name>/.scratch/` while iterating;
    keep the directory in `.gitignore` (or delete before merge). Commit a
-   sanitized golden output to `skills/<your-skill-name>/examples/` once
+   sanitized golden output to `<plugin>/skills/<your-skill-name>/examples/` once
    the skill stabilizes.
 
 4. **Anti-hallucination rules are not boilerplate.** Tailor them to the
@@ -46,11 +47,34 @@ and opinionated — read this before opening a PR.
    - Period-filtered vs all-time data sources
    - Malformed JSON shapes that need loose parsing
 
-5. **Update `README.md`'s skill table** — move your skill from 🚧 Planned
-   to ✅ Available with the validation date.
+5. **Update `README.md`'s skill table** — under the right plugin heading
+   (`euler-partner-managers` or `euler-partners`), move your skill from
+   🚧 Planned to ✅ Available with the validation date.
 
-6. **Bump `.claude-plugin/plugin.json` version** per the policy in the
-   README (patch / minor / major).
+6. **Bump the version** per the policy in the README. The marketplace
+   (`.claude-plugin/marketplace.json`) and both plugin manifests
+   (`partner-managers/.claude-plugin/plugin.json`,
+   `partners/.claude-plugin/plugin.json`) share one version line — bump them
+   together.
+
+## Shared partner-health model
+
+`generate-qbr` and `portfolio-pulse` (in `euler-partner-managers`) and
+`my-performance` (in `euler-partners`) all read the same partner-health model.
+Because plugins ship independently, the model is duplicated per plugin:
+
+- **Canonical:** `docs/partner-health-model.md` — edit here.
+- **Copies:** `partner-managers/docs/partner-health-model.md`,
+  `partners/docs/partner-health-model.md`.
+
+After editing the canonical, **copy** it over both plugin copies (use `cp` so the
+content matches exactly — don't hand-edit each) and run the sync check:
+
+```bash
+cp docs/partner-health-model.md partner-managers/docs/partner-health-model.md
+cp docs/partner-health-model.md partners/docs/partner-health-model.md
+node scripts/check-core-sync.mjs   # must print OK before you commit
+```
 
 ## Style guide
 
@@ -78,6 +102,9 @@ and opinionated — read this before opening a PR.
 
 - **Do not invent MCP tools or params.** If the catalog doesn't have it,
   the skill can't use it. Open an issue on `euler-mcp` instead.
+- **Do not put angle brackets in a skill's `description`.** `<like-this>` is
+  parsed as an HTML tag and the skill silently fails to load (it won't appear in
+  the plugin's skill list). Use plain words in the description.
 - **Do not couple skills to Bubble workflow names.**
 - **Do not relax anti-hallucination rules.** Tighten (add more), never
   loosen.
