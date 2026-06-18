@@ -5,15 +5,15 @@
     "email": "support@eulerapp.com"
   },
   "metadata": {
-    "description": "Marketplace catalog for EULER Software's Claude Code plugins — skills, agents, and workflows for partner-relationship management built on the EULER MCP.",
-    "version": "0.17.0"
+    "description": "Marketplace catalog for EULER Software's Claude Code plugins — partner-relationship skills built on the EULER MCP, split by audience: partner managers and partners.",
+    "version": "0.18.0"
   },
   "plugins": [
     {
-      "name": "euler",
-      "source": "./",
-      "description": "Skills that orchestrate the EULER MCP tools for partner-relationship workflows: QBR generation, pre-meeting partner briefings, portfolio pulse, approvals triage, and more. Self-contained HTML output styled with the EULER design system.",
-      "version": "0.17.0",
+      "name": "euler-partner-managers",
+      "source": "./partner-managers",
+      "description": "Customer-admin skills for partner-relationship managers: QBR generation, pre-meeting partner briefings, whole-portfolio pulse, and approvals triage. Self-contained HTML output styled with the EULER design system.",
+      "version": "0.18.0",
       "author": {
         "name": "EULER Software Inc.",
         "email": "support@eulerapp.com"
@@ -28,29 +28,54 @@
         "qbr",
         "quarterly-business-review",
         "partner-briefing",
-        "commissions",
-        "referrals",
+        "portfolio-pulse",
+        "approvals-triage",
         "mcp",
-        "euler",
-        "onboarding",
-        "certification",
-        "performance",
-        "partner-self-service",
-        "deals"
+        "euler"
       ],
       "keywords": [
         "euler",
         "partner-management",
         "prm",
         "qbr",
-        "mcp",
-        "commissions",
-        "referrals",
+        "partner-briefing",
+        "portfolio",
+        "approvals",
+        "mcp"
+      ],
+      "strict": false
+    },
+    {
+      "name": "euler-partners",
+      "source": "./partners",
+      "description": "Self-service skills for partners: performance scorecard, onboarding and certification progress, referral history, deal registrations, and submitting a new referral. Self-contained HTML output styled with the EULER design system.",
+      "version": "0.18.0",
+      "author": {
+        "name": "EULER Software Inc.",
+        "email": "support@eulerapp.com"
+      },
+      "homepage": "https://eulerapp.com",
+      "repository": "https://github.com/Euler-Software-Inc/EULER-skills",
+      "license": "MIT",
+      "category": "Sales & Partnerships",
+      "tags": [
+        "partner-self-service",
+        "performance",
         "onboarding",
         "certification",
-        "performance",
+        "referrals",
+        "deals",
+        "mcp",
+        "euler"
+      ],
+      "keywords": [
+        "euler",
         "partner-self-service",
-        "deals"
+        "performance",
+        "onboarding",
+        "referrals",
+        "deals",
+        "mcp"
       ],
       "strict": false
     }
