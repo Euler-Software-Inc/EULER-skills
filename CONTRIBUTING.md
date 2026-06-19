@@ -70,7 +70,7 @@ example per skill, and no internal dev docs tracked. Fix every error before you 
    - Malformed JSON shapes that need loose parsing
 
 5. **Update `README.md`'s skill table** — under the right plugin heading
-   (`euler-partner-managers` or `euler-partners`), move your skill from
+   (`euler-for-partner-managers` or `euler-for-partners`), move your skill from
    🚧 Planned to ✅ Available with the validation date.
 
 6. **Bump the version** per the policy in the README. The marketplace
@@ -81,8 +81,8 @@ example per skill, and no internal dev docs tracked. Fix every error before you 
 
 ## Shared partner-health model
 
-`generate-qbr` and `portfolio-pulse` (in `euler-partner-managers`) and
-`my-performance` (in `euler-partners`) all read the same partner-health model.
+`generate-qbr` and `portfolio-pulse` (in `euler-for-partner-managers`) and
+`my-performance` (in `euler-for-partners`) all read the same partner-health model.
 Because plugins ship independently, the model is duplicated per plugin:
 
 - **Canonical:** `docs/partner-health-model.md` — edit here.

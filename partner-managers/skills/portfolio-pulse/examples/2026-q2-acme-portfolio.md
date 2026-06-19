@@ -28,7 +28,7 @@ Strong top end (Lumon, Axion, Cobalt carrying the book), but 13 of 42 partners p
 | 5 | BlueByte Innovations | $74,000 | 2 |
 
 ### Needs attention
-- 🔴 **At risk** · Primetime Video — active, $0 closed-won in window, no ranked deals · *Run /euler-partner-managers:generate-qbr for Primetime Video to diagnose.*
+- 🔴 **At risk** · Primetime Video — active, $0 closed-won in window, no ranked deals · *Run /euler-for-partner-managers:generate-qbr for Primetime Video to diagnose.*
 - 🔴 **Inactive** · Helix Systems — status Inactive · *Decide: reactivate or offboard.*
 - 🟡 **Watch** · 7 partners in Onboarding with no first deal · *Push activation milestones (first referral / first registered deal).*
 

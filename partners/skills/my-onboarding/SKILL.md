@@ -13,7 +13,7 @@ progress with one customer — what's done, what's left, what's overdue:
 - "Where am I in my onboarding?" / "Am I done with onboarding?"
 - "My certification progress" / "Show my training progress"
 - "What onboarding steps do I have left?"
-- `/euler-partners:my-onboarding`
+- `/euler-for-partners:my-onboarding`
 
 DO NOT invoke for:
 

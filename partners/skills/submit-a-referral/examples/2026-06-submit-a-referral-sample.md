@@ -68,7 +68,7 @@
 | Estimated deal size (USD) | $40,000 |
 
 **Next-step note** → "Martus has received your registration; track its status with
-`/euler-partners:my-referrals`."
+`/euler-for-partners:my-referrals`."
 
 **Footer** → `euler · submit-a-referral`
 

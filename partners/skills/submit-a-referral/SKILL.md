@@ -12,7 +12,7 @@ chat — an interactive write: fetch the partner's form, collect the answers, co
 
 - "Submit a referral" / "Send a new referral" / "I want to refer a company"
 - "Register a deal" / "Register {Company} as a deal" / "Log a new deal registration"
-- `/euler-partners:submit-a-referral`
+- `/euler-for-partners:submit-a-referral`
 
 DO NOT invoke for:
 

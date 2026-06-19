@@ -13,7 +13,7 @@ Invoke when the user wants a **portfolio-wide** view across ALL their partners:
 - "Show me my top partners / partner leaderboard / best performers"
 - "Which partners need attention?"
 - "Portfolio overview / book of business / partner pulse"
-- `/euler-partner-managers:portfolio-pulse`
+- `/euler-for-partner-managers:portfolio-pulse`
 
 DO NOT invoke for:
 
@@ -67,7 +67,7 @@ No partner is named — this is the entire portfolio.
 per-partner `partner_artifacts`/`commissions` across the WHOLE portfolio for a pulse.
 The only per-partner fetch is the **capped bottom-K deep-dive** (K ≈ 5, the at-risk/watch
 tail — see §Segmentation), which upgrades just those few to a full health score. If the user
-wants depth on one partner, suggest `/euler-partner-managers:generate-qbr <partner>`.
+wants depth on one partner, suggest `/euler-for-partner-managers:generate-qbr <partner>`.
 
 > **Roster status comes from `partners(list)`, not `summary`.** On the 2026-06-01
 > live run, `summary` returned a status breakdown that only accounted for 35 of 42
@@ -107,7 +107,7 @@ Then **deep-dive only the bottom-K** (K ≈ 5, the at-risk/watch tail): fetch th
 sources and upgrade them to a **full** score + a one-line reason for "Needs attention". Cap K so
 the call budget stays small. **Label clearly** that the leaderboard is coarse-ranked and only the
 tail was deep-scored — never imply every partner got the full model. Deep-link each at-risk row to
-`/euler-partner-managers:generate-qbr <partner>` for the full picture.
+`/euler-for-partner-managers:generate-qbr <partner>` for the full picture.
 
 Portfolio-specific notes that still hold:
 
