@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<!-- ─── Topbar (text wordmark — no image) ─── -->
+<!-- Topbar (text wordmark — no image) -->
 <header class="topbar">
   <div class="container topbar-inner">
     <div class="brand">
@@ -26,17 +26,16 @@
   </div>
 </header>
 
-<!-- ─── Hero + quick facts ─── -->
-<!-- hero-eyebrow tone (default | amber | red) follows the briefing traffic light -->
+<!-- Hero + quick facts · hero-eyebrow tone (default | amber | red) follows the briefing traffic light -->
 <section class="hero">
   <div class="container">
     <span class="hero-eyebrow amber"><span class="dot" aria-hidden="true"></span>Prepared {{PREP_DATE}} · {{PARTNER_STATUS}}</span>
     <h1>Briefing: <span class="accent">{{PARTNER}}</span></h1>
     <p>{{ONE_LINE_STATE_WITH_THE_NUMBER}} <span class="data-pill complete">Complete data</span></p>
 
-    <!-- Quick stats, last {{N}} days. OMIT any fact whose value is zero and has no
-         contextual sub-detail — a briefing has no room for "$0" cards. -->
+    <!-- Quick stats, last {{N}} days · OMIT any fact whose value is zero with no sub-detail -->
     <div class="quick-facts">
+      <!-- fact · clone, max 3 -->
       <div class="fact"><div class="fact-label">{{STAT_1_LABEL}}</div><div class="fact-value">{{STAT_1_VALUE}}</div><div class="fact-sub">{{STAT_1_SUB}}</div></div>
       <div class="fact"><div class="fact-label">{{STAT_2_LABEL}}</div><div class="fact-value">{{STAT_2_VALUE}}</div><div class="fact-sub">{{STAT_2_SUB}}</div></div>
       <div class="fact"><div class="fact-label">{{STAT_3_LABEL}}</div><div class="fact-value">{{STAT_3_VALUE}}</div><div class="fact-sub">{{STAT_3_SUB}}</div></div>
@@ -44,8 +43,8 @@
   </div>
 </section>
 
-<!-- ─── Spotlight: the 30-second read (tone: default | amber | red) ─── -->
-<section style="padding-bottom:0">
+<!-- Spotlight · 30-second read (tone: default | amber | red) -->
+<section class="pb0">
   <div class="container">
     <div class="spotlight amber">
       <div class="spotlight-inner">
@@ -57,7 +56,7 @@
   </div>
 </section>
 
-<!-- ─── 01 · What they'll want to discuss (≤3, each from real data) ─── -->
+<!-- 01 · What they'll want to discuss (≤3, each from real data) -->
 <section>
   <div class="container">
     <div class="section-header">
@@ -65,36 +64,28 @@
       <h2 class="section-title">What they'll likely want to talk about</h2>
     </div>
     <div class="attention">
-      <div class="att-row">
-        <div class="att-left"><span class="att-name">{{TOPIC_1}}</span></div>
-        <div class="att-meta">{{TOPIC_1_DETAIL}}</div>
-      </div>
-      <!-- …max 3 rows, each traceable to a specific record (pending agreement,
-           referral awaiting review, late-stage deal, recent commission)… -->
+      <!-- row · clone, max 3 — each traceable to a specific record (pending agreement, referral awaiting review, late-stage deal, recent commission) -->
+      <div class="att-row"><div class="att-left"><span class="att-name">{{TOPIC_1}}</span></div><div class="att-meta">{{TOPIC_1_DETAIL}}</div></div>
     </div>
   </div>
 </section>
 
-<!-- ─── 02 · What you should bring up (≤3, actionable for the PM) ─── -->
-<section style="padding-top:0">
+<!-- 02 · What you should bring up (≤3, actionable for the PM) -->
+<section class="pt0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">02 · You raise</div>
       <h2 class="section-title">What you should bring up</h2>
     </div>
     <div class="attention">
-      <div class="att-row">
-        <div class="att-left"><span class="status-pill amber">🟡 Bring up</span><span class="att-name">{{ASK_1}}</span></div>
-        <div class="att-meta">{{ASK_1_IMPACT}}</div>
-      </div>
-      <!-- …max 3 rows. Embed a concrete impact phrase when derivable
-           ("blocks $50K Acme deal", "~$105K pipeline awaiting your decision")… -->
+      <!-- row · clone, max 3 — embed a concrete impact phrase when derivable ("blocks $50K Acme deal", "~$105K pipeline awaiting your decision") -->
+      <div class="att-row"><div class="att-left"><span class="status-pill amber">🟡 Bring up</span><span class="att-name">{{ASK_1}}</span></div><div class="att-meta">{{ASK_1_IMPACT}}</div></div>
     </div>
   </div>
 </section>
 
-<!-- ─── 03 · Recent touchpoints — omit section if no parseable dates ─── -->
-<section style="padding-top:0">
+<!-- 03 · Recent touchpoints — omit section if no parseable dates -->
+<section class="pt0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">03 · Recent</div>
@@ -104,16 +95,16 @@
       <table>
         <thead><tr><th>What</th><th>Detail</th><th class="numeric">When</th></tr></thead>
         <tbody>
+          <!-- row · clone, max N — omit a row when its entity has no parseable date -->
           <tr><td><strong>Most recent referral</strong></td><td>{{REF_NAME}} <em>({{REF_STATUS}})</em></td><td class="numeric">{{REF_DATE}}</td></tr>
           <tr><td><strong>Last agreement signed</strong></td><td>{{AGR_NAME}}</td><td class="numeric">{{AGR_DATE}}</td></tr>
-          <!-- omit a row when its entity has no parseable date -->
         </tbody>
       </table>
     </div>
   </div>
 </section>
 
-<!-- ─── Footer (text wordmark) ─── -->
+<!-- Footer (text wordmark) -->
 <footer>
   <div class="container footer-inner">
     <span class="brand-mark footer-mark">Euler</span>

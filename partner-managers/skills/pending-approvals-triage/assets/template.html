@@ -28,12 +28,13 @@
 <!-- ─── Hero + quick facts ─── -->
 <section class="hero">
   <div class="container">
-    <!-- eyebrow tone (red | amber | green | default) by worst SLA in the queue -->
+    <!-- hero-eyebrow tone red|amber|green|default by worst SLA -->
     <span class="hero-eyebrow red"><span class="dot"></span>{{TOTAL}} waiting · oldest {{OLDEST_DAYS}}d</span>
     <h1>{{HEADLINE_SHORT}} <span class="accent">{{HEADLINE_ACCENT}}</span></h1>
     <p>{{HERO_SUBTITLE}} <span class="data-pill partial">Partial data</span></p>
 
     <div class="quick-facts">
+      <!-- fact · clone, max 5 -->
       <div class="fact"><div class="fact-label">Total pending</div><div class="fact-value">{{TOTAL}}</div><div class="fact-sub">awaiting your approval</div></div>
       <div class="fact"><div class="fact-label">Partner apps</div><div class="fact-value">{{N_PARTNERS}}</div><div class="fact-sub">awaiting approval</div></div>
       <div class="fact"><div class="fact-label">Referrals</div><div class="fact-value">{{N_REFERRALS}}</div><div class="fact-sub">awaiting review</div></div>
@@ -43,8 +44,8 @@
   </div>
 </section>
 
-<!-- ─── Spotlight: what to clear first (tone: red | amber | green) ─── -->
-<section style="padding-bottom:0">
+<!-- spotlight · tone red|amber|green -->
+<section class="pb0">
   <div class="container">
     <div class="spotlight red">
       <div class="spotlight-inner">
@@ -56,7 +57,7 @@
   </div>
 </section>
 
-<!-- ─── Worklist (oldest first). If ALL queues empty, replace with an "Inbox zero" spotlight.green ─── -->
+<!-- worklist · oldest-first; if all queues empty → "Inbox zero" spotlight.green -->
 <section>
   <div class="container">
     <div class="section-header">
@@ -68,14 +69,8 @@
       <table>
         <thead><tr><th>Age</th><th>Type</th><th>Item</th><th>Waiting since</th><th>Action</th></tr></thead>
         <tbody>
-          <tr>
-            <td><span class="status-pill red">🔴 {{AGE_DAYS}}d</span></td>
-            <td><span class="status-pill violet">{{TYPE}}</span></td>
-            <td><strong>{{ITEM_NAME}}</strong></td>
-            <td class="numeric">{{SUBMITTED_ON}}</td>
-            <td><span class="att-meta"><code>Approve in dashboard</code></span></td>
-          </tr>
-          <!-- …oldest-first; SLA pill red >14d / amber 7–14d / green <7d; cap ~25 rows… -->
+          <!-- row · clone, max 25 · oldest-first; SLA pill red >14d / amber 7–14d / green <7d -->
+          <tr><td><span class="status-pill red">🔴 {{AGE_DAYS}}d</span></td><td><span class="status-pill violet">{{TYPE}}</span></td><td><strong>{{ITEM_NAME}}</strong></td><td class="numeric">{{SUBMITTED_ON}}</td><td><span class="att-meta"><code>Approve in dashboard</code></span></td></tr>
         </tbody>
       </table>
     </div>

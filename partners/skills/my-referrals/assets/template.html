@@ -62,21 +62,8 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Repeat one <tr> per referral, most-recent first.
-               Status pill class:
-                 green  → approved    "🟢 Approved"
-                 amber  → pending     "🟡 Pending"
-                 red    → rejected    "🔴 Rejected"
-                 gray   → other/unknown status (render the raw status value)
-               Type: "Referral" or "Deal registration" (from real field — no fabrication).
-               Date: YYYY-MM-DD from "Submitted On" field; numeric cell class.
-               No internal IDs in output. Flag test entries with "(test?)" suffix. -->
-          <tr>
-            <td><strong>{{COMPANY_1}}</strong></td>
-            <td>{{TYPE_1}}</td>
-            <td><span class="status-pill amber">🟡 {{STATUS_1}}</span></td>
-            <td class="numeric">{{DATE_1}}</td>
-          </tr>
+          <!-- row · clone, max 50 — most-recent first. status-pill: green/🟢 approved, amber/🟡 pending, red/🔴 rejected, gray/raw value for other. Type from real field (Referral|Deal registration). Date YYYY-MM-DD from "Submitted On". No internal IDs; flag tests with "(test?)". -->
+          <tr><td><strong>{{COMPANY_1}}</strong></td><td>{{TYPE_1}}</td><td><span class="status-pill amber">🟡 {{STATUS_1}}</span></td><td class="numeric">{{DATE_1}}</td></tr>
         </tbody>
       </table>
     </div>

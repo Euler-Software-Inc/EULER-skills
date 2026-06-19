@@ -61,24 +61,10 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Repeat one <tr> per open deal, grouped by stage (earliest → latest in the
-               funnel), largest amount first within each stage group.
-               - Stage cell: show the stage name (bold for first row of each group; blank
-                 for subsequent rows in the same group, OR repeat for clarity — either is OK).
-               - Deal cell: <strong>{{DEAL_NAME}}</strong>; add a .cell-note for valid aging:
-                   only render "{{N}} days in stage" when last_stage_change_date < 9999;
-                   NEVER render aging when last_stage_change_date ≥ 9999 (null sentinel).
-               - Amount: numeric cell; Number() from string; format as currency.
-               - No internal IDs in output. Flag obvious test entries with "(test?)" suffix.
-               Empty state: skip the table, render a .note instead:
-                 "No open deals — submit a referral with /euler-partners:submit-a-referral." -->
+          <!-- row · clone, max 1 per open deal · group by stage (early→late), largest amount first; stage cell bold on first row of group (blank/repeat OK); flag test entries "(test?)"; no internal IDs. Empty state: drop table, render .note "No open deals — submit a referral with /euler-partners:submit-a-referral." -->
           <tr>
             <td><strong>{{STAGE_NAME}}</strong></td>
-            <td>
-              <strong>{{DEAL_NAME}}</strong>
-              <!-- CONDITIONAL: only if last_stage_change_date < 9999 -->
-              <div class="cell-note">{{N}} days in stage</div>
-            </td>
+            <td><strong>{{DEAL_NAME}}</strong><!-- cell-note: only if last_stage_change_date < 9999 (null sentinel ≥9999 = skip) --><div class="cell-note">{{N}} days in stage</div></td>
             <td class="numeric">{{AMOUNT}}</td>
           </tr>
         </tbody>
@@ -89,23 +75,17 @@
 </section>
 
 <!-- ─── 02 · By stage — distribution chips ─── -->
-<section style="padding-top:0">
+<section class="pt0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">02 · By stage</div>
       <h2 class="section-title">Stage breakdown</h2>
       <p class="section-subtitle">Count of open deals per stage.</p>
     </div>
-    <!-- One .dist-chip per stage that has at least one open deal.
-         Swatch color: brand (Qualified/early) · amber (Demo/mid) · violet (Negotiating) ·
-         green (Contracting/late) · gray (other/unknown stage). Adapt to real stage names. -->
+    <!-- swatch color by stage: brand (early/Qualified) · amber (mid/Demo) · violet (Negotiating) · green (late/Contracting) · gray (other); adapt to real stage names -->
     <div class="dist">
-      <div class="dist-chip">
-        <span class="swatch brand"></span>
-        <span class="k">{{STAGE_NAME}}</span>
-        <span class="v">{{COUNT}}</span>
-      </div>
-      <!-- Repeat one .dist-chip per stage -->
+      <!-- chip · clone, max 1 per stage with ≥1 open deal -->
+      <div class="dist-chip"><span class="swatch brand"></span><span class="k">{{STAGE_NAME}}</span><span class="v">{{COUNT}}</span></div>
     </div>
     <p class="note">{{STAGE_NOTE}}</p>
   </div>

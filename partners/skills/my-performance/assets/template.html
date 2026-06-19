@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<!-- ─── Topbar (text wordmark) ─── -->
+<!-- Topbar (text wordmark) -->
 <header class="topbar">
   <div class="container topbar-inner">
     <div class="brand">
@@ -26,7 +26,7 @@
   </div>
 </header>
 
-<!-- ─── Hero — health score front and center (eyebrow/spotlight tone by band) ─── -->
+<!-- Hero — health score front and center (tone by band) -->
 <section class="hero">
   <div class="container">
     <span class="hero-eyebrow amber"><span class="dot" aria-hidden="true"></span>{{WINDOW}} · {{BAND}}</span>
@@ -42,8 +42,8 @@
   </div>
 </section>
 
-<!-- ─── Spotlight: the read + the next lever (tone by band) ─── -->
-<section style="padding-bottom:0">
+<!-- Spotlight: read + next lever (tone by band) -->
+<section class="pb0">
   <div class="container">
     <div class="spotlight amber">
       <div class="spotlight-inner">
@@ -55,7 +55,7 @@
   </div>
 </section>
 
-<!-- ─── 01 · Health breakdown — the 5 model factors, one .progress bar each ─── -->
+<!-- 01 · Health breakdown — 5 model factors, one .progress bar each -->
 <section>
   <div class="container">
     <div class="section-header">
@@ -63,24 +63,23 @@
       <h2 class="section-title">{{SCORE}}/100 · {{BAND}}</h2>
       <p class="section-subtitle">How your customer's health model reads you — and where the points are.</p>
     </div>
-    <!-- Repeat one block per factor; bar width = contribution ÷ weight × 100. Tone class
-         (green ≥80% of weight, amber 40–79%, red <40%). Localize the factor label. -->
-    <p style="margin:0 0 4px;font-size:14px"><strong>Production</strong> <span style="color:var(--gray-500)">{{PROD_VAL}}/35</span></p>
+    <!-- REPEATABLE per factor: bar width = contribution ÷ weight × 100; tone green ≥80% / amber 40–79% / red <40%; localize label. -->
+    <p style="margin:0 0 4px;font-size:14px"><strong>Production</strong> <span style="color:var(--g5)">{{PROD_VAL}}/35</span></p>
     <div class="progress amber"><div class="bar" style="width:{{PROD_PCT}}%"></div></div>
-    <p style="margin:0 0 4px;font-size:14px"><strong>Pipeline</strong> <span style="color:var(--gray-500)">{{PIPE_VAL}}/20</span></p>
+    <p style="margin:0 0 4px;font-size:14px"><strong>Pipeline</strong> <span style="color:var(--g5)">{{PIPE_VAL}}/20</span></p>
     <div class="progress amber"><div class="bar" style="width:{{PIPE_PCT}}%"></div></div>
-    <p style="margin:0 0 4px;font-size:14px"><strong>Engagement</strong> <span style="color:var(--gray-500)">{{ENG_VAL}}/20</span></p>
+    <p style="margin:0 0 4px;font-size:14px"><strong>Engagement</strong> <span style="color:var(--g5)">{{ENG_VAL}}/20</span></p>
     <div class="progress amber"><div class="bar" style="width:{{ENG_PCT}}%"></div></div>
-    <p style="margin:0 0 4px;font-size:14px"><strong>Foundation</strong> <span style="color:var(--gray-500)">{{FOUND_VAL}}/15</span></p>
+    <p style="margin:0 0 4px;font-size:14px"><strong>Foundation</strong> <span style="color:var(--g5)">{{FOUND_VAL}}/15</span></p>
     <div class="progress amber"><div class="bar" style="width:{{FOUND_PCT}}%"></div></div>
-    <p style="margin:0 0 4px;font-size:14px"><strong>Recency</strong> <span style="color:var(--gray-500)">{{REC_VAL}}/10</span></p>
+    <p style="margin:0 0 4px;font-size:14px"><strong>Recency</strong> <span style="color:var(--g5)">{{REC_VAL}}/10</span></p>
     <div class="progress amber"><div class="bar" style="width:{{REC_PCT}}%"></div></div>
     <p class="note">{{CAPS_NOTE}}</p>
   </div>
 </section>
 
-<!-- ─── 02 · Pipeline — top open deals ─── -->
-<section style="padding-top:0">
+<!-- 02 · Pipeline — top open deals -->
+<section class="pt0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">02 · Pipeline</div>
@@ -91,7 +90,7 @@
         <thead><tr><th>Deal</th><th>Stage</th><th class="numeric">Amount</th></tr></thead>
         <tbody>
           <tr><td><strong>{{DEAL_1}}</strong></td><td>{{STAGE_1}}</td><td class="numeric">{{AMOUNT_1}}</td></tr>
-          <!-- top 5 by amount; note the rollup if more -->
+          <!-- REPEATABLE row: top 5 by amount; note rollup if more -->
         </tbody>
       </table>
     </div>
@@ -99,30 +98,30 @@
   </div>
 </section>
 
-<!-- ─── 03 · Commissions — CONDITIONAL: omit if none ─── -->
-<section style="padding-top:0">
+<!-- 03 · Commissions — CONDITIONAL: omit if none -->
+<section class="pt0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">03 · Commissions</div>
-      <h2 class="section-title">Commissions <span style="font-weight:400;color:var(--gray-500)">({{WINDOW}})</span></h2>
+      <h2 class="section-title">Commissions <span class="muted">({{WINDOW}})</span></h2>
     </div>
-    <p class="note" style="font-size:14px;color:var(--gray-700)">{{COMMISSIONS_PROSE}}</p>
+    <p class="note" style="font-size:14px;color:var(--g7)">{{COMMISSIONS_PROSE}}</p>
   </div>
 </section>
 
-<!-- ─── 04 · Referrals — CONDITIONAL: omit if none ─── -->
-<section style="padding-top:0">
+<!-- 04 · Referrals — CONDITIONAL: omit if none -->
+<section class="pt0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">04 · Referrals</div>
-      <h2 class="section-title">Referrals <span style="font-weight:400;color:var(--gray-500)">(lifetime)</span></h2>
+      <h2 class="section-title">Referrals <span class="muted">(lifetime)</span></h2>
     </div>
-    <p class="note" style="font-size:14px;color:var(--gray-700)">{{REFERRALS_PROSE}}</p>
+    <p class="note" style="font-size:14px;color:var(--g7)">{{REFERRALS_PROSE}}</p>
   </div>
 </section>
 
-<!-- ─── 05 · Agreements — CONDITIONAL: omit if none; surface unsigned ─── -->
-<section style="padding-top:0">
+<!-- 05 · Agreements — CONDITIONAL: omit if none; surface unsigned -->
+<section class="pt0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">05 · Agreements</div>
@@ -139,7 +138,7 @@
   </div>
 </section>
 
-<!-- ─── Footer (text wordmark) ─── -->
+<!-- Footer (text wordmark) -->
 <footer>
   <div class="container footer-inner">
     <span class="brand-mark footer-mark">Euler</span>
