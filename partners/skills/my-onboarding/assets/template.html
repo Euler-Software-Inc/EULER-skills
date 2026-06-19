@@ -25,8 +25,7 @@
   </div>
 </header>
 
-<!-- ─── Hero + quick facts ─── -->
-<!-- hero-eyebrow tone (default | amber | red) follows the worst per-flow status -->
+<!-- Hero + quick facts. hero-eyebrow tone: default|amber|red (worst per-flow status) -->
 <section class="hero">
   <div class="container">
     <span class="hero-eyebrow amber"><span class="dot" aria-hidden="true"></span>{{CUSTOMER}} · {{N}} flows</span>
@@ -43,7 +42,7 @@
 </section>
 
 <!-- ─── Spotlight: the one most-urgent move (tone: default | amber | red) ─── -->
-<section style="padding-bottom:0">
+<section class="pb0">
   <div class="container">
     <div class="spotlight amber">
       <div class="spotlight-inner">
@@ -60,17 +59,15 @@
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">01 · {{FLOW_TITLE}}</div>
-      <h2 class="section-title">{{FLOW_PCT}}% complete <span style="font-weight:400;color:var(--gray-500)">· {{FLOW_DONE}}/{{FLOW_TOTAL}} steps · {{FLOW_TYPE}}</span> <span class="status-pill amber">🟡 In progress</span></h2>
+      <h2 class="section-title">{{FLOW_PCT}}% complete <span class="muted">· {{FLOW_DONE}}/{{FLOW_TOTAL}} steps · {{FLOW_TYPE}}</span> <span class="status-pill amber">🟡 In progress</span></h2>
     </div>
-    <!-- progress bar: tone class (green|amber|red) matches the flow status; width inline -->
+    <!-- progress: tone green|amber|red matches flow status; width inline -->
     <div class="progress amber"><div class="bar" style="width:{{FLOW_PCT}}%"></div></div>
-    <!-- only the to_do + overdue steps; done collapsed into the header count above -->
+    <!-- to_do + overdue steps only; done folded into header count -->
     <div class="attention">
-      <div class="att-row">
-        <div class="att-left"><span class="status-pill red">🔴 Overdue</span><span class="att-name">{{STEP_TITLE}}</span></div>
-        <div class="att-meta">{{STEP_TYPE}} · due {{STEP_DUE}}</div>
-      </div>
-      <!-- …to_do rows use <span class="status-pill gray">⚪ To do</span>; cap the list, footnote overflow… -->
+      <!-- repeat att-row per step -->
+      <div class="att-row"><div class="att-left"><span class="status-pill red">🔴 Overdue</span><span class="att-name">{{STEP_TITLE}}</span></div><div class="att-meta">{{STEP_TYPE}} · due {{STEP_DUE}}</div></div>
+      <!-- to_do rows: status-pill gray ⚪ To do; cap list, footnote overflow -->
     </div>
     <!-- certification badge line ONLY when certification_badge is a real URL: -->
     <p class="note">🏅 Certification badge earned.</p>

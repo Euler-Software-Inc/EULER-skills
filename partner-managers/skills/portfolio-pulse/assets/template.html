@@ -34,32 +34,17 @@
     <p>{{HERO_SUBTITLE}} <span class="data-pill partial">Partial data</span></p>
 
     <div class="quick-facts">
-      <div class="fact">
-        <div class="fact-label">Partners</div>
-        <div class="fact-value">{{PARTNER_COUNT}}</div>
-        <div class="fact-sub">{{ACTIVE}} active</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Producing (window)</div>
-        <div class="fact-value">{{PRODUCING}}</div>
-        <div class="fact-sub">{{PRODUCING_PCT}}</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Revenue (window)</div>
-        <div class="fact-value">{{REVENUE_WINDOW}}</div>
-        <div class="fact-sub">{{REVENUE_BASIS}}</div>
-      </div>
-      <div class="fact">
-        <div class="fact-label">Concentration</div>
-        <div class="fact-value">{{CONCENTRATION}}</div>
-        <div class="fact-sub">{{CONCENTRATION_SUB}}</div>
-      </div>
+      <!-- fact · clone, max 4 -->
+      <div class="fact"><div class="fact-label">Partners</div><div class="fact-value">{{PARTNER_COUNT}}</div><div class="fact-sub">{{ACTIVE}} active</div></div>
+      <div class="fact"><div class="fact-label">Producing (window)</div><div class="fact-value">{{PRODUCING}}</div><div class="fact-sub">{{PRODUCING_PCT}}</div></div>
+      <div class="fact"><div class="fact-label">Revenue (window)</div><div class="fact-value">{{REVENUE_WINDOW}}</div><div class="fact-sub">{{REVENUE_BASIS}}</div></div>
+      <div class="fact"><div class="fact-label">Concentration</div><div class="fact-value">{{CONCENTRATION}}</div><div class="fact-sub">{{CONCENTRATION_SUB}}</div></div>
     </div>
   </div>
 </section>
 
 <!-- ─── Spotlight: headline state (tone: default | amber | red) ─── -->
-<section style="padding-bottom:0">
+<section class="pb0">
   <div class="container">
     <div class="spotlight red">
       <div class="spotlight-inner">
@@ -83,13 +68,8 @@
       <table>
         <thead><tr><th>#</th><th>Partner</th><th class="numeric">Revenue</th><th class="numeric">Deals</th></tr></thead>
         <tbody>
-          <tr>
-            <td><span class="rank top">1</span></td>
-            <td><strong>{{P1_NAME}}</strong><div class="cell-note">{{P1_NOTE}}</div></td>
-            <td class="numeric">{{P1_REV}}</td>
-            <td class="numeric">{{P1_DEALS}}</td>
-          </tr>
-          <!-- …up to top N rows… -->
+          <!-- row · clone, max 10 -->
+          <tr><td><span class="rank top">1</span></td><td><strong>{{P1_NAME}}</strong><div class="cell-note">{{P1_NOTE}}</div></td><td class="numeric">{{P1_REV}}</td><td class="numeric">{{P1_DEALS}}</td></tr>
         </tbody>
       </table>
     </div>
@@ -98,7 +78,7 @@
 </section>
 
 <!-- ─── Needs attention (omit section if empty) ─── -->
-<section style="padding-top:0">
+<section class="pt0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">02 · Action</div>
@@ -106,20 +86,14 @@
       <p class="section-subtitle">The few partners worth a move now — top by severity.</p>
     </div>
     <div class="attention">
-      <div class="att-row">
-        <div class="att-left">
-          <span class="status-pill red">🔴 At risk</span>
-          <span class="att-name">{{ATT_NAME}}</span>
-        </div>
-        <div class="att-meta">{{ATT_REASON}} · {{ATT_ACTION}}</div>
-      </div>
-      <!-- …cap ~6 rows… -->
+      <!-- row · clone, max 6 -->
+      <div class="att-row"><div class="att-left"><span class="status-pill red">🔴 At risk</span><span class="att-name">{{ATT_NAME}}</span></div><div class="att-meta">{{ATT_REASON}} · {{ATT_ACTION}}</div></div>
     </div>
   </div>
 </section>
 
 <!-- ─── Status distribution ─── -->
-<section style="padding-top:0">
+<section class="pt0">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow">03 · Roster</div>
