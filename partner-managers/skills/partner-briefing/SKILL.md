@@ -287,7 +287,7 @@ User: "I have a call with Lumon Industries in 30 minutes — prep me"
 Claude:
 1. Reads this skill (partner-briefing playbook)
 2. partners(action: 'list', filter_name: 'Lumon Industries') →
-   partner_id = 1715179138376x577819007342954800
+   partner_id = 1700000000000x000000000000000000
 3. performance(action: 'partner', partner_id, '2026-04-25', '2026-05-25')
 4. partner_artifacts(action: 'deals', partner_id) → 19 deals lifetime
 5. commissions(action: 'partner', ...) → empty for the window

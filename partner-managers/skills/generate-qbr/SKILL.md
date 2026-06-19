@@ -463,7 +463,7 @@ Claude:
 1. Reads this skill (generate-qbr playbook)
 2. list_accounts → customer self = "Martus" (for header)
 3. partners(action: 'list', filter_name: 'Axion DataWorks') →
-   partner_id = 1715179138375x527400652689293400
+   partner_id = 1700000000000x000000000000000000
 4. performance(action: 'partner', partner_id, '2026-01-01', '2026-03-31') →
    0 deals, $0 booking, $0 billings (period-empty)
 5. partner_artifacts(action: 'deals', partner_id) →

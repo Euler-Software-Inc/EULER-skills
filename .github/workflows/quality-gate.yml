@@ -1,0 +1,22 @@
+name: quality-gate
+
+# Runs the EULER-skills quality gate (plugin/skill best practices + repo hygiene).
+# Node-only checks run here; `claude plugin validate` self-skips when the CLI is
+# absent (it runs locally via the pre-push hook instead).
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [dev, main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Quality gate
+        run: node scripts/quality-gate.mjs
