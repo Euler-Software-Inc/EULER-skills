@@ -3,6 +3,28 @@
 Thanks for adding a skill or improving an existing one. This repo is small
 and opinionated — read this before opening a PR.
 
+## Quality gate
+
+Before every push, the quality gate must pass:
+
+```bash
+node scripts/quality-gate.mjs
+```
+
+Enforced two ways:
+
+- **Locally** — a pre-push hook runs it automatically and blocks the push on
+  failure. Activate once per clone: `git config core.hooksPath .githooks`.
+- **CI** — `.github/workflows/quality-gate.yml` re-runs it on every PR to `main`
+  (and pushes to `dev`).
+
+It checks (errors block; warnings are surfaced): valid plugin manifests
+(`claude plugin validate`), canonical assets in sync (`check-core-sync`), skill
+frontmatter (`name` matches the folder, kebab-case, **no angle brackets in
+`description`**), no legacy CSS tokens, English-only shipped content, no real
+Bubble IDs or secrets, lightweight skill HTML (no JS / images / base64), one
+example per skill, and no internal dev docs tracked. Fix every error before you push.
+
 ## Adding a new skill
 
 1. **Copy the template:**
@@ -91,8 +113,8 @@ node scripts/check-core-sync.mjs   # must print OK before you commit
   `examples/`. Sanitize real customer data (rename partners, round
   dollar amounts).
 - **HTML output must be lightweight + mobile-responsive (always).** Generated
-  HTML has to open fast on any device: no JavaScript, no images beyond the
-  brand logo, no base64/data-URI blobs, at most the two Euler web fonts loaded
+  HTML has to open fast on any device: no JavaScript, no images (the brand is a
+  text wordmark, not an `<img>`), no base64/data-URI blobs, at most the two Euler web fonts loaded
   with `display=swap` (+ `<link rel="preconnect">`) so text paints instantly.
   Use fluid `clamp()` type and make wide tables scroll on narrow screens — never
   fixed pixel widths that overflow a phone. Cap repeated rows (top-N) so the
@@ -125,9 +147,8 @@ node scripts/check-core-sync.mjs   # must print OK before you commit
   - What changed in the skill
   - How it was validated (which partners / quarters / scenarios tested)
   - Any new anti-hallucination rules and why they were added
-- For in-progress / WIP work, push directly to `main` is fine — this is
-  a small repo with few contributors. PRs are for external contributors
-  or risky changes.
+- Work on `dev` and open a PR to `main`. The quality gate must pass — the
+  pre-push hook and CI enforce it.
 
 ## Sub-agents
 

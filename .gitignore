@@ -15,3 +15,8 @@ build/
 
 # Local presentation copy of the showcase (synced from showcase/index.html, not tracked).
 showcase/showcase-plugin-claude.html
+
+# Internal planning + design docs — kept local, not published to the public repo.
+docs/plans/
+docs/specs/
+PLAN-account-aware-skills.md
