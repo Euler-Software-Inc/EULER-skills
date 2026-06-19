@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Marketplace catalog for EULER Software's Claude Code plugins — partner-relationship skills built on the EULER MCP, split by audience: partner managers and partners.",
-    "version": "0.18.0"
+    "version": "0.18.1"
   },
   "plugins": [
     {
       "name": "euler-partner-managers",
       "source": "./partner-managers",
       "description": "Customer-admin skills for partner-relationship managers: QBR generation, pre-meeting partner briefings, whole-portfolio pulse, and approvals triage. Self-contained HTML output styled with the EULER design system.",
-      "version": "0.18.0",
+      "version": "0.18.1",
       "author": {
         "name": "EULER Software Inc.",
         "email": "support@eulerapp.com"
@@ -49,7 +49,7 @@
       "name": "euler-partners",
       "source": "./partners",
       "description": "Self-service skills for partners: performance scorecard, onboarding and certification progress, referral history, deal registrations, and submitting a new referral. Self-contained HTML output styled with the EULER design system.",
-      "version": "0.18.0",
+      "version": "0.18.1",
       "author": {
         "name": "EULER Software Inc.",
         "email": "support@eulerapp.com"
