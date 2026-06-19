@@ -104,6 +104,7 @@ const URLISH = /(https?:\/\/[^\s"'<)]*staging[^\s"'<)]*|staging\.[a-z0-9.-]+|loc
 const seenEmail = new Set();
 for (const f of tracked) {
   if (!/\.(md|html|json|mjs|js|css|txt|ya?ml)$/.test(f)) continue;
+  if (/^(scripts|\.github)\//.test(f)) continue; // tooling holds pattern literals (localhost, sk-, …)
   const t = read(f);
   for (const e of t.match(EMAIL) || []) { const k = e.toLowerCase(); if (!seenEmail.has(k)) { seenEmail.add(k); warns.push(`non-eulerapp email "${e}" (${f}) — confirm fictional/sample`); } }
   const u = t.match(URLISH); if (u) warns.push(`staging/localhost ref "${u[0]}" (${f})`);
