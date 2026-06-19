@@ -199,11 +199,11 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
     <div class="install">
       <div class="install-head">
         <h2>Install in Claude Code</h2>
-        <button class="btn-copy-install" id="copy-install" data-install="/plugin marketplace add Euler-Software-Inc/EULER-skills&#10;/plugin install euler-partner-managers@euler-plugins&#10;/plugin install euler-partners@euler-plugins">Copy</button>
+        <button class="btn-copy-install" id="copy-install" data-install="/plugin marketplace add Euler-Software-Inc/EULER-skills&#10;/plugin install euler-for-partner-managers@euler-plugins&#10;/plugin install euler-for-partners@euler-plugins">Copy</button>
       </div>
       <pre><span class="prompt">&gt; </span>/plugin marketplace add Euler-Software-Inc/EULER-skills
-<span class="prompt">&gt; </span>/plugin install euler-partner-managers@euler-plugins
-<span class="prompt">&gt; </span>/plugin install euler-partners@euler-plugins</pre>
+<span class="prompt">&gt; </span>/plugin install euler-for-partner-managers@euler-plugins
+<span class="prompt">&gt; </span>/plugin install euler-for-partners@euler-plugins</pre>
       <p class="tail">First invocation triggers a one-time OAuth consent against <span class="mono">mcp.eulerapp.com</span> — the token is cached for 30 days.</p>
     </div>
   </div>
@@ -215,8 +215,8 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
     <h2 class="section-title">Install once, then just ask.</h2>
     <p class="section-sub">Skills are model-invoked playbooks. Type a slash command or describe the intent — Claude reads the playbook, calls the EULER MCP tools, and formats the result.</p>
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><h3>Install a plugin</h3><p>Add the marketplace, then install <code>euler-partner-managers</code> (for managers) or <code>euler-partners</code> (self-service) — no server to run.</p></div>
-      <div class="step"><div class="step-num">2</div><h3>Invoke a skill</h3><p>Type <code>/euler-partner-managers:generate-qbr</code> or just ask: <em>"QBR for Lumon Industries."</em></p></div>
+      <div class="step"><div class="step-num">1</div><h3>Install a plugin</h3><p>Add the marketplace, then install <code>euler-for-partner-managers</code> (for managers) or <code>euler-for-partners</code> (self-service) — no server to run.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Invoke a skill</h3><p>Type <code>/euler-for-partner-managers:generate-qbr</code> or just ask: <em>"QBR for Lumon Industries."</em></p></div>
       <div class="step"><div class="step-num">3</div><h3>Connect once</h3><p>A one-time OAuth 2.1 consent to <code>mcp.eulerapp.com</code>; the token is cached.</p></div>
       <div class="step"><div class="step-num">4</div><h3>Get a branded report</h3><p>Claude orchestrates the MCP tools per the playbook and returns self-contained HTML.</p></div>
     </div>
@@ -235,7 +235,7 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 
       <article class="card">
         <div class="card-head"><h3>generate-qbr</h3></div>
-        <code class="cmd">/euler-partner-managers:generate-qbr</code>
+        <code class="cmd">/euler-for-partner-managers:generate-qbr</code>
         <p class="card-desc">A Quarterly Business Review for a partner — health score, period metrics, pipeline, deal attribution, and dated action items in one shareable doc.</p>
         <div class="preview" data-report="rpt-generate-qbr"><div class="preview-bar"><span></span><span></span><span></span></div><div class="preview-scale"><iframe data-report="rpt-generate-qbr" title="generate-qbr example" loading="lazy"></iframe></div><div class="preview-hint"><span>Click to open</span></div></div>
         <div class="card-actions"><button class="btn btn-primary copy-prompt" data-prompt="Generate a QBR for Lumon Industries for Q1 2026">Copy prompt</button><button class="btn btn-ghost open-full" data-report="rpt-generate-qbr">Open</button><button class="btn btn-ghost download-doc" data-report="rpt-generate-qbr">Download</button></div>
@@ -243,7 +243,7 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 
       <article class="card">
         <div class="card-head"><h3>partner-briefing</h3></div>
-        <code class="cmd">/euler-partner-managers:partner-briefing</code>
+        <code class="cmd">/euler-for-partner-managers:partner-briefing</code>
         <p class="card-desc">A 30-second pre-call briefing — what the partner will raise, what you should bring up, and the key activity from the last 30 days.</p>
         <div class="preview" data-report="rpt-partner-briefing"><div class="preview-bar"><span></span><span></span><span></span></div><div class="preview-scale"><iframe data-report="rpt-partner-briefing" title="partner-briefing example" loading="lazy"></iframe></div><div class="preview-hint"><span>Click to open</span></div></div>
         <div class="card-actions"><button class="btn btn-primary copy-prompt" data-prompt="Prep me for my call with Lumon Industries">Copy prompt</button><button class="btn btn-ghost open-full" data-report="rpt-partner-briefing">Open</button><button class="btn btn-ghost download-doc" data-report="rpt-partner-briefing">Download</button></div>
@@ -251,7 +251,7 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 
       <article class="card">
         <div class="card-head"><h3>portfolio-pulse</h3></div>
-        <code class="cmd">/euler-partner-managers:portfolio-pulse</code>
+        <code class="cmd">/euler-for-partner-managers:portfolio-pulse</code>
         <p class="card-desc">A one-screen pulse of the whole partner portfolio — leaderboard, who needs attention, status distribution, and coverage gaps.</p>
         <div class="preview" data-report="rpt-portfolio-pulse"><div class="preview-bar"><span></span><span></span><span></span></div><div class="preview-scale"><iframe data-report="rpt-portfolio-pulse" title="portfolio-pulse example" loading="lazy"></iframe></div><div class="preview-hint"><span>Click to open</span></div></div>
         <div class="card-actions"><button class="btn btn-primary copy-prompt" data-prompt="How's my partner portfolio doing this quarter?">Copy prompt</button><button class="btn btn-ghost open-full" data-report="rpt-portfolio-pulse">Open</button><button class="btn btn-ghost download-doc" data-report="rpt-portfolio-pulse">Download</button></div>
@@ -259,7 +259,7 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 
       <article class="card">
         <div class="card-head"><h3>pending-approvals-triage</h3></div>
-        <code class="cmd">/euler-partner-managers:pending-approvals-triage</code>
+        <code class="cmd">/euler-for-partner-managers:pending-approvals-triage</code>
         <p class="card-desc">An age-sorted worklist of everything awaiting approval — partner applications, pending referrals, and deal registrations — oldest first.</p>
         <div class="preview" data-report="rpt-pending-approvals-triage"><div class="preview-bar"><span></span><span></span><span></span></div><div class="preview-scale"><iframe data-report="rpt-pending-approvals-triage" title="pending-approvals-triage example" loading="lazy"></iframe></div><div class="preview-hint"><span>Click to open</span></div></div>
         <div class="card-actions"><button class="btn btn-primary copy-prompt" data-prompt="What's waiting on me to approve?">Copy prompt</button><button class="btn btn-ghost open-full" data-report="rpt-pending-approvals-triage">Open</button><button class="btn btn-ghost download-doc" data-report="rpt-pending-approvals-triage">Download</button></div>
@@ -272,7 +272,7 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 
       <article class="card">
         <div class="card-head"><h3>my-performance</h3></div>
-        <code class="cmd">/euler-partners:my-performance</code>
+        <code class="cmd">/euler-for-partners:my-performance</code>
         <p class="card-desc">A partner's own scorecard — their EULER health score (0–100), headline stats, and the single biggest lever to improve next.</p>
         <div class="preview" data-report="rpt-my-performance"><div class="preview-bar"><span></span><span></span><span></span></div><div class="preview-scale"><iframe data-report="rpt-my-performance" title="my-performance example" loading="lazy"></iframe></div><div class="preview-hint"><span>Click to open</span></div></div>
         <div class="card-actions"><button class="btn btn-primary copy-prompt" data-prompt="How am I doing with Martus this quarter?">Copy prompt</button><button class="btn btn-ghost open-full" data-report="rpt-my-performance">Open</button><button class="btn btn-ghost download-doc" data-report="rpt-my-performance">Download</button></div>
@@ -280,7 +280,7 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 
       <article class="card">
         <div class="card-head"><h3>my-onboarding</h3></div>
-        <code class="cmd">/euler-partners:my-onboarding</code>
+        <code class="cmd">/euler-for-partners:my-onboarding</code>
         <p class="card-desc">A partner's own onboarding & certification progress across assigned flows — what's done, what's left, and what's overdue.</p>
         <div class="preview" data-report="rpt-my-onboarding"><div class="preview-bar"><span></span><span></span><span></span></div><div class="preview-scale"><iframe data-report="rpt-my-onboarding" title="my-onboarding example" loading="lazy"></iframe></div><div class="preview-hint"><span>Click to open</span></div></div>
         <div class="card-actions"><button class="btn btn-primary copy-prompt" data-prompt="Where am I in my onboarding?">Copy prompt</button><button class="btn btn-ghost open-full" data-report="rpt-my-onboarding">Open</button><button class="btn btn-ghost download-doc" data-report="rpt-my-onboarding">Download</button></div>
@@ -288,7 +288,7 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 
       <article class="card">
         <div class="card-head"><h3>my-referrals</h3></div>
-        <code class="cmd">/euler-partners:my-referrals</code>
+        <code class="cmd">/euler-for-partners:my-referrals</code>
         <p class="card-desc">A partner's submitted referrals & deal registrations and where each stands — a recency-sorted worklist with status at a glance.</p>
         <div class="preview" data-report="rpt-my-referrals"><div class="preview-bar"><span></span><span></span><span></span></div><div class="preview-scale"><iframe data-report="rpt-my-referrals" title="my-referrals example" loading="lazy"></iframe></div><div class="preview-hint"><span>Click to open</span></div></div>
         <div class="card-actions"><button class="btn btn-primary copy-prompt" data-prompt="What referrals have I submitted to Martus?">Copy prompt</button><button class="btn btn-ghost open-full" data-report="rpt-my-referrals">Open</button><button class="btn btn-ghost download-doc" data-report="rpt-my-referrals">Download</button></div>
@@ -296,7 +296,7 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 
       <article class="card">
         <div class="card-head"><h3>my-deals</h3></div>
-        <code class="cmd">/euler-partners:my-deals</code>
+        <code class="cmd">/euler-for-partners:my-deals</code>
         <p class="card-desc">A partner's own deal pipeline with one customer — open deals grouped by stage with amounts, plus closed-won and a stage distribution.</p>
         <div class="preview" data-report="rpt-my-deals"><div class="preview-bar"><span></span><span></span><span></span></div><div class="preview-scale"><iframe data-report="rpt-my-deals" title="my-deals example" loading="lazy"></iframe></div><div class="preview-hint"><span>Click to open</span></div></div>
         <div class="card-actions"><button class="btn btn-primary copy-prompt" data-prompt="Show me my pipeline with Martus">Copy prompt</button><button class="btn btn-ghost open-full" data-report="rpt-my-deals">Open</button><button class="btn btn-ghost download-doc" data-report="rpt-my-deals">Download</button></div>
@@ -304,7 +304,7 @@ footer{background:var(--gray-950);color:var(--gray-400);padding:38px 0;margin-to
 
       <article class="card">
         <div class="card-head"><h3>submit-a-referral</h3><span class="tag">write</span></div>
-        <code class="cmd">/euler-partners:submit-a-referral</code>
+        <code class="cmd">/euler-for-partners:submit-a-referral</code>
         <p class="card-desc">A partner submits a new referral / deal registration through chat — fetch the form, collect answers, confirm, then a one-call write returns a compact confirmation card.</p>
         <div class="preview" data-report="rpt-submit-a-referral"><div class="preview-bar"><span></span><span></span><span></span></div><div class="preview-scale"><iframe data-report="rpt-submit-a-referral" title="submit-a-referral example" loading="lazy"></iframe></div><div class="preview-hint"><span>Click to open</span></div></div>
         <div class="card-actions"><button class="btn btn-primary copy-prompt" data-prompt="I want to register a new deal with Martus">Copy prompt</button><button class="btn btn-ghost open-full" data-report="rpt-submit-a-referral">Open</button><button class="btn btn-ghost download-doc" data-report="rpt-submit-a-referral">Download</button></div>
@@ -1296,7 +1296,7 @@ footer { background:var(--g95); color:var(--g4); padding:32px 0; margin-top:clam
         </tbody>
       </table>
     </div>
-    <p class="note">5 producers shown; the remaining 9 partners had no billed/invoiced revenue in the window. Vanta ranks on a $4,200 <strong>billing</strong> with 0 closed-won deals — revenue here is billed/invoiced, not only closed-won. Deep-link any row to a full retrospective via <code>/euler-partner-managers:generate-qbr &lt;partner&gt;</code>.</p>
+    <p class="note">5 producers shown; the remaining 9 partners had no billed/invoiced revenue in the window. Vanta ranks on a $4,200 <strong>billing</strong> with 0 closed-won deals — revenue here is billed/invoiced, not only closed-won. Deep-link any row to a full retrospective via <code>/euler-for-partner-managers:generate-qbr &lt;partner&gt;</code>.</p>
   </div>
 </section>
 
@@ -1321,35 +1321,35 @@ footer { background:var(--g95); color:var(--g4); padding:32px 0; margin-top:clam
           <span class="status-pill red">🔴 At risk</span>
           <span class="att-name">Initech Resellers</span>
         </div>
-        <div class="att-meta">Status Inactive; no closed-won and no open pipeline · Decide: reactivate or offboard · <code>/euler-partner-managers:generate-qbr Initech Resellers</code></div>
+        <div class="att-meta">Status Inactive; no closed-won and no open pipeline · Decide: reactivate or offboard · <code>/euler-for-partner-managers:generate-qbr Initech Resellers</code></div>
       </div>
       <div class="att-row">
         <div class="att-left">
           <span class="status-pill red">🔴 At risk</span>
           <span class="att-name">Globex Integrations</span>
         </div>
-        <div class="att-meta">Status Inactive; foundational agreement unsigned · Decide: reactivate or offboard · <code>/euler-partner-managers:generate-qbr Globex Integrations</code></div>
+        <div class="att-meta">Status Inactive; foundational agreement unsigned · Decide: reactivate or offboard · <code>/euler-for-partner-managers:generate-qbr Globex Integrations</code></div>
       </div>
       <div class="att-row">
         <div class="att-left">
           <span class="status-pill red">🔴 At risk</span>
           <span class="att-name">Vanta Field Systems</span>
         </div>
-        <div class="att-meta">Active but $4,200 billed with 0 closed-won deals and no open pipeline · Confirm the deal stalled vs mis-stage · <code>/euler-partner-managers:generate-qbr Vanta Field Systems</code></div>
+        <div class="att-meta">Active but $4,200 billed with 0 closed-won deals and no open pipeline · Confirm the deal stalled vs mis-stage · <code>/euler-for-partner-managers:generate-qbr Vanta Field Systems</code></div>
       </div>
       <div class="att-row">
         <div class="att-left">
           <span class="status-pill amber">🟡 Watch</span>
           <span class="att-name">Helix Systems</span>
         </div>
-        <div class="att-meta">Active, $0 production in window, last activity 78d ago · Re-engage with a pipeline review · <code>/euler-partner-managers:generate-qbr Helix Systems</code></div>
+        <div class="att-meta">Active, $0 production in window, last activity 78d ago · Re-engage with a pipeline review · <code>/euler-for-partner-managers:generate-qbr Helix Systems</code></div>
       </div>
       <div class="att-row">
         <div class="att-left">
           <span class="status-pill amber">🟡 Watch</span>
           <span class="att-name">EchoRise Labs</span>
         </div>
-        <div class="att-meta">Producing but thin — a single deal and light engagement · Build a second opportunity to de-risk · <code>/euler-partner-managers:generate-qbr EchoRise Labs</code></div>
+        <div class="att-meta">Producing but thin — a single deal and light engagement · Build a second opportunity to de-risk · <code>/euler-for-partner-managers:generate-qbr EchoRise Labs</code></div>
       </div>
     </div>
   </div>
@@ -2563,7 +2563,7 @@ footer { background:var(--g95); color:var(--g4); padding:32px 0; margin-top:clam
         </tbody>
       </table>
     </div>
-    <p class="note">To submit a new referral, use <code>/euler-partners:submit-a-referral</code>.</p>
+    <p class="note">To submit a new referral, use <code>/euler-for-partners:submit-a-referral</code>.</p>
     <p class="note">(1 entry flagged as possible test data — Lumon Industries can delete it from the dashboard. It is still included in the counts above.)</p>
   </div>
 </section>
@@ -3095,7 +3095,7 @@ footer { background:var(--g95); color:var(--g4); padding:32px 0; margin-top:clam
       <tr><td><strong>Estimated deal size (USD)</strong></td><td>$40,000</td></tr>
     </tbody>
   </table></div>
-  <p class="note">Martus has received your registration. Track its status anytime with <code>/euler-partners:my-referrals</code>.</p>
+  <p class="note">Martus has received your registration. Track its status anytime with <code>/euler-for-partners:my-referrals</code>.</p>
 </div></section>
 <footer><div class="container footer-inner">
   <span class="brand-mark footer-mark">Euler</span><p>Referral · Martus</p><p class="mono">euler · submit-a-referral</p>

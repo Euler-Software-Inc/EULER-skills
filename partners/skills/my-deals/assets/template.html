@@ -61,7 +61,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- row · clone, max 1 per open deal · group by stage (early→late), largest amount first; stage cell bold on first row of group (blank/repeat OK); flag test entries "(test?)"; no internal IDs. Empty state: drop table, render .note "No open deals — submit a referral with /euler-partners:submit-a-referral." -->
+          <!-- row · clone, max 1 per open deal · group by stage (early→late), largest amount first; stage cell bold on first row of group (blank/repeat OK); flag test entries "(test?)"; no internal IDs. Empty state: drop table, render .note "No open deals — submit a referral with /euler-for-partners:submit-a-referral." -->
           <tr>
             <td><strong>{{STAGE_NAME}}</strong></td>
             <td><strong>{{DEAL_NAME}}</strong><!-- cell-note: only if last_stage_change_date < 9999 (null sentinel ≥9999 = skip) --><div class="cell-note">{{N}} days in stage</div></td>

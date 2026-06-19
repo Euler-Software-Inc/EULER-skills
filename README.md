@@ -7,12 +7,12 @@
 This repo is a **Claude Code plugin marketplace** (`euler-plugins`) containing two
 audience-scoped plugins:
 
-- **`euler-partner-managers`** — "EULER for Partner managers": customer-admin workflows.
-- **`euler-partners`** — "EULER for Partners": partner self-service workflows.
+- **`euler-for-partner-managers`** — "EULER for Partner managers": customer-admin workflows.
+- **`euler-for-partners`** — "EULER for Partners": partner self-service workflows.
 
 ## What's included
 
-### `euler-partner-managers` — for partner-relationship managers (customer-admin)
+### `euler-for-partner-managers` — for partner-relationship managers (customer-admin)
 
 | Skill | Status | Description |
 |-------|--------|-------------|
@@ -24,7 +24,7 @@ audience-scoped plugins:
 | `monthly-commission-report` | 🚧 Planned | Auto-generate commission payout report for a partner or company-wide |
 | `flow-onboarding-setup` | 🚧 Planned | Scaffold a new onboarding flow with steps + assignments |
 
-### `euler-partners` — for partners (self-service)
+### `euler-for-partners` — for partners (self-service)
 
 | Skill | Status | Description |
 |-------|--------|-------------|
@@ -51,16 +51,16 @@ Add the marketplace once, then install whichever plugin fits your role.
 /plugin marketplace add Euler-Software-Inc/EULER-skills
 
 # For partner-relationship managers (customer-admin workflows):
-/plugin install euler-partner-managers@euler-plugins
+/plugin install euler-for-partner-managers@euler-plugins
 
 # For partners (self-service workflows):
-/plugin install euler-partners@euler-plugins
+/plugin install euler-for-partners@euler-plugins
 ```
 
 The first time you invoke an EULER skill, Claude will trigger the OAuth flow
 against `https://mcp.eulerapp.com` — one-time consent, the token is cached for
 30 days. Skills are invoked under each plugin's namespace, e.g.
-`/euler-partner-managers:generate-qbr` and `/euler-partners:my-performance`.
+`/euler-for-partner-managers:generate-qbr` and `/euler-for-partners:my-performance`.
 
 ### Local development install
 
@@ -78,8 +78,8 @@ Use `/reload-plugins` inside Claude Code to pick up changes without restarting.
 
 ```bash
 /plugin marketplace update euler-plugins
-/plugin update euler-partner-managers
-/plugin update euler-partners
+/plugin update euler-for-partner-managers
+/plugin update euler-for-partners
 ```
 
 ### Validation

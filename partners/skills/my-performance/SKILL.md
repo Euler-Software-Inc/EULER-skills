@@ -14,7 +14,7 @@ biggest thing to improve:
 - "How am I doing?" / "How am I doing with {Customer} this quarter?"
 - "My performance" / "My numbers" / "My partner scorecard"
 - "How's my pipeline?" / "Am I on track with {Customer}?"
-- `/euler-partners:my-performance`
+- `/euler-for-partners:my-performance`
 
 DO NOT invoke for:
 

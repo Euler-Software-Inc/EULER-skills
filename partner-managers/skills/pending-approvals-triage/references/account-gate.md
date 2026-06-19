@@ -34,7 +34,7 @@ Do NOT proceed and do NOT surface a raw error:
 > "**pending-approvals-triage** is for customer admins / partner managers (the company
 > that hosts the partner program), so this approval queue isn't available on a
 > **partner** account. To see your own data with a customer, try
-> **`/euler-partners:my-performance`**; to manage your program, open your dashboard:
+> **`/euler-for-partners:my-performance`**; to manage your program, open your dashboard:
 > `<dashboard_url>` (from `list_accounts`)."
 
 ## Defense-in-depth: `forbidden_scope`

@@ -48,7 +48,7 @@ no real company name). Appended `(test?)` to the display name; counted in totals
 Footer footnote: "(1 entry flagged as possible test data — Lumon Industries can delete it
 from the dashboard.)"
 
-**CTA note** → "To submit a new referral, use `/euler-partners:submit-a-referral`."
+**CTA note** → "To submit a new referral, use `/euler-for-partners:submit-a-referral`."
 
 **Footer** → `euler · my-referrals`
 
