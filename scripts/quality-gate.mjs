@@ -5,7 +5,7 @@
 //
 //   node scripts/quality-gate.mjs
 //
-import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, appendFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -113,7 +113,19 @@ for (const f of tracked) {
   const u = t.match(URLISH); if (u) warns.push(`staging/localhost ref "${u[0]}" (${f})`);
 }
 
-// Report
+// Report — console + GitHub Actions job summary (renders on the PR's run page)
+const CHECKS = 'manifests (`claude plugin validate`) · canonical sync · skill frontmatter (no `<>` in description) · no legacy CSS tokens · English-only · no Bubble IDs / secrets · lightweight HTML · examples present · no dev docs tracked';
+const status = errors.length ? '✗ FAILED' : '✓ PASSED';
+const summaryMd =
+  `## EULER-skills quality gate\n\n` +
+  `**${status}** · ${errors.length} error(s) · ${warns.length} warning(s) · ${skillFiles.length} skills, ${tracked.length} tracked files\n\n` +
+  `**Checks run:** ${CHECKS}\n` +
+  (errors.length ? `\n### Errors\n${errors.map((e) => '- ✗ ' + e.replace(/\n/g, '  \n  ')).join('\n')}\n` : '') +
+  (warns.length ? `\n<details><summary>⚠ ${warns.length} warning(s)</summary>\n\n${warns.map((w) => '- ' + w).join('\n')}\n</details>\n` : '');
+if (process.env.GITHUB_STEP_SUMMARY) {
+  try { appendFileSync(process.env.GITHUB_STEP_SUMMARY, summaryMd); } catch { /* non-fatal */ }
+}
+
 console.log(`\nEULER-skills quality gate — ${skillFiles.length} skills, ${tracked.length} tracked files\n`);
 if (warns.length) { console.log(`⚠ ${warns.length} warning(s):`); for (const w of warns) console.log('  - ' + w); console.log(''); }
 if (errors.length) {
