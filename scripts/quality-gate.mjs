@@ -5,7 +5,7 @@
 //
 //   node scripts/quality-gate.mjs
 //
-import { readFileSync, existsSync, readdirSync, appendFileSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, appendFileSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -102,7 +102,8 @@ const devdocs = tracked.filter((f) => /^docs\/(plans|specs)\//.test(f) || f === 
 if (devdocs.length) errors.push(`internal dev docs are tracked (should be gitignored): ${devdocs.join(', ')}`);
 
 // WARNINGS — non-eulerapp emails, staging/localhost URLs
-const EMAIL = /[a-z0-9._%+-]+@(?!eulerapp\.com\b)[a-z0-9.-]+\.[a-z]{2,}/gi;
+// Allowlist: our domain + RFC-2606 example domains + known-fictional sample domains used in examples.
+const EMAIL = /[a-z0-9._%+-]+@(?!eulerapp\.com\b|example\.(?:com|org|net)\b|initech\.com\b)[a-z0-9.-]+\.[a-z]{2,}/gi;
 const URLISH = /(https?:\/\/[^\s"'<)]*staging[^\s"'<)]*|staging\.[a-z0-9.-]+|localhost(:\d+)?|127\.0\.0\.1)/i;
 const seenEmail = new Set();
 for (const f of tracked) {
@@ -124,6 +125,7 @@ const summaryMd =
   (warns.length ? `\n<details><summary>⚠ ${warns.length} warning(s)</summary>\n\n${warns.map((w) => '- ' + w).join('\n')}\n</details>\n` : '');
 if (process.env.GITHUB_STEP_SUMMARY) {
   try { appendFileSync(process.env.GITHUB_STEP_SUMMARY, summaryMd); } catch { /* non-fatal */ }
+  try { writeFileSync(join(root, 'qg-summary.md'), summaryMd); } catch { /* non-fatal */ } // consumed by the PR-comment step
 }
 
 console.log(`\nEULER-skills quality gate — ${skillFiles.length} skills, ${tracked.length} tracked files\n`);

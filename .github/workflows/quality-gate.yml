@@ -2,13 +2,18 @@ name: quality-gate
 
 # Runs the EULER-skills quality gate (plugin/skill best practices + repo hygiene).
 # Node-only checks run here; `claude plugin validate` self-skips when the CLI is
-# absent (it runs locally via the pre-push hook instead).
+# absent (it runs locally via the pre-push hook instead). On pull requests the
+# gate's summary is posted as a sticky PR comment and to the run's job summary.
 
 on:
   pull_request:
     branches: [main]
   push:
     branches: [dev, main]
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   gate:
@@ -20,3 +25,14 @@ jobs:
           node-version: '20'
       - name: Quality gate
         run: node scripts/quality-gate.mjs
+      - name: Comment summary on PR
+        # Best-effort: post/refresh the gate summary on the PR even if the gate failed.
+        # continue-on-error keeps the gate's pass/fail (the step above) as the real check.
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR='${{ github.event.pull_request.number }}'
+          gh pr comment "$PR" --body-file qg-summary.md --edit-last \
+            || gh pr comment "$PR" --body-file qg-summary.md

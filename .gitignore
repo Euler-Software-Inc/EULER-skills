@@ -20,3 +20,6 @@ showcase/showcase-plugin-claude.html
 docs/plans/
 docs/specs/
 PLAN-account-aware-skills.md
+
+# Quality-gate run summary — written by scripts/quality-gate.mjs in CI, consumed by the PR-comment step.
+qg-summary.md
