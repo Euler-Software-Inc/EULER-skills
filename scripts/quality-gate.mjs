@@ -21,15 +21,18 @@ const SKILL_RE = /^(partner-managers|partners)\/skills\/([^/]+)\/SKILL\.md$/;
 const skillFiles = tracked.filter((f) => SKILL_RE.test(f));
 const skillDirs = [...new Set(skillFiles.map((f) => f.replace(/\/SKILL\.md$/, '')))];
 
-// 1. Manifests valid (claude plugin validate) — WARNING-skip if CLI absent (e.g. CI)
-try {
+// 1. Manifests valid (claude plugin validate) — skip with WARNING if the CLI is absent (e.g. CI)
+let claudeOk = true;
+try { sh('claude --version'); } catch { claudeOk = false; }
+if (!claudeOk) {
+  warns.push('`claude` CLI not available — skipped plugin-manifest validation (runs locally via the pre-push hook).');
+} else {
   for (const p of ['.', './partner-managers', './partners']) {
-    const out = sh(`claude plugin validate ${p} 2>&1`);
+    let out = '';
+    try { out = sh(`claude plugin validate ${p}`); }
+    catch (e) { out = (e.stdout || '').toString() + (e.stderr || '').toString(); }
     if (!/Validation passed/.test(out)) errors.push(`manifest invalid: ${p}\n${out.trim()}`);
   }
-} catch (e) {
-  if (/not recognized|not found|ENOENT/i.test(String(e.message) + String(e.stderr))) warns.push('`claude` CLI not available — skipped plugin-manifest validation (run locally).');
-  else errors.push(`claude plugin validate failed:\n${(e.stdout || e.message || '').toString().trim()}`);
 }
 
 // 2. Canonical assets in sync
