@@ -5,7 +5,7 @@
 //
 //   node scripts/quality-gate.mjs
 //
-import { readFileSync, existsSync, readdirSync, appendFileSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, appendFileSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -17,15 +17,16 @@ const tracked = sh('git ls-files').split(/\r?\n/).filter(Boolean);
 
 const errors = [];
 const warns = [];
+const infos = []; // expected, non-actionable notes (e.g. a check skipped by environment) — not counted as warnings
 const SKILL_RE = /^(partner-managers|partners)\/skills\/([^/]+)\/SKILL\.md$/;
 const skillFiles = tracked.filter((f) => SKILL_RE.test(f));
 const skillDirs = [...new Set(skillFiles.map((f) => f.replace(/\/SKILL\.md$/, '')))];
 
-// 1. Manifests valid (claude plugin validate) — skip with WARNING if the CLI is absent (e.g. CI)
+// 1. Manifests valid (claude plugin validate) — skip with an INFO note if the CLI is absent (e.g. CI)
 let claudeOk = true;
 try { sh('claude --version'); } catch { claudeOk = false; }
 if (!claudeOk) {
-  warns.push('`claude` CLI not available — skipped plugin-manifest validation (runs locally via the pre-push hook).');
+  infos.push('Manifest validation (`claude plugin validate`) skipped — the CLI is not available here; it runs locally via the pre-push hook.');
 } else {
   for (const p of ['.', './partner-managers', './partners']) {
     let out = '';
@@ -102,7 +103,8 @@ const devdocs = tracked.filter((f) => /^docs\/(plans|specs)\//.test(f) || f === 
 if (devdocs.length) errors.push(`internal dev docs are tracked (should be gitignored): ${devdocs.join(', ')}`);
 
 // WARNINGS — non-eulerapp emails, staging/localhost URLs
-const EMAIL = /[a-z0-9._%+-]+@(?!eulerapp\.com\b)[a-z0-9.-]+\.[a-z]{2,}/gi;
+// Allowlist: our domain + RFC-2606 example domains + known-fictional sample domains used in examples.
+const EMAIL = /[a-z0-9._%+-]+@(?!eulerapp\.com\b|example\.(?:com|org|net)\b|initech\.com\b)[a-z0-9.-]+\.[a-z]{2,}/gi;
 const URLISH = /(https?:\/\/[^\s"'<)]*staging[^\s"'<)]*|staging\.[a-z0-9.-]+|localhost(:\d+)?|127\.0\.0\.1)/i;
 const seenEmail = new Set();
 for (const f of tracked) {
@@ -121,13 +123,16 @@ const summaryMd =
   `**${status}** · ${errors.length} error(s) · ${warns.length} warning(s) · ${skillFiles.length} skills, ${tracked.length} tracked files\n\n` +
   `**Checks run:** ${CHECKS}\n` +
   (errors.length ? `\n### Errors\n${errors.map((e) => '- ✗ ' + e.replace(/\n/g, '  \n  ')).join('\n')}\n` : '') +
-  (warns.length ? `\n<details><summary>⚠ ${warns.length} warning(s)</summary>\n\n${warns.map((w) => '- ' + w).join('\n')}\n</details>\n` : '');
+  (warns.length ? `\n<details><summary>⚠ ${warns.length} warning(s)</summary>\n\n${warns.map((w) => '- ' + w).join('\n')}\n</details>\n` : '') +
+  (infos.length ? `\n<details><summary>ℹ ${infos.length} note(s)</summary>\n\n${infos.map((i) => '- ' + i).join('\n')}\n</details>\n` : '');
 if (process.env.GITHUB_STEP_SUMMARY) {
   try { appendFileSync(process.env.GITHUB_STEP_SUMMARY, summaryMd); } catch { /* non-fatal */ }
+  try { writeFileSync(join(root, 'qg-summary.md'), summaryMd); } catch { /* non-fatal */ } // consumed by the PR-comment step
 }
 
 console.log(`\nEULER-skills quality gate — ${skillFiles.length} skills, ${tracked.length} tracked files\n`);
 if (warns.length) { console.log(`⚠ ${warns.length} warning(s):`); for (const w of warns) console.log('  - ' + w); console.log(''); }
+if (infos.length) { console.log(`ℹ ${infos.length} note(s):`); for (const i of infos) console.log('  - ' + i); console.log(''); }
 if (errors.length) {
   console.error(`✗ ${errors.length} error(s):`);
   for (const e of errors) console.error('  ✗ ' + e);
