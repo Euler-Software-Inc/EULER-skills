@@ -39,10 +39,10 @@ the partner program). It is NOT usable from a partner-only account.
 ## Inputs (all optional — never block on them)
 
 ### 1. Time window
-- Default: **last 90 days** (today − 90 → today).
-- Accept: "this quarter", "last 30 days", "Q1 2026", explicit dates, "YTD".
-- Convert to `start_date` / `end_date` in **`YYYY-MM-DD`** (never a time component —
-  full ISO datetimes are mis-parsed downstream).
+- **No window → Path A** (default): the lifetime-to-date snapshot (`get_partner_overall_stats`).
+- A window ("this quarter", "last 30 days", "Q1 2026", explicit dates, "YTD") **→ Path B**.
+  Convert to `start_date` / `end_date` in **`YYYY-MM-DD`** (never a time component — full ISO
+  datetimes are mis-parsed downstream).
 
 ### 2. Ranking metric
 - Default: **`revenue`** (closed-won deal revenue).
@@ -53,31 +53,50 @@ the partner program). It is NOT usable from a partner-only account.
 
 No partner is named — this is the entire portfolio.
 
-## Orchestration sequence (~5 fixed calls + a capped bottom-K deep-dive)
+## Orchestration sequence (path-selected)
 
+Step 1 is always `list_accounts` (header + account gate per
+[`references/account-gate.md`](references/account-gate.md)). Then pick ONE data path, by
+whether the user asked for a **time window**.
+
+### Path A — default snapshot (no window requested) · PREFERRED · scales to 40k
 | # | Tool call | Provides |
 |---|-----------|----------|
 | 1 | `list_accounts` | Customer-side `name` (header) + account gate. |
-| 2 | `partners(action: 'summary')` | Company-wide totals + portal-access counts. **Its status breakdown proved unreliable** (disagreed with the roster — 2026-06-01 live run); do NOT use it for the status distribution. |
-| 3 | `performance(action: 'company', start_date, end_date)` | Own-company aggregate (booking / billings / deal count / win rate) for portfolio totals. |
-| 4 | `performance(action: 'overall', entity_key, start_date, end_date, page: 1, limit: N)` | **Terminal** ranked top-N partners + aggregate metrics in one call. Ranks by **billed/invoiced revenue** (`entity_key: 'revenue'`) — a partner can rank with revenue while having 0 closed-won deals. |
-| 5 | `partners(action: 'list', page: 1, limit: 100)` | Roster (name + status) — **the canonical source for the status distribution AND the at-risk segment**. Page if needed; note if truncated. |
+| 2 | `get_partner_overall_stats` | **One backend-aggregated call**: total / active / pending partner counts, total / won deal counts, total revenue (sum), and the **top 100 partners by revenue**. **Lifetime-to-date** — label the basis "lifetime", never a window. |
+| 3 | `company_invoices(action: 'summary')` | Company-wide invoiced / collected / pending totals (the collections line). Optional — skip silently if empty/forbidden. |
 
-`overall` is terminal — it returns ranking + aggregates together; do NOT loop
-per-partner `partner_artifacts`/`commissions` across the WHOLE portfolio for a pulse.
-The only per-partner fetch is the **capped bottom-K deep-dive** (K ≈ 5, the at-risk/watch
-tail — see §Segmentation), which upgrades just those few to a full health score. If the user
-wants depth on one partner, suggest `/euler-for-partner-managers:generate-qbr <partner>`.
+### Path B — windowed (user asked for dates / "this quarter" / "last 30 days" / "YTD")
+`get_partner_overall_stats` is unfiltered, so a window uses the multi-call path:
 
-> **Roster status comes from `partners(list)`, not `summary`.** On the 2026-06-01
-> live run, `summary` returned a status breakdown that only accounted for 35 of 42
-> partners and disagreed with the per-entry roster. Always compute the status
-> distribution by counting `partners(list)` entries. Use `summary` only for the
-> grand total + portal-access counts, and treat it skeptically.
+| # | Tool call | Provides |
+|---|-----------|----------|
+| 1 | `list_accounts` | Header + account gate. |
+| 2 | `performance(action: 'company', start_date, end_date)` | Own-company window aggregate (booking / billings / deals / win rate). |
+| 3 | `performance(action: 'overall', entity_key, start_date, end_date, page: 1, limit: N)` | **Terminal** ranked top-N + aggregates in one call. Ranks by **billed/invoiced revenue** (`entity_key: 'revenue'`) — a partner can rank with revenue while having 0 closed-won deals. |
+| 4 | `partners(action: 'list', page: 1, limit: 100)` | Roster (name + status) — canonical for the status distribution + at-risk segment, **only when the roster is small** (see §Segmentation). |
+| 5 | `company_invoices(action: 'summary')` | Collections line (optional). |
+
+### Fallback — Path A tool unavailable
+`get_partner_overall_stats` is newly shipped and may not be enabled on every tenant. If it
+is **not available** or returns an error, **silently fall back to Path B run unwindowed**
+(omit dates; `performance(action:'overall')` lifetime). Never mention tools or
+"unavailable" to the user.
+
+`overall` (Path B) is terminal — it returns ranking + aggregates together; do NOT loop
+per-partner `partner_artifacts`/`commissions` across the WHOLE portfolio. The only
+per-partner fetch is the **capped bottom-K deep-dive** (K ≈ 5), and only when the roster is
+small (§Segmentation). For depth on one partner, suggest
+`/euler-for-partner-managers:generate-qbr <partner>`.
+
+> **Roster status (small-roster path) comes from `partners(list)`, not `summary`.** On the
+> 2026-06-01 live run, `summary`'s status breakdown accounted for only 35 of 42 partners and
+> disagreed with the roster. Compute status by counting `partners(list)` entries; use
+> `summary` only for grand total + portal-access counts.
 
 For exact response field paths per tool, consult
-[`references/mcp-field-paths.md`](references/mcp-field-paths.md). The same backend
-gotchas apply (dates `YYYY-MM-DD`; numerics arrive as strings; loose JSON parsing).
+[`references/mcp-field-paths.md`](references/mcp-field-paths.md). Backend gotchas apply
+(dates `YYYY-MM-DD`; numerics arrive as strings; loose JSON parsing).
 
 ### Error handling
 - Partner-only account → gate message (see §Account type), STOP.
@@ -88,42 +107,43 @@ gotchas apply (dates `YYYY-MM-DD`; numerics arrive as strings; loose JSON parsin
 - Any single tool empty/errors → continue; add a one-line footnote at the END of
   the TL;DR naming the missing section. No giant banner.
 
-## Segmentation (coarse rank from the 2 existing calls; deep-dive only the bottom-K tail)
+## Segmentation + the roster scale rule
 
-- **Portfolio totals**: partner count (from `list`/`summary`), revenue/deals in window
-  (from `company` + `overall`).
-- **Status distribution** (count `partners(list)` entries — NOT `summary`):
-  Active / Onboarding / Prospecting / Inactive / **No status set**.
-- **Top performers** (overall): top N by revenue (billed/invoiced), with deal count.
+The fine **status distribution** (Onboarding / Prospecting / No-status) and the
+**needs-attention bottom-K deep-dive** both require the full roster
+(`partners(action:'list')`), which does NOT scale to tens of thousands. Gate them by size:
 
-### Partner health (coarse rank → deep-dive the tail)
+- **Total partner count ≤ ~300** (≈ ≤2 pages at `limit: 250`) — fetch the roster and run
+  those sections: coarse-rank every partner per
+  [`docs/partner-health-model.md`](../../docs/partner-health-model.md) in **coarse** mode
+  (Production + Status), segment by band (hard-rule caps apply: Inactive → At-risk, etc.),
+  then **deep-dive only the bottom-K** (K ≈ 5, the at-risk/watch tail) to a **full** score +
+  one-line reason. **Label** the leaderboard coarse-ranked, tail-only deep-scored; deep-link
+  each at-risk row to `/euler-for-partner-managers:generate-qbr <partner>`.
+- **Total > ~300 (or Path A):** do NOT fetch the full roster. Render headline counts
+  (total / active / pending) + the top-100 leaderboard; **omit** needs-attention; render a
+  **coarse** status row (Active / Pending / Other) from the headline counts; add one note:
+  *"Full-roster segmentation not run ({N} partners) — showing top 100 by revenue + headline
+  totals."*
+- Path B's `partners(list)` is itself page-capped — same honesty rule: if truncated, scope
+  the claim ("top-N producing"), never imply you saw every partner.
 
-Score the portfolio per [`docs/partner-health-model.md`](../../docs/partner-health-model.md) in
-**coarse** mode — Production (from `performance(action:'overall')`) + Status (from
-`partners(action:'list')`), the two calls this skill already makes. Rank all partners by the
-coarse score and segment by band (the hard-rule caps still apply: Inactive → At-risk, etc.).
+Always-applicable notes:
 
-Then **deep-dive only the bottom-K** (K ≈ 5, the at-risk/watch tail): fetch their per-partner
-sources and upgrade them to a **full** score + a one-line reason for "Needs attention". Cap K so
-the call budget stays small. **Label clearly** that the leaderboard is coarse-ranked and only the
-tail was deep-scored — never imply every partner got the full model. Deep-link each at-risk row to
-`/euler-for-partner-managers:generate-qbr <partner>` for the full picture.
+- **Top performers**: top N by revenue (billed/invoiced on Path B; lifetime on Path A), with deal count.
+- The **No status configured** cohort (small-roster path) is itself a coarse signal — a large
+  no-status share is the #1 item (action = "segment the roster & assign statuses", not pipeline).
+- **Coverage gaps / concentration**: producing vs dormant; top partner = X% of the ranked
+  (top-100 / top-N) revenue. **When producing ≤ 1**, concentration is meaningless — render
+  `n/a` / "insufficient producers", not "100%".
 
-Portfolio-specific notes that still hold:
+## Product how-to questions (`euler_help`)
 
-- The **No status configured** cohort is a real coarse signal in its own right — Status feeds the
-  coarse score, so a large no-status share is the #1 item (the program can't be measured/worked
-  until the roster is segmented; action = "segment the roster & assign statuses", not pipeline).
-- Count statuses from `partners(list)`, NOT `summary` (the summary breakdown proved unreliable).
-- Each "Needs attention" row: band pill (At-risk / Watch) + name + the deep-dived one-line reason +
-  one action + the `generate-qbr` deep-link.
-- **Coverage gaps**: producing vs dormant share; concentration (top partner = X% of
-  ranked revenue).
-  - **When producing ≤ 1**, concentration is meaningless (100% of a single record is
-    noise) — render it as `n/a` / "insufficient producers", not "100%".
-  - Producing count: `overall` returned the full producing set (not a truncated page)
-    on the 2026-06-01 run — but verify per run. If the ranking IS capped at top-N,
-    label "top-N producing", never imply you saw every partner.
+If the user asks how EULER itself works or how to do something in the product — not about
+their own data — e.g. "how do I register a deal", "where do I find X in the portal", "how
+does onboarding work" — call `euler_help` with their question and answer briefly from its
+result. Do not guess about product behavior. This is a tangent to this skill's main job:
+answer in 1–3 sentences (no HTML report) and return to the task.
 
 ## Output format
 
@@ -174,21 +194,27 @@ Follow [`assets/template.html`](assets/template.html). Sections, in order:
 1. **Topbar** — Euler `brand-mark` wordmark + `brand-label` "Portfolio Pulse · {Customer}".
 2. **Hero** — `hero-eyebrow` (tone) "{window} · {N} partners"; `<h1>` short headline
    with a gradient `.accent` span; subtitle + a `.data-pill` (complete/partial/stale).
-3. **Quick facts** (`.quick-facts` → `.fact`): Partners · Producing (window) ·
-   Revenue (window) · Concentration. Numerals render in JetBrains Mono via `.fact-value`.
+3. **Quick facts** (`.quick-facts` → `.fact`): Partners · Active · Revenue · Concentration.
+   Revenue basis = **lifetime** (Path A) or **window** (Path B) — state which in `.fact-sub`.
+   Add a 4th fact OR a line under the spotlight for the **collections** read from
+   `company_invoices`: "Invoiced $X · collected $Y · pending $Z" (program-wide; omit if absent).
+   Numerals render in JetBrains Mono via `.fact-value`.
 4. **Spotlight** (`.spotlight` tone amber/red): the one-line read + 2–3 sentences
    (biggest signal · biggest risk · first move). Wrap key figures in `<span class="num">`.
 5. **Top performers** (`01 · Leaderboard`): `.table-wrap` table — `#` (`.rank`, rank 1
    = `.rank.top`), Partner (+ optional `.cell-note`), Revenue, Deals (numeric cols mono).
-   **Label the depth** (per the model's "always label depth" rule): a `.cell-note` / section
-   caption stating the board is **coarse-ranked** (Production + Status) and only the at-risk/watch
-   tail was deep-scored to a full health score — never imply every partner got the full model.
+   Caption the basis: "ranked by **lifetime** revenue" (Path A) / "ranked by revenue
+   (**{window}**)" (Path B). On the **small-roster** path also label the board **coarse-ranked**
+   (Production + Status), tail-only deep-scored — never imply every partner got the full model.
 6. **Needs attention** (`02 · Action`): `.attention` → `.att-row` (status-pill carrying the
    **band** label — At-risk / Watch — + name + the deep-dived one-line reason/action). These are
    the deep-dived bottom-K tail (full score + reason), NOT every partner. Cap ~6, top by severity.
-   **Omit the whole section if empty.**
-7. **Status distribution** (`03 · Roster`): `.dist` → `.dist-chip` per status
-   (Active/Onboarding/Prospecting/Inactive/No status set), counted from `partners(list)`.
+   **Small-roster path only** — on the large / Path-A path, omit this section and show the scope
+   note instead. **Omit the whole section if empty.**
+7. **Status distribution** (`03 · Roster`): `.dist` → `.dist-chip`. **Small roster:** full set
+   (Active/Onboarding/Prospecting/Inactive/No status set) counted from `partners(list)`.
+   **Large / Path A:** a coarse row (Active / Pending / Other) from the headline counts + the
+   "full-roster segmentation not run ({N})" note.
 8. **Footer** — Euler `brand-mark footer-mark` wordmark + "Portfolio Pulse · {Customer} · {window}".
 
 ### Status pill vocabulary (portfolio)
@@ -233,27 +259,32 @@ Silence empty sections (no "No X data" placeholders). The absence is the signal.
    field paths, no `forbidden_scope`/`euler_*` codes shown to the user.
 10. **One portfolio per invocation** for the connected customer. If the user has
     multiple customer accounts, ask which one (rare).
+11. **Path A is lifetime / unfiltered** — never imply "this quarter" on the default
+    snapshot; say "lifetime-to-date". Its revenue is the tool's total revenue (sum);
+    partner / deal counts are current-state lifetime, not window-filtered.
+12. **`company_invoices` is COMPANY-level** (program-wide collections) — never attribute
+    invoiced / collected / pending totals to a single partner.
 
 ## Example user flow
 
 ```
-User: "How's my partner portfolio doing this quarter?"
+User: "How's my partner portfolio doing?"   (no window → Path A)
 
 Claude:
 1. Reads this skill.
-2. list_accounts → customer self = "Martus" (header) + gate passes (customer role).
-3. partners(action: 'summary') → 42 partners: 18 Active, 9 Onboarding, 7 Prospecting, 8 Inactive.
-4. performance(action: 'company', '2026-04-01', '2026-06-30') → company aggregate.
-5. performance(action: 'overall', entity_key: 'revenue', dates, page: 1, limit: 10) →
-   ranked top 10 partners by closed-won revenue + aggregates.
-6. partners(action: 'list') → roster → coarse-score every partner (Production + Status) per the
-   shared health model; segment by band. Deep-dive only the bottom-K (~5) tail to a full score +
-   reason for "Needs attention".
-7. Renders the portfolio-pulse HTML per the template (leaderboard labelled coarse-ranked; only the
-   tail deep-scored).
+2. list_accounts → customer self = "Northwind" (header) + gate passes (customer role).
+3. get_partner_overall_stats → one call: 4,200 partners (1,180 active / 240 pending),
+   total/won deals, total revenue (lifetime), top 100 by revenue.
+4. company_invoices(action: 'summary') → invoiced / collected / pending (collections line).
+5. 4,200 > ~300 → no full roster: render headline totals + top-100 leaderboard + a coarse
+   Active/Pending/Other row + the "full-roster segmentation not run (4,200)" note.
+6. Renders the portfolio-pulse HTML per the template (basis labelled "lifetime").
 
-User: opens the HTML in a browser / saves as PDF. Deep-links into generate-qbr for
-the two partners flagged "Needs attention".
+User: "...and just for this quarter?"   (window → Path B)
+
+Claude: re-runs Path B — performance(company / overall, dates) + (small roster only)
+partners(list) for status + bottom-K deep-dive; caption "ranked by revenue (this quarter)".
+Deep-links into generate-qbr for partners flagged "Needs attention".
 ```
 
 ## Why this skill exists
