@@ -109,6 +109,14 @@ empty counts + empty detail lists (**not** an error) → **skip it silently**.
   `to_do_details`. e.g. "Finish *{step}* in *{flow}* — due {date}."
 - **Most urgent first:** order the per-flow sections **overdue → due-soon → in-progress → done**.
 
+## Product how-to questions (`euler_help`)
+
+If the user asks how EULER itself works or how to do something in the product — not about
+their own data — e.g. "how do I register a deal", "where do I find X in the portal", "how
+does onboarding work" — call `euler_help` with their question and answer briefly from its
+result. Do not guess about product behavior. This is a tangent to this skill's main job:
+answer in 1–3 sentences (no HTML report) and return to the task.
+
 ## Output format
 
 Render a **single self-contained HTML file** — no external CSS/fonts/scripts beyond the one

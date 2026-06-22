@@ -109,3 +109,31 @@ status              "Active" | "Onboarding" | "Prospecting" | "Inactive" | ""(em
 rather than implying you saw everyone. Derive "needs attention" from `status` +
 absence from the `overall` revenue ranking. Watch for obvious test entries
 (e.g. "UUU") — flag, keep in counts.
+
+## `get_partner_overall_stats`  — single-call snapshot (Path A, lifetime)
+
+No params; customer-scoped automatically; **lifetime-to-date, unfiltered**. Returns the
+headline totals + the top 100 partners by revenue in one backend-aggregated call.
+
+```
+total_partners / active_partners / pending_partners   counts (string-numeric → parse)   [verify key casing]
+total_deals / won_deals                               counts (string-numeric → parse)
+total_revenue                                         sum, $-string; normalize ""/"$"/"$0" → $0
+top_partners[]   top 100 by revenue, each:
+  { partner name (may be blank → "Unattributed"), revenue ($-string), deal count (string) }
+```
+
+New tool (shipped on `dev` first) — **exact keys are unverified; confirm against the first
+live run.** Numerics arrive as strings; a blank partner name = "Unattributed" (flag, keep in
+counts). Lifetime-to-date — label the basis "lifetime", never a window. **If the tool is
+unavailable or errors, fall back to Path B** (see SKILL.md §Orchestration).
+
+## `company_invoices(action: 'summary')`  — company-wide collections
+
+```
+totals by status: paid / pending / processing   ($-strings → parse + normalize)   [verify key casing]
+```
+
+**Company-level (program-wide), NOT partner-scoped** — never attribute to a single partner.
+`action: 'list'` (unused here) returns individual invoices with filters. Skip silently if
+empty/forbidden.

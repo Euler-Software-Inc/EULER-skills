@@ -89,6 +89,14 @@ constraints, not suggestions:
 5. **Confirm before you send (step 4).** The submit only fires after the user has seen
    the collected answers and approved them.
 
+## Product how-to questions (`euler_help`)
+
+If the user asks how EULER itself works or how to do something in the product — not about
+their own data — e.g. "how do I register a deal", "where do I find X in the portal", "how
+does onboarding work" — call `euler_help` with their question and answer briefly from its
+result. Do not guess about product behavior. This is a tangent to this skill's main job:
+answer in 1–3 sentences (no HTML report) and return to the task.
+
 ## Output
 
 A **compact confirmation card** — a single self-contained HTML file (the write's value is
