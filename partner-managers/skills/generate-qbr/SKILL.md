@@ -164,7 +164,7 @@ silence the section.
 
 ## Partner health score (computed — see the shared model)
 
-Compute the partner's health per [`docs/partner-health-model.md`](../../docs/partner-health-model.md)
+Compute the partner's health per [`partner-health-model.md`](references/partner-health-model.md)
 in **full** mode — you already fetch every source in the Orchestration sequence, so this adds no
 extra calls. **Use exactly these five factors and weights — do not rename, drop, re-weight, or
 invent factors** (no "Compliance", no 4-factor variants):
@@ -264,7 +264,7 @@ markdown, no preamble.
 
 ### Health band labels (QBR vocabulary)
 
-The pill label IS the band from [`docs/partner-health-model.md`](../../docs/partner-health-model.md).
+The pill label IS the band from [`partner-health-model.md`](references/partner-health-model.md).
 Use the band as the `status-pill` text; tone follows the model's mapping.
 
 | `status-pill` tone | Pill label | Band (from the health model) |

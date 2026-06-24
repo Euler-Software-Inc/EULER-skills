@@ -95,7 +95,7 @@ retrospective.)
 
 ## Your health score
 
-Compute the partner's health per [`docs/partner-health-model.md`](../../docs/partner-health-model.md)
+Compute the partner's health per [`partner-health-model.md`](references/partner-health-model.md)
 in **full** mode — you already fetched every source in the Orchestration sequence, so this adds
 no extra calls. **Use exactly these five factors and weights — do not rename, drop, re-weight, or
 invent factors** (no "Compliance", no 4-factor variants):
@@ -222,7 +222,7 @@ themselves, so frame findings as levers ("your biggest lift is …"), not verdic
    `affiliate_company_name`). **Never** from `partner_directory_search` (its `profile_id` is
    rejected as `partner_not_in_consent`).
 3. **Health = the exact model** — use the exact 5 factors / weights / caps from
-   [`docs/partner-health-model.md`](../../docs/partner-health-model.md); never rename, drop,
+   [`partner-health-model.md`](references/partner-health-model.md); never rename, drop,
    re-weight, or invent a factor (no "Compliance"). **Always show the 0–100 number.** A factor with
    no data **contributes 0** (never a fabricated value) — state the basis. Name only caps that
    actually fired.
