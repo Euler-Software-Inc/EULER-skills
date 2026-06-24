@@ -38,7 +38,7 @@ audience-scoped plugins:
 **Shared model:** `generate-qbr`, `portfolio-pulse` (managers) and `my-performance`
 (partners) all derive partner-health signals from the same model — canonical at
 [`docs/partner-health-model.md`](./docs/partner-health-model.md), copied into each
-plugin's `docs/` and kept in sync by
+consuming skill's `references/` and kept in sync by
 [`scripts/check-core-sync.mjs`](./scripts/check-core-sync.mjs).
 
 ## Installation
@@ -116,13 +116,13 @@ EULER-skills/
 ├── partner-managers/                 Plugin: EULER for Partner managers
 │   ├── .claude-plugin/plugin.json    Plugin manifest (name, version, metadata)
 │   ├── .mcp.json                     References the remote EULER MCP server
-│   ├── docs/partner-health-model.md  Synced copy of the canonical health model
 │   └── skills/                       generate-qbr · partner-briefing · portfolio-pulse · pending-approvals-triage
+│                                      (generate-qbr + portfolio-pulse carry a synced partner-health-model.md in references/)
 ├── partners/                         Plugin: EULER for Partners
 │   ├── .claude-plugin/plugin.json
 │   ├── .mcp.json                     References the remote EULER MCP server
-│   ├── docs/partner-health-model.md  Synced copy of the canonical health model
 │   └── skills/                       my-performance · my-onboarding · my-referrals · my-deals · submit-a-referral
+│                                      (my-performance carries a synced partner-health-model.md in references/)
 ├── docs/
 │   ├── partner-health-model.md       CANONICAL shared partner-health model
 │   ├── plans/                        Implementation plans (superpowers)
@@ -131,6 +131,7 @@ EULER-skills/
 │   └── check-core-sync.mjs           Guards the model copies against drift
 ├── template/                         Starter SKILL.md for new skills (not loaded — outside any plugin)
 ├── showcase/                         Self-contained HTML showcase
+├── site/                             Docs landing page (published via GitHub Pages)
 ├── CONTRIBUTING.md                   How to add or modify a skill
 └── README.md
 ```

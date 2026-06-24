@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EULER skills for Claude — partner-program plugins</title>
+<meta name="description" content="Claude plugins that turn EULER partner-relationship workflows — QBRs, briefings, portfolio pulse, referrals — into one-command skills, built on the EULER MCP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root {
+  --b0:#F1F5FE; --b2:#C2D3FA; --b5:#5283EF; --b6:#2563EB; --b7:#124CC9; --b8:#0E3A9A; --b95:#06173D;
+  --g0:#FEFEFE; --g1:#F6F7F8; --g2:#EEEFF1; --g3:#D7DADF; --g5:#9196A1; --g6:#707C8F; --g7:#546078; --g8:#3F495A; --g95:#15171E;
+  --w:#FEFEFE; --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sh0:0 0 4px -1px rgba(75,75,88,.06),0 1px 8px -1px rgba(75,75,88,.06);
+  --sh1:0 1px 6px -1px rgba(74,74,88,.08),0 2px 8px -2px rgba(75,75,88,.06);
+  --sh2:0 1px 8px -2px rgba(74,74,88,.12),0 4px 10px -4px rgba(74,74,88,.08);
+}
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.5;color:var(--g95);background:var(--g1);-webkit-font-smoothing:antialiased;}
+.container{width:100%;max-width:1040px;margin:0 auto;padding:0 clamp(16px,4vw,24px);}
+a{color:var(--b7);text-decoration:none;}
+a:hover{text-decoration:underline;}
+.topbar{background:rgba(254,254,254,.92);border-bottom:1px solid var(--g2);padding:14px 0;position:sticky;top:0;z-index:50;backdrop-filter:blur(8px);}
+.topbar-inner{display:flex;align-items:center;gap:12px;}
+.brand-mark{font-weight:700;font-size:17px;letter-spacing:-.01em;color:var(--b6);}
+.brand-divider{width:1px;height:22px;background:var(--g2);}
+.brand-label{font-size:12px;font-weight:600;color:var(--g6);letter-spacing:.04em;text-transform:uppercase;}
+.topbar .spacer{flex:1;}
+.topbar a{font-size:13px;font-weight:600;color:var(--g7);}
+.hero{padding:clamp(40px,8vw,72px) 0 clamp(28px,5vw,40px);background:linear-gradient(180deg,var(--w),var(--g1));border-bottom:1px solid var(--g2);}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--b0);color:var(--b7);padding:6px 12px;border-radius:9999px;font-size:12px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;margin-bottom:18px;}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--b6);}
+h1{font-size:clamp(30px,6.5vw,46px);line-height:1.1;font-weight:700;letter-spacing:-.02em;margin:0 0 16px;max-width:760px;}
+h1 .accent{background:linear-gradient(90deg,var(--b6),var(--b5));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.lede{font-size:clamp(16px,2.4vw,18px);line-height:1.6;color:var(--g7);margin:0;max-width:680px;}
+section{padding:clamp(36px,6vw,52px) 0;}
+.section-eyebrow{font-size:12px;font-weight:700;color:var(--b6);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+h2{font-size:clamp(22px,4vw,28px);font-weight:700;letter-spacing:-.01em;margin:0 0 8px;}
+.section-sub{color:var(--g6);margin:0 0 24px;max-width:640px;}
+.plugins{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:28px;}
+.pcard{background:var(--w);border:1px solid var(--g2);border-radius:16px;padding:22px;box-shadow:var(--sh0);}
+.pcard h3{margin:0 0 4px;font-size:18px;font-weight:700;}
+.pcard .slug{font-family:var(--mono);font-size:12px;color:var(--b7);background:var(--b0);padding:2px 8px;border-radius:6px;display:inline-block;margin-bottom:12px;}
+.pcard p{margin:0;font-size:14px;color:var(--g7);line-height:1.6;}
+pre{background:var(--g95);color:#E8EAF0;border-radius:14px;padding:20px 22px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.7;box-shadow:var(--sh1);}
+pre .c{color:#8FA0BF;}
+pre .p{color:#8FB7FF;}
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
+.scard{background:var(--w);border:1px solid var(--g2);border-radius:12px;padding:16px 18px;box-shadow:var(--sh0);transition:box-shadow .15s,transform .15s,border-color .15s;}
+.scard:hover{box-shadow:var(--sh2);transform:translateY(-2px);border-color:var(--b2);}
+.scard .cmd{font-family:var(--mono);font-size:12px;color:var(--g6);}
+.scard h4{margin:0 0 6px;font-size:15px;font-weight:700;}
+.scard p{margin:8px 0 0;font-size:13.5px;color:var(--g7);line-height:1.55;}
+.group-label{font-size:13px;font-weight:700;color:var(--g8);margin:28px 0 14px;display:flex;align-items:center;gap:10px;}
+.group-label::after{content:'';flex:1;height:1px;background:var(--g2);}
+.cta{display:inline-flex;align-items:center;gap:8px;background:var(--b6);color:var(--w);padding:11px 20px;border-radius:10px;font-weight:600;font-size:15px;box-shadow:var(--sh1);}
+.cta:hover{background:var(--b7);text-decoration:none;}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:8px;}
+.how .step{background:var(--w);border:1px solid var(--g2);border-radius:12px;padding:18px;box-shadow:var(--sh0);}
+.how .n{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--w);background:var(--b6);width:24px;height:24px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.how p{margin:0;font-size:14px;color:var(--g7);line-height:1.55;}
+footer{background:var(--g95);color:var(--g5);padding:32px 0;margin-top:clamp(40px,8vw,56px);}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;}
+.footer-mark{font-weight:700;font-size:16px;color:var(--w);}
+.footer-inner a{color:#9FB4DF;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar-inner">
+    <span class="brand-mark">Euler</span>
+    <span class="brand-divider" aria-hidden="true"></span>
+    <span class="brand-label">Plugins for Claude</span>
+    <span class="spacer"></span>
+    <a href="https://github.com/Euler-Software-Inc/EULER-skills">GitHub ↗</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Claude Code · Plugin marketplace</span>
+    <h1>EULER skills for <span class="accent">Claude</span></h1>
+    <p class="lede">Partner-relationship workflows — QBRs, pre-call briefings, whole-portfolio pulse, referrals — as one-command Claude skills, built on the EULER MCP. Every skill returns a single self-contained HTML report styled with the EULER design system: open it in a browser, print to PDF, or share the file.</p>
+    <div class="plugins">
+      <div class="pcard">
+        <h3>EULER for Partner Managers</h3>
+        <span class="slug">euler-for-partner-managers</span>
+        <p>Customer-admin workflows: generate a QBR, prep for a partner call, read the whole portfolio, and triage your approval queue.</p>
+      </div>
+      <div class="pcard">
+        <h3>EULER for Partners</h3>
+        <span class="slug">euler-for-partners</span>
+        <p>Partner self-service: your performance scorecard, onboarding &amp; certification progress, referral and deal history, and submitting a new referral.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-eyebrow">Install</div>
+    <h2>Add the marketplace, install your plugin</h2>
+    <p class="section-sub">Inside Claude Code, add the marketplace once, then install whichever plugin fits your role.</p>
+<pre><span class="c"># add the marketplace once</span>
+/plugin marketplace add Euler-Software-Inc/EULER-skills
+
+<span class="c"># for partner-relationship managers (customer-admin)</span>
+/plugin install <span class="p">euler-for-partner-managers</span>@euler-plugins
+
+<span class="c"># for partners (self-service)</span>
+/plugin install <span class="p">euler-for-partners</span>@euler-plugins</pre>
+    <p class="section-sub" style="margin-top:18px">First invocation triggers a one-time OAuth consent against <code>mcp.eulerapp.com</code> (token cached 30 days). Skills run under each plugin's namespace, e.g. <code>/euler-for-partner-managers:generate-qbr</code>.</p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-eyebrow">Skills</div>
+    <h2>Nine skills across two plugins</h2>
+
+    <div class="group-label">For partner managers — <code>/euler-for-partner-managers</code></div>
+    <div class="skills">
+      <div class="scard"><h4>generate-qbr</h4><span class="cmd">:generate-qbr</span><p>A Quarterly Business Review for a specific partner — performance, pipeline, referrals, agreements, health score.</p></div>
+      <div class="scard"><h4>partner-briefing</h4><span class="cmd">:partner-briefing</span><p>A 30-second pre-call read: what they'll want to discuss, what you should bring up, last-30-day stats.</p></div>
+      <div class="scard"><h4>portfolio-pulse</h4><span class="cmd">:portfolio-pulse</span><p>One screen across all partners — totals, top performers, who needs attention, coverage gaps. Scales to tens of thousands.</p></div>
+      <div class="scard"><h4>pending-approvals-triage</h4><span class="cmd">:pending-approvals-triage</span><p>An age-sorted worklist of everything awaiting your approval — partner apps, referrals, deal registrations.</p></div>
+    </div>
+
+    <div class="group-label">For partners — <code>/euler-for-partners</code></div>
+    <div class="skills">
+      <div class="scard"><h4>my-performance</h4><span class="cmd">:my-performance</span><p>Your performance scorecard with a customer — health score (0–100), revenue, deals, commissions, referrals, and the biggest lever to improve.</p></div>
+      <div class="scard"><h4>my-onboarding</h4><span class="cmd">:my-onboarding</span><p>Your onboarding and certification progress across assigned flows — what's done, what's left, what's overdue.</p></div>
+      <div class="scard"><h4>my-referrals</h4><span class="cmd">:my-referrals</span><p>Your full referral history with a customer — status of everything you submitted, sorted by recency.</p></div>
+      <div class="scard"><h4>my-deals</h4><span class="cmd">:my-deals</span><p>Your deal registrations — status breakdown, per-deal value and stage, total attributed pipeline.</p></div>
+      <div class="scard"><h4>submit-a-referral</h4><span class="cmd">:submit-a-referral</span><p>Submit a new referral through chat — collects the details interactively, then records it via the EULER MCP.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-eyebrow">See it live</div>
+    <h2>Sample reports</h2>
+    <p class="section-sub">Every skill outputs a self-contained HTML report. Browse worked examples in the showcase.</p>
+    <a class="cta" href="showcase/">Open the showcase →</a>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-eyebrow">How it works</div>
+    <h2>Curated workflows on the EULER MCP</h2>
+    <p class="section-sub">The plugins don't ship their own server — they orchestrate the existing remote EULER MCP.</p>
+    <div class="how">
+      <div class="step"><span class="n">1</span><p>You invoke a skill; Claude reads its playbook (<code>SKILL.md</code>).</p></div>
+      <div class="step"><span class="n">2</span><p>Claude connects to <code>mcp.eulerapp.com</code> (OAuth 2.1, one-time consent).</p></div>
+      <div class="step"><span class="n">3</span><p>It orchestrates the MCP tools per the skill's instructions.</p></div>
+      <div class="step"><span class="n">4</span><p>It renders the result as a self-contained HTML report.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <span class="footer-mark">Euler</span>
+    <span>MIT licensed · <a href="https://github.com/Euler-Software-Inc/EULER-skills">github.com/Euler-Software-Inc/EULER-skills</a></span>
+    <span>Built on the <a href="https://mcp.eulerapp.com">EULER MCP</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

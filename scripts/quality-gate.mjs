@@ -145,10 +145,10 @@ check('Examples present', () => {
   }
 });
 
-// 10. No internal dev docs tracked
+// 10. No internal dev docs / local working files tracked
 check('No dev docs tracked', () => {
-  const devdocs = tracked.filter((f) => /^docs\/(plans|specs)\//.test(f) || f === 'PLAN-account-aware-skills.md');
-  if (devdocs.length) errors.push(`internal dev docs are tracked (should be gitignored): ${devdocs.join(', ')}`);
+  const devdocs = tracked.filter((f) => /^docs\/(plans|specs)\//.test(f) || /^\.claude\//.test(f) || f === 'PLAN-account-aware-skills.md');
+  if (devdocs.length) errors.push(`internal dev docs / local working files are tracked (should be gitignored): ${devdocs.join(', ')}`);
 });
 
 // ── warnings (surface only) ───────────────────────────────────────────────

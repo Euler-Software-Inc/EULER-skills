@@ -23,3 +23,6 @@ PLAN-account-aware-skills.md
 
 # Quality-gate run summary — written by scripts/quality-gate.mjs in CI, consumed by the PR-comment step.
 qg-summary.md
+
+# Local Claude working files (submission drafts, issue bodies, scratch) — never public.
+.claude/
