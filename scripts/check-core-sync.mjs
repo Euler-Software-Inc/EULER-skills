@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Asserts the shared canonical files have identical content (line endings
 // normalized) across each repo-root canonical and its per-plugin/per-skill copies:
-//   1. docs/partner-health-model.md  -> each plugin's docs/ copy
+//   1. docs/partner-health-model.md  -> each consuming skill's references/ copy
 //   2. core/report.css               -> each skill's assets/styles.css
 // Run before `claude plugin validate .`. Exits 1 on any divergence.
 import { readFileSync } from 'node:fs';
@@ -25,8 +25,9 @@ const families = [
     name: 'partner-health-model.md',
     canonical: 'docs/partner-health-model.md',
     copies: [
-      'partner-managers/docs/partner-health-model.md',
-      'partners/docs/partner-health-model.md',
+      'partner-managers/skills/generate-qbr/references/partner-health-model.md',
+      'partner-managers/skills/portfolio-pulse/references/partner-health-model.md',
+      'partners/skills/my-performance/references/partner-health-model.md',
     ],
   },
   {

@@ -123,10 +123,12 @@ top_partners[]   top 100 by revenue, each:
   { partner name (may be blank → "Unattributed"), revenue ($-string), deal count (string) }
 ```
 
-New tool (shipped on `dev` first) — **exact keys are unverified; confirm against the first
-live run.** Numerics arrive as strings; a blank partner name = "Unattributed" (flag, keep in
-counts). Lifetime-to-date — label the basis "lifetime", never a window. **If the tool is
-unavailable or errors, fall back to Path B** (see SKILL.md §Orchestration).
+**Live on `main` (prod)** — confirmed 2026-06-23. Numerics arrive as strings; a blank partner
+name = "Unattributed" (flag, keep in counts). Lifetime-to-date — label "lifetime", never a window.
+A response with `total_revenue` 0 / `top_partners: []` is **valid empty** (0-production tenant) —
+render zeros, do NOT fall back. Fall back to Path B only if the tool is **absent or errors** — and
+note `performance(action:'overall')` **requires a date range** (wide lifetime range for the
+unwindowed fallback, never omit). Verify `revenue`/`top_partners` come populated for a producing tenant.
 
 ## `company_invoices(action: 'summary')`  — company-wide collections
 

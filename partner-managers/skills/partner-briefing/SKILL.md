@@ -64,7 +64,7 @@ instead of a quarter. Skip steps only if the user's framing excludes them
 | 3 | `performance(action: 'partner', partner_id, start_date, end_date)` | Headline movement in the window |
 | 4 | `partner_artifacts(action: 'deals', partner_id, page: 1, limit: 20)` | All-time pipeline — used for "what they'll want to discuss" + "what you should bring up" |
 | 5 | `commissions(action: 'partner', partner_id, start_date, end_date)` | Recent commission events |
-| 6 | `referrals(action: 'for_partner', partner_id, page: 1, limit: 20)` | All-time referrals; filter to the window by parsing `"Submitted On"` |
+| 6 | `referrals(action: 'for_partner', partner_id, page: 1, limit: 20)` | All-time referrals; filter to the window by parsing `"Submitted On"`. **Cap at ~2 pages** — this is a 30-second read; if the window isn't fully covered, report an approximate floor ("40+ in 30d"), don't paginate the whole history. |
 | 7 | `partner_artifacts(action: 'agreements', partner_id)` | Open agreement blockers |
 | 8 | `influenced_sourced_deals(partner_id, start_date, end_date)` | Sourced vs Influenced split for the window. Adds depth to "what they'll want to talk about" — partners commonly raise attribution disputes. |
 | 9 | `performance(action: 'partner', partner_id, prev_window_dates)` | Previous window (e.g. 30 days before the current 30-day window) for delta indicators in the hero facts (`.fact-sub`). |
@@ -91,7 +91,7 @@ shorter window:
 | Indicator | Conditions |
 |-----------|------------|
 | ⚪ **Inactive** | `partner_status` = "Inactive" — meeting is likely reactivate-or-offboard |
-| 🟢 **Hot** | Any of these in the window: ≥1 closed-won deal, ≥1 referral approved, ≥1 agreement signed, or commission paid |
+| 🟢 **Hot** | Any of these in the window: ≥1 closed-won deal, ≥1 **real** referral approved (ignore test/placeholder/malformed entries — a date-as-name, `test`, or blank-company row is NOT a real approval), ≥1 agreement signed, or commission paid |
 | 🟡 **Steady** | Default — activity in flight (open pipeline, pending referrals, in-progress agreements) but no closes in window |
 | 🔴 **Cold / blocked** | `partner_status` = "Active" AND zero window activity AND foundational blocker present (unsigned agreement, stuck referrals, no open pipeline) |
 

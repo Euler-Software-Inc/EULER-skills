@@ -77,11 +77,15 @@ whether the user asked for a **time window**.
 | 4 | `partners(action: 'list', page: 1, limit: 100)` | Roster (name + status) — canonical for the status distribution + at-risk segment, **only when the roster is small** (see §Segmentation). |
 | 5 | `company_invoices(action: 'summary')` | Collections line (optional). |
 
-### Fallback — Path A tool unavailable
-`get_partner_overall_stats` is newly shipped and may not be enabled on every tenant. If it
-is **not available** or returns an error, **silently fall back to Path B run unwindowed**
-(omit dates; `performance(action:'overall')` lifetime). Never mention tools or
-"unavailable" to the user.
+### Empty vs. unavailable (Path A)
+The tool is **live**. A successful response with `total_revenue` 0 and `top_partners: []` is
+**valid empty data** (a tenant with no production yet) — render the zeros, omit the leaderboard,
+and do NOT fall back. Only fall back when the tool is **absent** from the toolset or **errors**.
+
+### Fallback — Path A unavailable
+If absent/errors, **silently use Path B**, unwindowed. Note: `performance(action:'overall')`
+**requires a date range** — pass a wide lifetime range (e.g. `2015-01-01` → today), never omit
+dates. Never mention tools or "unavailable" to the user.
 
 `overall` (Path B) is terminal — it returns ranking + aggregates together; do NOT loop
 per-partner `partner_artifacts`/`commissions` across the WHOLE portfolio. The only
@@ -115,7 +119,7 @@ The fine **status distribution** (Onboarding / Prospecting / No-status) and the
 
 - **Total partner count ≤ ~300** (≈ ≤2 pages at `limit: 250`) — fetch the roster and run
   those sections: coarse-rank every partner per
-  [`docs/partner-health-model.md`](../../docs/partner-health-model.md) in **coarse** mode
+  [`partner-health-model.md`](references/partner-health-model.md) in **coarse** mode
   (Production + Status), segment by band (hard-rule caps apply: Inactive → At-risk, etc.),
   then **deep-dive only the bottom-K** (K ≈ 5, the at-risk/watch tail) to a **full** score +
   one-line reason. **Label** the leaderboard coarse-ranked, tail-only deep-scored; deep-link
@@ -264,6 +268,10 @@ Silence empty sections (no "No X data" placeholders). The absence is the signal.
     partner / deal counts are current-state lifetime, not window-filtered.
 12. **`company_invoices` is COMPANY-level** (program-wide collections) — never attribute
     invoiced / collected / pending totals to a single partner.
+13. **`active_partners` is the snapshot's own count** — it can read 0 even when partners have
+    roster status "Live" (different semantics). Don't equate "0 active" with "nothing live /
+    dormant program"; label it as the snapshot's active count, and if it conflicts with partners
+    you know are Live, state the basis rather than declaring the program dead.
 
 ## Example user flow
 
